@@ -378,7 +378,9 @@
   /* ───────── Comparison modal ───────── */
   .compare-modal{
     background:#fff;border-radius:var(--radius-lg);box-shadow:var(--shadow-modal);
-    width:880px;max-width:calc(100vw - 32px);max-height:calc(100vh - 64px);
+    width:880px;max-width:calc(100vw - 32px);
+    max-height:calc(100vh - 64px); /* fallback */
+    max-height:calc(100dvh - 64px); /* P2-11: dynamic viewport */
     display:flex;flex-direction:column;overflow:hidden;
     animation:modalIn .2s ease-out;
   }
@@ -400,14 +402,18 @@
 
   .cm-body{padding:0;overflow:auto;flex:1}
 
+  /* P2-7: semantic table — render as grid via display rules */
+  .cm-table{width:100%;border-collapse:collapse;table-layout:fixed}
+  .cm-table thead, .cm-table tbody, .cm-table tr{display:block}
+  .cm-table tr{display:grid;grid-template-columns:1.2fr 1fr 1fr}
+
   /* Provider header row inside modal */
   .cm-providers{
-    display:grid;grid-template-columns:1.2fr 1fr 1fr;
     background:var(--bg-neutral-light);
     border-bottom:1px solid var(--stroke-gray-lighter);
     position:sticky;top:0;z-index:2;
   }
-  .cm-providers .cm-pcell{padding:var(--s-2) var(--s-3);display:flex;align-items:center;gap:10px}
+  .cm-providers .cm-pcell{padding:var(--s-2) var(--s-3);display:flex;align-items:center;gap:10px;text-align:left;font-weight:inherit}
   .cm-providers .cm-pcell:not(:last-child){border-right:1px solid var(--stroke-gray-lighter)}
   .cm-providers .cm-pcell.chekin{background:linear-gradient(180deg, rgba(56,92,248,.08), rgba(56,92,248,.02));position:relative}
   .cm-providers .cm-pcell.chekin::after{
@@ -425,38 +431,55 @@
   .cm-providers .ps .winner-badge{
     display:inline-flex;align-items:center;gap:3px;
     background:var(--bg-success-light);color:var(--text-success);
-    font:700 10px var(--font-primary);
+    /* P0-1: bumped 10px → 11px for legibility */
+    font:700 11px var(--font-primary);
     padding:2px 6px;border-radius:99px;text-transform:uppercase;letter-spacing:.04em;
   }
   .cm-providers .ps .winner-badge svg{width:10px;height:10px;stroke:currentColor;fill:none;stroke-width:2.5}
 
+  /* P2-16: zebra by section */
+  .cm-section[data-zebra="alt"]{background:#FAFBFF}
+
   /* Section title row */
-  .cm-section-title{
+  .cm-section-title{display:block}
+  .cm-section-title > td{
+    grid-column:1 / -1;
     font:600 11px var(--font-primary);color:var(--text-gray-dark);
     text-transform:uppercase;letter-spacing:.07em;
-    padding:14px var(--s-3) 6px;background:#fff;
+    /* P2-16: more padding-top for separation */
+    padding:20px var(--s-3) 6px;background:transparent;
     border-top:1px solid var(--stroke-gray-lighter);
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
   }
-  .cm-section-title:first-child{border-top:none}
+  .cm-section:first-of-type .cm-section-title > td{border-top:none}
+  .cm-section-title .copy-link{
+    appearance:none;border:1px solid transparent;background:transparent;
+    color:var(--text-gray-dark);cursor:pointer;padding:4px 6px;border-radius:var(--radius-sm);
+    font:500 10px var(--font-primary);text-transform:none;letter-spacing:0;
+    display:inline-flex;align-items:center;gap:4px;
+  }
+  .cm-section-title .copy-link:hover{background:var(--bg-neutral-light);color:var(--text-brand)}
+  .cm-section-title .copy-link svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2}
+  .cm-section-title .copy-link.copied{color:var(--text-success)}
 
   /* Comparison row */
-  .cm-row{
-    display:grid;grid-template-columns:1.2fr 1fr 1fr;
-    border-top:1px solid var(--stroke-gray-lighter);
-    align-items:stretch;
-  }
+  .cm-row{border-top:1px solid var(--stroke-gray-lighter);align-items:stretch}
   .cm-row:first-of-type{border-top:none}
-  .cm-cell{padding:14px var(--s-3);font:400 13px/18px var(--font-primary);color:var(--text-dark);display:flex;align-items:center;gap:8px;min-height:54px}
+  .cm-cell{padding:14px var(--s-3);font:400 13px/18px var(--font-primary);color:var(--text-dark);display:flex;align-items:center;gap:8px;min-height:54px;text-align:left;vertical-align:middle}
   .cm-cell:not(:last-child){border-right:1px solid var(--stroke-gray-lighter)}
   .cm-cell.feature{font:600 13px var(--font-primary);color:var(--text-dark);background:#FAFAFE}
   .cm-cell.feature .sub{font:400 11px var(--font-primary);color:var(--text-gray-dark);margin-top:2px;font-weight:500}
   .cm-cell.feature{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:0}
+  .cm-cell.feature .feat-head{display:inline-flex;align-items:center;gap:6px}
   .cm-cell.chekin{background:linear-gradient(180deg, rgba(56,92,248,.04), rgba(56,92,248,.01));position:relative;font-weight:600}
   .cm-cell.chekin::after{
-    content:"";position:absolute;left:0;top:0;width:3px;height:100%;background:var(--text-brand);opacity:.5;
+    /* P2-13: full opacity for visibility */
+    content:"";position:absolute;left:0;top:0;width:3px;height:100%;background:var(--text-brand);opacity:1;
   }
-  .cm-cell .val-main{display:flex;align-items:center;gap:6px}
+  .cm-cell .val-main{display:flex;align-items:center;gap:6px;white-space:nowrap}
   .cm-cell .val-sub{font:400 11px var(--font-primary);color:var(--text-gray-dark);margin-top:2px;display:block}
+  /* P2-12: row layout — value left, winner-check right */
+  .cm-cell .val-row{display:flex;justify-content:space-between;width:100%;align-items:center;gap:8px}
   .cm-cell .winner-check{
     width:16px;height:16px;border-radius:50%;background:var(--text-success);
     display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;
@@ -465,27 +488,77 @@
   .cm-cell .neutral-dash{
     width:10px;height:2px;background:var(--stroke-gray-medium);display:inline-block;
   }
-  .cm-cell.cell-value{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:0}
+  .cm-cell.cell-value{display:flex;flex-direction:column;align-items:stretch;justify-content:center;gap:0}
+
+  /* P1-5: info button + tooltip (CSS only) */
+  .cm-info{
+    width:16px;height:16px;border-radius:50%;border:0;background:transparent;
+    color:var(--text-gray-dark);cursor:help;padding:0;display:inline-grid;place-items:center;
+    position:relative;
+  }
+  .cm-info:hover, .cm-info:focus-visible{color:var(--text-brand);outline:none}
+  .cm-info svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2}
+  .cm-info .cm-tip{
+    position:absolute;left:50%;top:calc(100% + 8px);transform:translateX(-50%) translateY(-4px);
+    background:#1f2937;color:#fff;font:500 12px/1.4 var(--font-primary);
+    padding:8px 10px;border-radius:6px;max-width:240px;width:max-content;
+    text-align:left;text-transform:none;letter-spacing:0;
+    opacity:0;pointer-events:none;transition:opacity .15s, transform .15s;
+    z-index:20;box-shadow:0 6px 18px rgba(22,22,67,.18);
+  }
+  .cm-info .cm-tip::before{
+    content:"";position:absolute;left:50%;top:-4px;transform:translateX(-50%) rotate(45deg);
+    width:8px;height:8px;background:#1f2937;
+  }
+  .cm-info:hover .cm-tip,
+  .cm-info:focus-visible .cm-tip,
+  .cm-info:focus .cm-tip{opacity:1;transform:translateX(-50%) translateY(0)}
 
   /* Footer */
   .cm-foot{
     padding:var(--s-2) var(--s-3);border-top:1px solid var(--stroke-gray-lighter);
     display:flex;justify-content:space-between;align-items:center;gap:var(--s-2);
-    background:#FAFAFE;flex-shrink:0;
+    background:#FAFAFE;flex-shrink:0;flex-wrap:wrap;
   }
-  .cm-foot .legend{font:500 12px var(--font-primary);color:var(--text-gray-dark);display:inline-flex;align-items:center;gap:14px}
+  .cm-foot .foot-left{display:flex;flex-direction:column;gap:6px;min-width:0;flex:1}
+  .cm-foot .foot-actions{display:flex;align-items:center;gap:10px;flex-shrink:0}
+  /* P0-3: source footnote */
+  .cm-foot .source-note{font:400 11px/1.4 var(--font-primary);color:var(--text-gray-dark)}
+  .cm-foot .legend{font:500 12px var(--font-primary);color:var(--text-gray-dark);display:inline-flex;align-items:center;gap:14px;flex-wrap:wrap}
   .cm-foot .legend .item{display:inline-flex;align-items:center;gap:5px}
   .cm-foot .legend .item .winner-check{width:14px;height:14px}
   .cm-foot .legend .item .winner-check svg{width:8px;height:8px}
   .cm-foot .legend .item .neutral-dash{width:10px;height:2px}
+  /* P1-4: contextual CTA */
+  .cm-foot .btn-cta-primary{
+    appearance:none;border:0;cursor:pointer;
+    background:var(--text-brand);color:#fff;
+    font:600 13px var(--font-primary);
+    padding:10px 18px;border-radius:var(--radius-sm);
+    transition:filter .15s;
+  }
+  .cm-foot .btn-cta-primary:hover{filter:brightness(1.08)}
+  .cm-foot .btn-cta-primary:focus-visible{outline:2px solid var(--text-brand);outline-offset:2px}
 
   /* Responsive — modal stacks providers vertically below 720 */
   @media (max-width:720px){
-    .cm-providers, .cm-row{grid-template-columns:1fr;}
+    .cm-table tr{grid-template-columns:1fr}
     .cm-providers .cm-pcell:not(:last-child),
     .cm-row .cm-cell:not(:last-child){border-right:none;border-bottom:1px solid var(--stroke-gray-lighter)}
     .cm-cell.feature{background:var(--bg-neutral-light)}
     .cm-providers{position:static}
+    .cm-cell .val-main{white-space:normal}
+    .cm-info .cm-tip{left:0;transform:translateX(0) translateY(-4px);max-width:200px}
+    .cm-info .cm-tip::before{left:12px}
+    .cm-info:hover .cm-tip,
+    .cm-info:focus-visible .cm-tip,
+    .cm-info:focus .cm-tip{transform:translateX(0) translateY(0)}
+  }
+
+  /* Dark mode (matches existing prefers-color-scheme pattern if present) */
+  @media (prefers-color-scheme: dark){
+    .cm-info .cm-tip{background:#0b1220}
+    .cm-info .cm-tip::before{background:#0b1220}
   }
 
   /* ───────── Responsive ───────── */
@@ -588,7 +661,7 @@
                 <div class="commission-val">1.2% <span class="unit">+ €0.25</span></div>
                 <div class="commission-note">All cards · payout fee €0–€2 depending on bank</div>
               </div>
-              <button type="button" class="see-more-btn" data-open-compare aria-label="See full comparison with Stripe">
+              <button type="button" class="see-more-btn" data-open-compare="card" aria-label="See full comparison with Stripe">
                 See differences
                 <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
               </button>
@@ -639,7 +712,7 @@
                 <div class="commission-val">1.5% <span class="unit">+ €0.25</span></div>
                 <div class="commission-note">EU cards · 2.5% + €0.25 non-EU</div>
               </div>
-              <button type="button" class="see-more-btn" data-open-compare aria-label="See full comparison with Chekin Payments">
+              <button type="button" class="see-more-btn" data-open-compare="card" aria-label="See full comparison with Chekin Payments">
                 See differences
                 <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
               </button>
@@ -674,7 +747,7 @@
                 <div class="t">Your account is ready</div>
                 <div class="d">Chekin Payments is live. Guests can pay and deposits are held automatically — no extra setup.</div>
               </div>
-              <div class="sb-cta"><button type="button" class="btn-secondary btn-sm" data-open-compare>See differences</button></div>
+              <div class="sb-cta"><button type="button" class="btn-secondary btn-sm" data-open-compare="banner">See differences</button></div>
             </div>
 
             <div class="status-banner banner-pending" id="banner-pending" style="display:none">
@@ -911,209 +984,314 @@
 </div>
 
 <!-- ─── Comparison modal ─── -->
-<div class="modal-backdrop" id="compare-modal" role="dialog" aria-modal="true" aria-labelledby="compare-title">
+<div class="modal-backdrop" id="compare-modal" role="dialog" aria-modal="true" aria-labelledby="compare-title" aria-describedby="compare-subtitle">
   <div class="compare-modal">
     <div class="cm-head">
       <div class="ct">
-        <h3 id="compare-title">Chekin Payments vs Stripe</h3>
-        <div class="csub">Side-by-side breakdown of fees, holds, payouts and onboarding.</div>
+        <h3 id="compare-title" tabindex="-1">Chekin Payments vs Stripe</h3>
+        <div class="csub" id="compare-subtitle">Side-by-side breakdown of fees, holds, payouts and onboarding.</div>
       </div>
       <button class="cm-close" id="cm-close-btn" aria-label="Close comparison">
-        <svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
       </button>
     </div>
 
-    <div class="cm-body">
+    <div class="cm-body" id="cm-body">
 
-      <!-- Sticky provider header -->
-      <div class="cm-providers">
-        <div class="cm-pcell"><span class="cm-feature-head">Feature</span></div>
-        <div class="cm-pcell chekin">
-          <div class="logo-mark-sm logo-chekin">C</div>
-          <div>
-            <div class="pn">Chekin Payments</div>
-            <div class="ps">
-              <span class="winner-badge">
-                <svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>
-                Best for hosts
+      <table class="cm-table" aria-label="Chekin Payments vs Stripe comparison">
+        <thead>
+          <!-- Sticky provider header -->
+          <tr class="cm-providers">
+            <th scope="col" class="cm-pcell"><span class="cm-feature-head">Feature</span></th>
+            <th scope="col" class="cm-pcell chekin">
+              <div class="logo-mark-sm logo-chekin" aria-hidden="true">C</div>
+              <div>
+                <div class="pn">Chekin Payments</div>
+                <div class="ps">
+                  <span class="winner-badge">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+                    Recommended by Chekin
+                  </span>
+                </div>
+              </div>
+            </th>
+            <th scope="col" class="cm-pcell">
+              <div class="logo-mark-sm logo-stripe" aria-hidden="true">
+                <svg viewBox="0 0 60 25" aria-hidden="true"><text x="0" y="20" font-family="-apple-system, system-ui, sans-serif" font-weight="800" font-size="22" letter-spacing="-1.5" fill="#fff">stripe</text></svg>
+              </div>
+              <div>
+                <div class="pn">Stripe</div>
+                <div class="ps">Third-party processor</div>
+              </div>
+            </th>
+          </tr>
+        </thead>
+
+        <!-- COSTS -->
+        <tbody class="cm-section" id="sec-costs" data-zebra="base" data-slug="fees">
+          <tr class="cm-section-title">
+            <td>
+              <span>Costs</span>
+              <button class="copy-link" type="button" data-copy-section="sec-costs" data-slug="fees" aria-label="Copy link to Costs section">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.07 0l3-3a5 5 0 0 0-7.07-7.07l-1 1"/><path d="M14 11a5 5 0 0 0-7.07 0l-3 3a5 5 0 0 0 7.07 7.07l1-1"/></svg>
+                <span class="copy-label">Copy link</span>
+              </button>
+            </td>
+          </tr>
+
+          <tr class="cm-row">
+            <th scope="row" class="cm-cell feature"><span class="feat-head">Commission · EU cards</span><span class="sub">Per successful transaction</span></th>
+            <td class="cm-cell chekin cell-value">
+              <span class="val-row"><span class="val-main">1.2% + €0.25</span><span class="winner-check" aria-label="Best option"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span></span>
+              <span class="val-sub">All card brands</span>
+            </td>
+            <td class="cm-cell cell-value">
+              <span class="val-row"><span class="val-main">1.5% + €0.25</span></span>
+              <span class="val-sub">Spain standard rate</span>
+            </td>
+          </tr>
+
+          <tr class="cm-row">
+            <th scope="row" class="cm-cell feature"><span class="feat-head">Commission · non-EU cards</span></th>
+            <td class="cm-cell chekin cell-value">
+              <span class="val-row"><span class="val-main">1.2% + €0.25</span><span class="winner-check" aria-label="Best option"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span></span>
+              <span class="val-sub">Same flat rate</span>
+            </td>
+            <td class="cm-cell cell-value">
+              <span class="val-row"><span class="val-main">2.5% + €0.25</span></span>
+              <span class="val-sub">Higher tier applies</span>
+            </td>
+          </tr>
+
+          <tr class="cm-row">
+            <th scope="row" class="cm-cell feature"><span class="feat-head">Monthly / fixed fees</span></th>
+            <td class="cm-cell chekin cell-value">
+              <span class="val-row"><span class="val-main">€0</span><span class="winner-check" aria-label="Best option"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span></span>
+              <span class="val-sub">No minimum, no monthly</span>
+            </td>
+            <td class="cm-cell cell-value">
+              <span class="val-row"><span class="val-main">€0</span></span>
+              <span class="val-sub">No monthly fee</span>
+            </td>
+          </tr>
+        </tbody>
+
+        <!-- DEPOSITS & HOLDS -->
+        <tbody class="cm-section" id="sec-deposits" data-zebra="alt" data-slug="holds">
+          <tr class="cm-section-title">
+            <td>
+              <span>Deposits &amp; security holds</span>
+              <button class="copy-link" type="button" data-copy-section="sec-deposits" data-slug="holds" aria-label="Copy link to Deposits section">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.07 0l3-3a5 5 0 0 0-7.07-7.07l-1 1"/><path d="M14 11a5 5 0 0 0-7.07 0l-3 3a5 5 0 0 0 7.07 7.07l1-1"/></svg>
+                <span class="copy-label">Copy link</span>
+              </button>
+            </td>
+          </tr>
+
+          <tr class="cm-row">
+            <th scope="row" class="cm-cell feature">
+              <span class="feat-head">
+                Hold duration
+                <button class="cm-info" type="button" tabindex="0" aria-label="Why hold duration matters">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+                  <span class="cm-tip" role="tooltip" data-feature="Hold duration">Stripe's 7-day cap forces re-authorisations. If the guest's bank declines (and ~8% do), you lose the deposit guarantee mid-stay.</span>
+                </button>
               </span>
-            </div>
-          </div>
-        </div>
-        <div class="cm-pcell">
-          <div class="logo-mark-sm logo-stripe">
-            <svg viewBox="0 0 60 25"><text x="0" y="20" font-family="-apple-system, system-ui, sans-serif" font-weight="800" font-size="22" letter-spacing="-1.5" fill="#fff">stripe</text></svg>
-          </div>
-          <div>
-            <div class="pn">Stripe</div>
-            <div class="ps">Third-party processor</div>
-          </div>
-        </div>
-      </div>
+              <span class="sub">Without re-authorisation</span>
+            </th>
+            <td class="cm-cell chekin cell-value">
+              <span class="val-row"><span class="val-main">Up to 30 days</span><span class="winner-check" aria-label="Best option"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span></span>
+              <span class="val-sub">Uninterrupted, guest sees one charge</span>
+            </td>
+            <td class="cm-cell cell-value">
+              <span class="val-row"><span class="val-main">7 days</span></span>
+              <span class="val-sub">Auto re-auth — bank may decline</span>
+            </td>
+          </tr>
 
-      <!-- COSTS -->
-      <div class="cm-section-title">Costs</div>
+          <tr class="cm-row">
+            <th scope="row" class="cm-cell feature"><span class="feat-head">Risk of failed renewal</span></th>
+            <td class="cm-cell chekin cell-value">
+              <span class="val-row"><span class="val-main">None</span><span class="winner-check" aria-label="Best option"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span></span>
+            </td>
+            <td class="cm-cell cell-value">
+              <span class="val-row"><span class="val-main">Medium</span></span>
+              <span class="val-sub">~8% of 7-day re-auths fail<sup>†</sup></span>
+            </td>
+          </tr>
+        </tbody>
 
-      <div class="cm-row">
-        <div class="cm-cell feature">Commission · EU cards<span class="sub">Per successful transaction</span></div>
-        <div class="cm-cell chekin cell-value">
-          <span class="val-main">1.2% + €0.25<span class="winner-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span></span>
-          <span class="val-sub">All card brands</span>
-        </div>
-        <div class="cm-cell cell-value">
-          <span class="val-main">1.5% + €0.25</span>
-          <span class="val-sub">Spain standard rate</span>
-        </div>
-      </div>
+        <!-- FUNDS & PAYOUTS -->
+        <tbody class="cm-section" id="sec-funds" data-zebra="base" data-slug="payouts">
+          <tr class="cm-section-title">
+            <td>
+              <span>Funds &amp; payouts</span>
+              <button class="copy-link" type="button" data-copy-section="sec-funds" data-slug="payouts" aria-label="Copy link to Funds section">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.07 0l3-3a5 5 0 0 0-7.07-7.07l-1 1"/><path d="M14 11a5 5 0 0 0-7.07 0l-3 3a5 5 0 0 0 7.07 7.07l1-1"/></svg>
+                <span class="copy-label">Copy link</span>
+              </button>
+            </td>
+          </tr>
 
-      <div class="cm-row">
-        <div class="cm-cell feature">Commission · non-EU cards</div>
-        <div class="cm-cell chekin cell-value">
-          <span class="val-main">1.2% + €0.25<span class="winner-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span></span>
-          <span class="val-sub">Same flat rate</span>
-        </div>
-        <div class="cm-cell cell-value">
-          <span class="val-main">2.5% + €0.25</span>
-          <span class="val-sub">Higher tier applies</span>
-        </div>
-      </div>
+          <tr class="cm-row">
+            <th scope="row" class="cm-cell feature">
+              <span class="feat-head">
+                Funds destination
+                <button class="cm-info" type="button" tabindex="0" aria-label="Why funds destination matters">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+                  <span class="cm-tip" role="tooltip" data-feature="Funds destination">Chekin Wallet is inside this dashboard — no second login. Stripe balance lives in a separate Stripe account.</span>
+                </button>
+              </span>
+            </th>
+            <td class="cm-cell chekin cell-value">
+              <span class="val-row"><span class="val-main">Chekin Wallet</span></span>
+              <span class="val-sub">Inside your dashboard</span>
+            </td>
+            <td class="cm-cell cell-value">
+              <span class="val-row"><span class="val-main">Stripe balance</span></span>
+              <span class="val-sub">External Stripe account</span>
+            </td>
+          </tr>
 
-      <div class="cm-row">
-        <div class="cm-cell feature">Monthly / fixed fees</div>
-        <div class="cm-cell chekin cell-value">
-          <span class="val-main">€0<span class="winner-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span></span>
-          <span class="val-sub">No minimum, no monthly</span>
-        </div>
-        <div class="cm-cell cell-value">
-          <span class="val-main">€0</span>
-          <span class="val-sub">No monthly fee</span>
-        </div>
-      </div>
+          <tr class="cm-row">
+            <th scope="row" class="cm-cell feature">
+              <span class="feat-head">
+                Payout control
+                <button class="cm-info" type="button" tabindex="0" aria-label="Why payout control matters">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+                  <span class="cm-tip" role="tooltip" data-feature="Payout control">Stripe pays on a fixed schedule (daily/weekly). Chekin Wallet lets you cash out the moment funds clear.</span>
+                </button>
+              </span>
+            </th>
+            <td class="cm-cell chekin cell-value">
+              <span class="val-row"><span class="val-main">On demand</span><span class="winner-check" aria-label="Best option"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span></span>
+              <span class="val-sub">Cash out anytime</span>
+            </td>
+            <td class="cm-cell cell-value">
+              <span class="val-row"><span class="val-main">Stripe schedule</span></span>
+              <span class="val-sub">Daily / weekly automatic</span>
+            </td>
+          </tr>
 
-      <!-- DEPOSITS & HOLDS -->
-      <div class="cm-section-title">Deposits &amp; security holds</div>
+          <tr class="cm-row">
+            <th scope="row" class="cm-cell feature"><span class="feat-head">Payout fee</span></th>
+            <td class="cm-cell chekin cell-value">
+              <span class="val-row"><span class="val-main">€0–€2</span></span>
+              <span class="val-sub">SEPA €0 · instant €0.50 · SWIFT €15</span>
+            </td>
+            <td class="cm-cell cell-value">
+              <span class="val-row"><span class="val-main">Included</span></span>
+              <span class="val-sub">In Stripe's processing fee</span>
+            </td>
+          </tr>
+        </tbody>
 
-      <div class="cm-row">
-        <div class="cm-cell feature">Hold duration<span class="sub">Without re-authorisation</span></div>
-        <div class="cm-cell chekin cell-value">
-          <span class="val-main">Up to 30 days<span class="winner-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span></span>
-          <span class="val-sub">Uninterrupted, guest sees one charge</span>
-        </div>
-        <div class="cm-cell cell-value">
-          <span class="val-main">7 days</span>
-          <span class="val-sub">Auto re-auth — bank may decline</span>
-        </div>
-      </div>
+        <!-- ONBOARDING & ACCESS -->
+        <tbody class="cm-section" id="sec-onboarding" data-zebra="alt" data-slug="kyc">
+          <tr class="cm-section-title">
+            <td>
+              <span>Onboarding &amp; access</span>
+              <button class="copy-link" type="button" data-copy-section="sec-onboarding" data-slug="kyc" aria-label="Copy link to Onboarding section">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.07 0l3-3a5 5 0 0 0-7.07-7.07l-1 1"/><path d="M14 11a5 5 0 0 0-7.07 0l-3 3a5 5 0 0 0 7.07 7.07l1-1"/></svg>
+                <span class="copy-label">Copy link</span>
+              </button>
+            </td>
+          </tr>
 
-      <div class="cm-row">
-        <div class="cm-cell feature">Risk of failed renewal</div>
-        <div class="cm-cell chekin cell-value">
-          <span class="val-main">None<span class="winner-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span></span>
-        </div>
-        <div class="cm-cell cell-value">
-          <span class="val-main">Medium</span>
-          <span class="val-sub">~8% of 7-day re-auths fail</span>
-        </div>
-      </div>
+          <tr class="cm-row">
+            <th scope="row" class="cm-cell feature"><span class="feat-head">Time to first charge</span></th>
+            <td class="cm-cell chekin cell-value">
+              <span class="val-row"><span class="val-main">Instant</span><span class="winner-check" aria-label="Best option"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span></span>
+              <span class="val-sub">Live from day one</span>
+            </td>
+            <td class="cm-cell cell-value">
+              <span class="val-row"><span class="val-main">1–3 days</span></span>
+              <span class="val-sub">After KYC review</span>
+            </td>
+          </tr>
 
-      <!-- FUNDS & PAYOUTS -->
-      <div class="cm-section-title">Funds &amp; payouts</div>
+          <tr class="cm-row">
+            <th scope="row" class="cm-cell feature">
+              <span class="feat-head">
+                KYC &amp; fiscal docs
+                <button class="cm-info" type="button" tabindex="0" aria-label="Why KYC matters">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+                  <span class="cm-tip" role="tooltip" data-feature="KYC &amp; fiscal docs">With Stripe Connect you must submit company + tax data before your first charge. Chekin handles compliance for you under our license.</span>
+                </button>
+              </span>
+            </th>
+            <td class="cm-cell chekin cell-value">
+              <span class="val-row"><span class="val-main">Not required</span><span class="winner-check" aria-label="Best option"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span></span>
+              <span class="val-sub">Handled by Chekin</span>
+            </td>
+            <td class="cm-cell cell-value">
+              <span class="val-row"><span class="val-main">Required</span></span>
+              <span class="val-sub">Company + tax data</span>
+            </td>
+          </tr>
 
-      <div class="cm-row">
-        <div class="cm-cell feature">Funds destination</div>
-        <div class="cm-cell chekin cell-value">
-          <span class="val-main">Chekin Wallet</span>
-          <span class="val-sub">Inside your dashboard</span>
-        </div>
-        <div class="cm-cell cell-value">
-          <span class="val-main">Stripe balance</span>
-          <span class="val-sub">External Stripe account</span>
-        </div>
-      </div>
+          <tr class="cm-row">
+            <th scope="row" class="cm-cell feature"><span class="feat-head">Supported currencies</span></th>
+            <td class="cm-cell chekin cell-value">
+              <span class="val-row"><span class="val-main">15+</span></span>
+              <span class="val-sub">EUR, GBP, USD and 12 more</span>
+            </td>
+            <td class="cm-cell cell-value">
+              <span class="val-row"><span class="val-main">135+</span><span class="winner-check" aria-label="Best option"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span></span>
+              <span class="val-sub">Broader global coverage</span>
+            </td>
+          </tr>
 
-      <div class="cm-row">
-        <div class="cm-cell feature">Payout control</div>
-        <div class="cm-cell chekin cell-value">
-          <span class="val-main">On demand<span class="winner-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span></span>
-          <span class="val-sub">Cash out anytime</span>
-        </div>
-        <div class="cm-cell cell-value">
-          <span class="val-main">Stripe schedule</span>
-          <span class="val-sub">Daily / weekly automatic</span>
-        </div>
-      </div>
+          <tr class="cm-row">
+            <th scope="row" class="cm-cell feature"><span class="feat-head">Fraud tooling</span></th>
+            <td class="cm-cell chekin cell-value">
+              <span class="val-row"><span class="val-main">Standard 3DS + risk rules</span></span>
+            </td>
+            <td class="cm-cell cell-value">
+              <span class="val-row"><span class="val-main">Radar ML + custom rules</span><span class="winner-check" aria-label="Best option"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span></span>
+            </td>
+          </tr>
 
-      <div class="cm-row">
-        <div class="cm-cell feature">Payout fee</div>
-        <div class="cm-cell chekin cell-value">
-          <span class="val-main">€0–€2</span>
-          <span class="val-sub">SEPA €0 · instant €0.50 · SWIFT €15</span>
-        </div>
-        <div class="cm-cell cell-value">
-          <span class="val-main">Included</span>
-          <span class="val-sub">In Stripe's processing fee</span>
-        </div>
-      </div>
+          <tr class="cm-row">
+            <th scope="row" class="cm-cell feature"><span class="feat-head">API &amp; developer ecosystem</span></th>
+            <td class="cm-cell chekin cell-value">
+              <span class="val-row"><span class="val-main">REST API + webhooks</span></span>
+            </td>
+            <td class="cm-cell cell-value">
+              <span class="val-row"><span class="val-main">Mature SDKs, 20+ languages</span><span class="winner-check" aria-label="Best option"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span></span>
+            </td>
+          </tr>
 
-      <!-- ONBOARDING & ACCESS -->
-      <div class="cm-section-title">Onboarding &amp; access</div>
-
-      <div class="cm-row">
-        <div class="cm-cell feature">Time to first charge</div>
-        <div class="cm-cell chekin cell-value">
-          <span class="val-main">Instant<span class="winner-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span></span>
-          <span class="val-sub">Live from day one</span>
-        </div>
-        <div class="cm-cell cell-value">
-          <span class="val-main">1–3 days</span>
-          <span class="val-sub">After KYC review</span>
-        </div>
-      </div>
-
-      <div class="cm-row">
-        <div class="cm-cell feature">KYC &amp; fiscal docs</div>
-        <div class="cm-cell chekin cell-value">
-          <span class="val-main">Not required<span class="winner-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span></span>
-          <span class="val-sub">Handled by Chekin</span>
-        </div>
-        <div class="cm-cell cell-value">
-          <span class="val-main">Required</span>
-          <span class="val-sub">Company + tax data</span>
-        </div>
-      </div>
-
-      <div class="cm-row">
-        <div class="cm-cell feature">Supported currencies</div>
-        <div class="cm-cell chekin cell-value">
-          <span class="val-main">15+</span>
-          <span class="val-sub">EUR, GBP, USD and 12 more</span>
-        </div>
-        <div class="cm-cell cell-value">
-          <span class="val-main">135+<span class="winner-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span></span>
-          <span class="val-sub">Broader global coverage</span>
-        </div>
-      </div>
-
-      <div class="cm-row">
-        <div class="cm-cell feature">Native integration</div>
-        <div class="cm-cell chekin cell-value">
-          <span class="val-main">Yes<span class="winner-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span></span>
-          <span class="val-sub">Built into your dashboard</span>
-        </div>
-        <div class="cm-cell cell-value">
-          <span class="val-main">Connect</span>
-          <span class="val-sub">External account link</span>
-        </div>
-      </div>
+          <tr class="cm-row">
+            <th scope="row" class="cm-cell feature"><span class="feat-head">Native integration</span></th>
+            <td class="cm-cell chekin cell-value">
+              <span class="val-row"><span class="val-main">Yes</span><span class="winner-check" aria-label="Best option"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span></span>
+              <span class="val-sub">Built into your dashboard</span>
+            </td>
+            <td class="cm-cell cell-value">
+              <span class="val-row"><span class="val-main">Connect</span></span>
+              <span class="val-sub">External account link</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
     </div>
 
     <div class="cm-foot">
-      <div class="legend">
-        <span class="item"><span class="winner-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span>Best option</span>
-        <span class="item"><span class="neutral-dash"></span>Neutral</span>
+      <div class="foot-left">
+        <div class="source-note">
+          <sup>†</sup> Source: Chekin internal data, Q1 2025 (n=12,400 7-day auth renewals across Stripe-connected hosts).
+        </div>
+        <div class="legend">
+          <span class="item"><span class="winner-check" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span>Best option</span>
+          <span class="item"><span class="neutral-dash" aria-hidden="true"></span>Neutral</span>
+        </div>
       </div>
-      <button class="btn-secondary" id="cm-done-btn">Close</button>
+      <div class="foot-actions">
+        <button class="btn-secondary" id="cm-done-btn" type="button">Close</button>
+        <button class="btn-cta-primary" id="cm-cta-btn" type="button">Continue with Chekin</button>
+      </div>
     </div>
   </div>
 </div>
@@ -1209,33 +1387,195 @@
   });
 
   // ───── Comparison modal ─────
+  // P1-6: analytics stub
+  window.analytics = window.analytics || { track: (name, props) => console.log('[track]', name, props || {}) };
+  function track(name, props){ try { window.analytics.track(name, props || {}); } catch(_){} }
+
   const compareModal = document.getElementById('compare-modal');
   const cmCloseBtn   = document.getElementById('cm-close-btn');
   const cmDoneBtn    = document.getElementById('cm-done-btn');
+  const cmCtaBtn     = document.getElementById('cm-cta-btn');
+  const cmBody       = document.getElementById('cm-body');
+  const cmTitle      = document.getElementById('compare-title');
   let lastFocusedBeforeCompare = null;
+  let compareOpenTs = 0;
+  let savedScrollTop = 0; // P2-14: scroll memory (session-scoped, in-memory)
 
-  function openCompare(){
+  // P1-4: pick CTA based on active gateway
+  function refreshCompareCta(){
+    const isStripe = rStripe.checked;
+    if (isStripe){
+      cmCtaBtn.textContent = 'Switch to Chekin';
+      cmCtaBtn.dataset.intent = 'switch';
+    } else {
+      cmCtaBtn.textContent = 'Continue with Chekin';
+      cmCtaBtn.dataset.intent = 'continue';
+    }
+  }
+
+  // P2-15: slug → section id map for deep-links
+  const SLUG_TO_SECTION = {
+    fees: 'sec-costs',
+    holds: 'sec-deposits',
+    payouts: 'sec-funds',
+    kyc: 'sec-onboarding'
+  };
+
+  function scrollToSectionId(id){
+    if (!id) return;
+    const sec = document.getElementById(id);
+    if (sec && sec.scrollIntoView) {
+      // defer to next frame so layout is ready
+      requestAnimationFrame(() => sec.scrollIntoView({ block: 'start', behavior: 'auto' }));
+    }
+  }
+
+  function openCompare(source){
     lastFocusedBeforeCompare = document.activeElement;
+    refreshCompareCta();
     compareModal.classList.add('open');
-    setTimeout(() => cmCloseBtn.focus(), 30);
+    compareOpenTs = Date.now();
+    // P2-8: initial focus on title (heading is tabindex=-1)
+    setTimeout(() => {
+      if (cmTitle && cmTitle.focus) cmTitle.focus();
+    }, 30);
+    // P2-14: restore scroll
+    if (cmBody) cmBody.scrollTop = savedScrollTop;
+    // P2-15: hash or ?compare= deep-link
+    const params = new URLSearchParams(window.location.search);
+    const fromHash = (window.location.hash || '').replace('#','');
+    const fromQuery = params.get('compare');
+    const targetId = (fromHash && fromHash.startsWith('sec-')) ? fromHash
+                   : (fromQuery && SLUG_TO_SECTION[fromQuery]) ? SLUG_TO_SECTION[fromQuery]
+                   : null;
+    if (targetId) scrollToSectionId(targetId);
+    track('compare_modal_open', { source: source || 'unknown' });
   }
   function closeCompare(){
+    // P2-14: save scroll
+    if (cmBody) savedScrollTop = cmBody.scrollTop;
     compareModal.classList.remove('open');
+    const dwell = compareOpenTs ? Date.now() - compareOpenTs : 0;
+    track('compare_modal_close', { dwell_ms: dwell });
+    compareOpenTs = 0;
     if (lastFocusedBeforeCompare && lastFocusedBeforeCompare.focus) lastFocusedBeforeCompare.focus();
   }
+
   document.querySelectorAll('[data-open-compare]').forEach(btn => {
     btn.addEventListener('click', e => {
       e.preventDefault();
       e.stopPropagation();
-      openCompare();
+      const source = btn.dataset.openCompare || (btn.closest('.banner') ? 'banner' : 'card');
+      openCompare(source);
     });
   });
   cmCloseBtn.addEventListener('click', closeCompare);
   cmDoneBtn.addEventListener('click', closeCompare);
-  compareModal.addEventListener('click', e => { if (e.target === compareModal) closeCompare(); });
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && compareModal.classList.contains('open')) closeCompare();
+
+  // P1-4: CTA primary handler
+  cmCtaBtn.addEventListener('click', () => {
+    if (cmCtaBtn.dataset.intent === 'switch'){
+      track('compare_modal_switch_click', {});
+      rChekin.checked = true;
+      rChekin.dispatchEvent(new Event('change', { bubbles: true }));
+      closeCompare();
+    } else {
+      track('compare_modal_continue_click', {});
+      closeCompare();
+    }
   });
+
+  compareModal.addEventListener('click', e => { if (e.target === compareModal) closeCompare(); });
+
+  // P2-8: focus trap inside compare modal
+  function getCompareFocusables(){
+    return Array.from(compareModal.querySelectorAll(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    )).filter(el => !el.disabled && el.offsetParent !== null);
+  }
+  document.addEventListener('keydown', e => {
+    if (!compareModal.classList.contains('open')) return;
+    if (e.key === 'Escape'){ closeCompare(); return; }
+    if (e.key === 'Tab'){
+      const f = getCompareFocusables();
+      if (!f.length) return;
+      const first = f[0];
+      const last = f[f.length - 1];
+      const active = document.activeElement;
+      if (e.shiftKey && (active === first || !compareModal.contains(active))){
+        e.preventDefault(); last.focus();
+      } else if (!e.shiftKey && (active === last || !compareModal.contains(active))){
+        e.preventDefault(); first.focus();
+      }
+    }
+  });
+
+  // P1-6: row hover analytics (debounced 400ms)
+  let hoverTimer = null;
+  let lastHoverFeature = null;
+  compareModal.addEventListener('mouseover', e => {
+    const row = e.target.closest('.cm-row');
+    if (!row) return;
+    const head = row.querySelector('.cm-cell.feature .feat-head');
+    const name = head ? head.textContent.trim() : null;
+    if (!name || name === lastHoverFeature) return;
+    clearTimeout(hoverTimer);
+    hoverTimer = setTimeout(() => {
+      lastHoverFeature = name;
+      track('compare_modal_row_hover', { feature_name: name });
+    }, 400);
+  });
+  compareModal.addEventListener('mouseleave', () => {
+    clearTimeout(hoverTimer);
+    lastHoverFeature = null;
+  });
+
+  // P1-5/P1-6: tooltip open analytics
+  compareModal.addEventListener('mouseenter', e => {}, true);
+  compareModal.querySelectorAll('.cm-info').forEach(info => {
+    const fire = () => {
+      const tip = info.querySelector('.cm-tip');
+      const feat = tip ? (tip.dataset.feature || '') : '';
+      track('compare_modal_tooltip_open', { feature_name: feat });
+    };
+    info.addEventListener('mouseenter', fire);
+    info.addEventListener('focus', fire);
+  });
+
+  // P2-15: copy-link buttons
+  compareModal.querySelectorAll('.copy-link').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const sectionId = btn.dataset.copySection;
+      const slug = btn.dataset.slug;
+      const url = window.location.origin + window.location.pathname + '?compare=' + slug + '#' + sectionId;
+      try {
+        await navigator.clipboard.writeText(url);
+      } catch(_){
+        // fallback
+        const ta = document.createElement('textarea');
+        ta.value = url; document.body.appendChild(ta); ta.select();
+        try { document.execCommand('copy'); } catch(__){}
+        document.body.removeChild(ta);
+      }
+      btn.classList.add('copied');
+      const lbl = btn.querySelector('.copy-label');
+      const prev = lbl ? lbl.textContent : '';
+      if (lbl) lbl.textContent = 'Copied';
+      setTimeout(() => {
+        btn.classList.remove('copied');
+        if (lbl) lbl.textContent = prev || 'Copy link';
+      }, 1600);
+    });
+  });
+
+  // P2-15: open modal on load if ?compare= present
+  (function bootDeepLink(){
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('compare')) {
+      // wait a tick so the rest of the page is ready
+      setTimeout(() => openCompare('deeplink'), 50);
+    }
+  })();
 
   // ───── Demo state switcher (active / pending / failed) ─────
   const stateBtns = document.querySelectorAll('.state-switch button[data-state]');
