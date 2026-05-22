@@ -180,48 +180,6 @@
     *,*::before,*::after{animation:none !important;transition:none !important}
   }
 
-  /* ───────── Savings calculator ───────── */
-  .calc-card{
-    background:#fff;border:1px solid var(--stroke-gray-lighter);
-    border-radius:var(--radius-lg);box-shadow:var(--shadow-card);
-    padding:var(--s-3);
-    display:grid;grid-template-columns:auto 1px 1fr 1fr;gap:var(--s-3);align-items:center;
-  }
-  .calc-input{display:flex;flex-direction:column;gap:8px}
-  .calc-label{font:500 11px var(--font-primary);color:var(--text-gray-dark);text-transform:uppercase;letter-spacing:.05em}
-  .calc-field{
-    display:flex;align-items:center;
-    height:44px;padding:0 12px;border:1px solid var(--stroke-gray-light);border-radius:var(--radius-md);
-    background:var(--bg-neutral-light);font:600 16px var(--font-primary);color:var(--text-dark);
-    width:200px;
-  }
-  .calc-field:focus-within{background:#fff;border-color:var(--text-brand);box-shadow:0 0 0 3px rgba(56,92,248,.12)}
-  .calc-field input{
-    border:none;background:transparent;font:600 16px var(--font-primary);color:var(--text-dark);
-    outline:none;width:100%;text-align:right;font-variant-numeric:tabular-nums;
-  }
-  .calc-field .currency{color:var(--text-gray-dark);font-weight:600;margin-right:6px}
-  .calc-divider{width:1px;height:64px;background:var(--stroke-gray-lighter)}
-
-  /* Presets */
-  .calc-presets{display:flex;gap:4px;flex-wrap:wrap}
-  .calc-presets button{
-    border:1px solid var(--stroke-gray-lighter);background:#fff;
-    font:600 11px var(--font-primary);color:var(--text-gray-dark);
-    padding:5px 9px;border-radius:99px;cursor:pointer;
-  }
-  .calc-presets button:hover{border-color:var(--stroke-gray-medium);color:var(--text-dark)}
-  .calc-presets button[aria-pressed="true"]{background:var(--bg-blue-light);border-color:var(--text-brand);color:var(--text-brand)}
-
-  .calc-result{display:flex;flex-direction:column;gap:3px;min-width:0}
-  .calc-r-label{font:500 11px var(--font-primary);color:var(--text-gray-dark);text-transform:uppercase;letter-spacing:.05em;display:flex;align-items:center;gap:6px}
-  .calc-r-label .dot-c{width:8px;height:8px;border-radius:50%;background:var(--text-brand)}
-  .calc-r-label .dot-s{width:8px;height:8px;border-radius:50%;background:#635BFF}
-  .calc-r-val{font:700 26px/30px var(--font-primary);color:var(--text-dark);letter-spacing:-.012em;font-variant-numeric:tabular-nums}
-  .calc-r-sub{font:500 12px var(--font-primary);color:var(--text-gray-dark)}
-  .calc-result.highlight .calc-r-val{color:var(--text-success)}
-  .calc-result.highlight .calc-r-sub{color:var(--text-success);font-weight:600}
-
   /* ───────── Config panel ───────── */
   .config-panel{
     background:var(--bg-white);
@@ -404,16 +362,137 @@
   .modal ul li{margin-bottom:4px}
   .m-actions{display:flex;justify-content:flex-end;gap:8px}
 
+  /* ───────── "See differences" CTA on cards ───────── */
+  .see-more-btn{
+    display:inline-flex;align-items:center;gap:6px;
+    font:600 12px var(--font-primary);color:var(--text-brand);
+    background:transparent;border:1px solid rgba(56,92,248,.25);
+    padding:6px 10px;border-radius:var(--radius-sm);cursor:pointer;
+    white-space:nowrap;transition:background .15s, border-color .15s;
+  }
+  .see-more-btn:hover{background:var(--bg-blue-light);border-color:var(--text-brand)}
+  .see-more-btn svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2}
+  .method-card:not(.recommended) .see-more-btn{color:var(--text-gray-dark);border-color:var(--stroke-gray-light)}
+  .method-card:not(.recommended) .see-more-btn:hover{background:var(--bg-neutral-light);border-color:var(--stroke-gray-medium);color:var(--text-dark)}
+
+  /* ───────── Comparison modal ───────── */
+  .compare-modal{
+    background:#fff;border-radius:var(--radius-lg);box-shadow:var(--shadow-modal);
+    width:880px;max-width:calc(100vw - 32px);max-height:calc(100vh - 64px);
+    display:flex;flex-direction:column;overflow:hidden;
+    animation:modalIn .2s ease-out;
+  }
+  .cm-head{
+    display:flex;align-items:center;gap:var(--s-2);
+    padding:var(--s-3);border-bottom:1px solid var(--stroke-gray-lighter);
+    flex-shrink:0;
+  }
+  .cm-head .ct{flex:1;min-width:0}
+  .cm-head h3{font:600 18px/22px var(--font-primary);color:var(--text-dark);margin:0}
+  .cm-head .csub{font:400 13px/18px var(--font-primary);color:var(--text-gray-dark);margin-top:2px}
+  .cm-close{
+    width:32px;height:32px;border-radius:var(--radius-sm);
+    border:1px solid var(--stroke-gray-lighter);background:#fff;
+    display:grid;place-items:center;cursor:pointer;flex-shrink:0;
+  }
+  .cm-close:hover{background:var(--bg-neutral-light)}
+  .cm-close svg{width:14px;height:14px;stroke:var(--text-gray-dark);fill:none;stroke-width:2}
+
+  .cm-body{padding:0;overflow:auto;flex:1}
+
+  /* Provider header row inside modal */
+  .cm-providers{
+    display:grid;grid-template-columns:1.2fr 1fr 1fr;
+    background:var(--bg-neutral-light);
+    border-bottom:1px solid var(--stroke-gray-lighter);
+    position:sticky;top:0;z-index:2;
+  }
+  .cm-providers .cm-pcell{padding:var(--s-2) var(--s-3);display:flex;align-items:center;gap:10px}
+  .cm-providers .cm-pcell:not(:last-child){border-right:1px solid var(--stroke-gray-lighter)}
+  .cm-providers .cm-pcell.chekin{background:linear-gradient(180deg, rgba(56,92,248,.08), rgba(56,92,248,.02));position:relative}
+  .cm-providers .cm-pcell.chekin::after{
+    content:"";position:absolute;left:0;top:0;width:3px;height:100%;background:var(--text-brand);
+  }
+  .cm-providers .cm-feature-head{font:600 12px var(--font-primary);color:var(--text-gray-dark);text-transform:uppercase;letter-spacing:.06em}
+  .cm-providers .logo-mark-sm{
+    width:32px;height:32px;border-radius:8px;display:grid;place-items:center;flex-shrink:0;
+  }
+  .cm-providers .logo-mark-sm.logo-chekin{background:linear-gradient(135deg,#385CF8,#274BF0);color:#fff;font:800 14px var(--font-primary)}
+  .cm-providers .logo-mark-sm.logo-stripe{background:#635BFF}
+  .cm-providers .logo-mark-sm.logo-stripe svg{width:22px;height:10px}
+  .cm-providers .pn{font:700 14px var(--font-primary);color:var(--text-dark);line-height:1.2}
+  .cm-providers .ps{font:500 11px var(--font-primary);color:var(--text-gray-dark);margin-top:2px;display:flex;align-items:center;gap:4px}
+  .cm-providers .ps .winner-badge{
+    display:inline-flex;align-items:center;gap:3px;
+    background:var(--bg-success-light);color:var(--text-success);
+    font:700 10px var(--font-primary);
+    padding:2px 6px;border-radius:99px;text-transform:uppercase;letter-spacing:.04em;
+  }
+  .cm-providers .ps .winner-badge svg{width:10px;height:10px;stroke:currentColor;fill:none;stroke-width:2.5}
+
+  /* Section title row */
+  .cm-section-title{
+    font:600 11px var(--font-primary);color:var(--text-gray-dark);
+    text-transform:uppercase;letter-spacing:.07em;
+    padding:14px var(--s-3) 6px;background:#fff;
+    border-top:1px solid var(--stroke-gray-lighter);
+  }
+  .cm-section-title:first-child{border-top:none}
+
+  /* Comparison row */
+  .cm-row{
+    display:grid;grid-template-columns:1.2fr 1fr 1fr;
+    border-top:1px solid var(--stroke-gray-lighter);
+    align-items:stretch;
+  }
+  .cm-row:first-of-type{border-top:none}
+  .cm-cell{padding:14px var(--s-3);font:400 13px/18px var(--font-primary);color:var(--text-dark);display:flex;align-items:center;gap:8px;min-height:54px}
+  .cm-cell:not(:last-child){border-right:1px solid var(--stroke-gray-lighter)}
+  .cm-cell.feature{font:600 13px var(--font-primary);color:var(--text-dark);background:#FAFAFE}
+  .cm-cell.feature .sub{font:400 11px var(--font-primary);color:var(--text-gray-dark);margin-top:2px;font-weight:500}
+  .cm-cell.feature{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:0}
+  .cm-cell.chekin{background:linear-gradient(180deg, rgba(56,92,248,.04), rgba(56,92,248,.01));position:relative;font-weight:600}
+  .cm-cell.chekin::after{
+    content:"";position:absolute;left:0;top:0;width:3px;height:100%;background:var(--text-brand);opacity:.5;
+  }
+  .cm-cell .val-main{display:flex;align-items:center;gap:6px}
+  .cm-cell .val-sub{font:400 11px var(--font-primary);color:var(--text-gray-dark);margin-top:2px;display:block}
+  .cm-cell .winner-check{
+    width:16px;height:16px;border-radius:50%;background:var(--text-success);
+    display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;
+  }
+  .cm-cell .winner-check svg{width:9px;height:9px;stroke:#fff;fill:none;stroke-width:3}
+  .cm-cell .neutral-dash{
+    width:10px;height:2px;background:var(--stroke-gray-medium);display:inline-block;
+  }
+  .cm-cell.cell-value{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:0}
+
+  /* Footer */
+  .cm-foot{
+    padding:var(--s-2) var(--s-3);border-top:1px solid var(--stroke-gray-lighter);
+    display:flex;justify-content:space-between;align-items:center;gap:var(--s-2);
+    background:#FAFAFE;flex-shrink:0;
+  }
+  .cm-foot .legend{font:500 12px var(--font-primary);color:var(--text-gray-dark);display:inline-flex;align-items:center;gap:14px}
+  .cm-foot .legend .item{display:inline-flex;align-items:center;gap:5px}
+  .cm-foot .legend .item .winner-check{width:14px;height:14px}
+  .cm-foot .legend .item .winner-check svg{width:8px;height:8px}
+  .cm-foot .legend .item .neutral-dash{width:10px;height:2px}
+
+  /* Responsive — modal stacks providers vertically below 720 */
+  @media (max-width:720px){
+    .cm-providers, .cm-row{grid-template-columns:1fr;}
+    .cm-providers .cm-pcell:not(:last-child),
+    .cm-row .cm-cell:not(:last-child){border-right:none;border-bottom:1px solid var(--stroke-gray-lighter)}
+    .cm-cell.feature{background:var(--bg-neutral-light)}
+    .cm-providers{position:static}
+  }
+
   /* ───────── Responsive ───────── */
   @media (max-width:1024px){
     .method-grid{grid-template-columns:1fr}
-    .calc-card{grid-template-columns:1fr;gap:var(--s-2)}
-    .calc-divider{display:none}
-    .calc-field{width:100%}
     .kpi-row{grid-template-columns:repeat(2,1fr)}
     .page{padding:var(--s-3) var(--s-3) 64px}
-    /* P1: Chekin first on mobile */
-    .calc-result.highlight{order:-1}
   }
 </style>
 </head>
@@ -509,6 +588,10 @@
                 <div class="commission-val">1.2% <span class="unit">+ €0.25</span></div>
                 <div class="commission-note">All cards · payout fee €0–€2 depending on bank</div>
               </div>
+              <button type="button" class="see-more-btn" data-open-compare aria-label="See full comparison with Stripe">
+                See differences
+                <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </button>
             </div>
           </label>
 
@@ -556,49 +639,20 @@
                 <div class="commission-val">1.5% <span class="unit">+ €0.25</span></div>
                 <div class="commission-note">EU cards · 2.5% + €0.25 non-EU</div>
               </div>
+              <button type="button" class="see-more-btn" data-open-compare aria-label="See full comparison with Chekin Payments">
+                See differences
+                <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </button>
             </div>
           </label>
 
         </div>
       </section>
 
-      <!-- ─── SAVINGS CALCULATOR ─── -->
-      <section>
-        <span class="sec-label">Estimated savings</span>
-        <div class="calc-card">
-          <div class="calc-input">
-            <span class="calc-label">Monthly volume</span>
-            <div class="calc-field">
-              <span class="currency">€</span>
-              <input type="number" id="volume-input" value="4500" min="0" step="100" aria-label="Monthly volume in euros">
-            </div>
-            <div class="calc-presets" role="group" aria-label="Volume presets">
-              <button data-preset="800" aria-pressed="false">Single property · €800</button>
-              <button data-preset="4500" aria-pressed="true">3–10 units · €4.5k</button>
-              <button data-preset="25000" aria-pressed="false">10+ units · €25k</button>
-            </div>
-          </div>
-
-          <div class="calc-divider"></div>
-
-          <div class="calc-result">
-            <div class="calc-r-label"><span class="dot-s"></span>With Stripe</div>
-            <div class="calc-r-val" id="cost-stripe">€ 80.00</div>
-            <div class="calc-r-sub">1.5% + €0.25 per tx</div>
-          </div>
-
-          <div class="calc-result highlight">
-            <div class="calc-r-label"><span class="dot-c"></span>With Chekin Payments</div>
-            <div class="calc-r-val" id="cost-chekin">€ 66.50</div>
-            <div class="calc-r-sub" id="savings-line">You save €13.50/month · €162/year</div>
-          </div>
-        </div>
-      </section>
-
       <!-- ─── CONFIG PANEL ─── -->
       <section id="config-wrapper">
 
-        <!-- Chekin config (default visible) -->
+        <!-- Chekin "active" status panel (compact, no details) -->
         <div id="config-chekin" class="config-panel">
           <div class="cp-head">
             <div class="cp-title">
@@ -614,21 +668,20 @@
             </div>
           </div>
           <div class="cp-body">
-
-            <!-- Status banner — swaps based on demo state -->
             <div class="status-banner banner-active" id="banner-active">
               <div class="sb-icon"><svg viewBox="0 0 24 24" stroke="currentColor"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
               <div class="sb-info">
                 <div class="t">Your account is ready</div>
                 <div class="d">Chekin Payments is live. Guests can pay and deposits are held automatically — no extra setup.</div>
               </div>
+              <div class="sb-cta"><button type="button" class="btn-secondary btn-sm" data-open-compare>See differences</button></div>
             </div>
 
             <div class="status-banner banner-pending" id="banner-pending" style="display:none">
               <div class="sb-icon"><svg viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
               <div class="sb-info">
                 <div class="t">Validating your business data</div>
-                <div class="d">We're reviewing the information you submitted. This usually takes a few hours. You can still receive bookings — charges will resume once validation completes.</div>
+                <div class="d">We're reviewing the information you submitted. This usually takes a few hours.</div>
               </div>
               <div class="sb-cta"><button class="btn-secondary btn-sm">View checklist</button></div>
             </div>
@@ -637,40 +690,9 @@
               <div class="sb-icon"><svg viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg></div>
               <div class="sb-info">
                 <div class="t">Validation failed — action required</div>
-                <div class="d">Some of the documents you provided couldn't be verified. New charges are paused until you resolve this. Open holds remain unaffected.</div>
+                <div class="d">Some documents couldn't be verified. New charges are paused until you resolve this.</div>
               </div>
               <div class="sb-cta"><button class="btn-primary btn-sm">Fix now</button></div>
-            </div>
-
-            <div class="detail-rows">
-              <div class="detail-row">
-                <span class="dr-label">Commission</span>
-                <span class="dr-val">1.2% + €0.25 per transaction</span>
-              </div>
-              <div class="detail-row">
-                <span class="dr-label">Deposit hold</span>
-                <span class="dr-val" style="color:#0F9F80">
-                  Up to 30 days, uninterrupted
-                  <span class="why" style="color:var(--text-gray-dark)">— guest sees one charge, no reminders</span>
-                </span>
-              </div>
-              <div class="detail-row">
-                <span class="dr-label">Funds destination</span>
-                <span class="dr-val">Chekin Wallet → payout on demand</span>
-              </div>
-              <div class="detail-row">
-                <span class="dr-label">Payout time</span>
-                <span class="dr-val">1–2 business days (SEPA) · same day (instant, fee applies)</span>
-              </div>
-              <div class="detail-row">
-                <span class="dr-label">Supported currencies</span>
-                <span class="dr-val">EUR, GBP, USD and 12 more</span>
-              </div>
-            </div>
-
-            <div class="payout-disclosure">
-              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
-              <span><b>Payout fee:</b> €0 for SEPA standard · €0.50 SEPA instant · €15 SWIFT · 1% card. No minimum balance, no monthly fee.</span>
             </div>
           </div>
         </div>
@@ -888,6 +910,214 @@
   </main>
 </div>
 
+<!-- ─── Comparison modal ─── -->
+<div class="modal-backdrop" id="compare-modal" role="dialog" aria-modal="true" aria-labelledby="compare-title">
+  <div class="compare-modal">
+    <div class="cm-head">
+      <div class="ct">
+        <h3 id="compare-title">Chekin Payments vs Stripe</h3>
+        <div class="csub">Side-by-side breakdown of fees, holds, payouts and onboarding.</div>
+      </div>
+      <button class="cm-close" id="cm-close-btn" aria-label="Close comparison">
+        <svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <div class="cm-body">
+
+      <!-- Sticky provider header -->
+      <div class="cm-providers">
+        <div class="cm-pcell"><span class="cm-feature-head">Feature</span></div>
+        <div class="cm-pcell chekin">
+          <div class="logo-mark-sm logo-chekin">C</div>
+          <div>
+            <div class="pn">Chekin Payments</div>
+            <div class="ps">
+              <span class="winner-badge">
+                <svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>
+                Best for hosts
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="cm-pcell">
+          <div class="logo-mark-sm logo-stripe">
+            <svg viewBox="0 0 60 25"><text x="0" y="20" font-family="-apple-system, system-ui, sans-serif" font-weight="800" font-size="22" letter-spacing="-1.5" fill="#fff">stripe</text></svg>
+          </div>
+          <div>
+            <div class="pn">Stripe</div>
+            <div class="ps">Third-party processor</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COSTS -->
+      <div class="cm-section-title">Costs</div>
+
+      <div class="cm-row">
+        <div class="cm-cell feature">Commission · EU cards<span class="sub">Per successful transaction</span></div>
+        <div class="cm-cell chekin cell-value">
+          <span class="val-main">1.2% + €0.25<span class="winner-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span></span>
+          <span class="val-sub">All card brands</span>
+        </div>
+        <div class="cm-cell cell-value">
+          <span class="val-main">1.5% + €0.25</span>
+          <span class="val-sub">Spain standard rate</span>
+        </div>
+      </div>
+
+      <div class="cm-row">
+        <div class="cm-cell feature">Commission · non-EU cards</div>
+        <div class="cm-cell chekin cell-value">
+          <span class="val-main">1.2% + €0.25<span class="winner-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span></span>
+          <span class="val-sub">Same flat rate</span>
+        </div>
+        <div class="cm-cell cell-value">
+          <span class="val-main">2.5% + €0.25</span>
+          <span class="val-sub">Higher tier applies</span>
+        </div>
+      </div>
+
+      <div class="cm-row">
+        <div class="cm-cell feature">Monthly / fixed fees</div>
+        <div class="cm-cell chekin cell-value">
+          <span class="val-main">€0<span class="winner-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span></span>
+          <span class="val-sub">No minimum, no monthly</span>
+        </div>
+        <div class="cm-cell cell-value">
+          <span class="val-main">€0</span>
+          <span class="val-sub">No monthly fee</span>
+        </div>
+      </div>
+
+      <!-- DEPOSITS & HOLDS -->
+      <div class="cm-section-title">Deposits &amp; security holds</div>
+
+      <div class="cm-row">
+        <div class="cm-cell feature">Hold duration<span class="sub">Without re-authorisation</span></div>
+        <div class="cm-cell chekin cell-value">
+          <span class="val-main">Up to 30 days<span class="winner-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span></span>
+          <span class="val-sub">Uninterrupted, guest sees one charge</span>
+        </div>
+        <div class="cm-cell cell-value">
+          <span class="val-main">7 days</span>
+          <span class="val-sub">Auto re-auth — bank may decline</span>
+        </div>
+      </div>
+
+      <div class="cm-row">
+        <div class="cm-cell feature">Risk of failed renewal</div>
+        <div class="cm-cell chekin cell-value">
+          <span class="val-main">None<span class="winner-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span></span>
+        </div>
+        <div class="cm-cell cell-value">
+          <span class="val-main">Medium</span>
+          <span class="val-sub">~8% of 7-day re-auths fail</span>
+        </div>
+      </div>
+
+      <!-- FUNDS & PAYOUTS -->
+      <div class="cm-section-title">Funds &amp; payouts</div>
+
+      <div class="cm-row">
+        <div class="cm-cell feature">Funds destination</div>
+        <div class="cm-cell chekin cell-value">
+          <span class="val-main">Chekin Wallet</span>
+          <span class="val-sub">Inside your dashboard</span>
+        </div>
+        <div class="cm-cell cell-value">
+          <span class="val-main">Stripe balance</span>
+          <span class="val-sub">External Stripe account</span>
+        </div>
+      </div>
+
+      <div class="cm-row">
+        <div class="cm-cell feature">Payout control</div>
+        <div class="cm-cell chekin cell-value">
+          <span class="val-main">On demand<span class="winner-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span></span>
+          <span class="val-sub">Cash out anytime</span>
+        </div>
+        <div class="cm-cell cell-value">
+          <span class="val-main">Stripe schedule</span>
+          <span class="val-sub">Daily / weekly automatic</span>
+        </div>
+      </div>
+
+      <div class="cm-row">
+        <div class="cm-cell feature">Payout fee</div>
+        <div class="cm-cell chekin cell-value">
+          <span class="val-main">€0–€2</span>
+          <span class="val-sub">SEPA €0 · instant €0.50 · SWIFT €15</span>
+        </div>
+        <div class="cm-cell cell-value">
+          <span class="val-main">Included</span>
+          <span class="val-sub">In Stripe's processing fee</span>
+        </div>
+      </div>
+
+      <!-- ONBOARDING & ACCESS -->
+      <div class="cm-section-title">Onboarding &amp; access</div>
+
+      <div class="cm-row">
+        <div class="cm-cell feature">Time to first charge</div>
+        <div class="cm-cell chekin cell-value">
+          <span class="val-main">Instant<span class="winner-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span></span>
+          <span class="val-sub">Live from day one</span>
+        </div>
+        <div class="cm-cell cell-value">
+          <span class="val-main">1–3 days</span>
+          <span class="val-sub">After KYC review</span>
+        </div>
+      </div>
+
+      <div class="cm-row">
+        <div class="cm-cell feature">KYC &amp; fiscal docs</div>
+        <div class="cm-cell chekin cell-value">
+          <span class="val-main">Not required<span class="winner-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span></span>
+          <span class="val-sub">Handled by Chekin</span>
+        </div>
+        <div class="cm-cell cell-value">
+          <span class="val-main">Required</span>
+          <span class="val-sub">Company + tax data</span>
+        </div>
+      </div>
+
+      <div class="cm-row">
+        <div class="cm-cell feature">Supported currencies</div>
+        <div class="cm-cell chekin cell-value">
+          <span class="val-main">15+</span>
+          <span class="val-sub">EUR, GBP, USD and 12 more</span>
+        </div>
+        <div class="cm-cell cell-value">
+          <span class="val-main">135+<span class="winner-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span></span>
+          <span class="val-sub">Broader global coverage</span>
+        </div>
+      </div>
+
+      <div class="cm-row">
+        <div class="cm-cell feature">Native integration</div>
+        <div class="cm-cell chekin cell-value">
+          <span class="val-main">Yes<span class="winner-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span></span>
+          <span class="val-sub">Built into your dashboard</span>
+        </div>
+        <div class="cm-cell cell-value">
+          <span class="val-main">Connect</span>
+          <span class="val-sub">External account link</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="cm-foot">
+      <div class="legend">
+        <span class="item"><span class="winner-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span>Best option</span>
+        <span class="item"><span class="neutral-dash"></span>Neutral</span>
+      </div>
+      <button class="btn-secondary" id="cm-done-btn">Close</button>
+    </div>
+  </div>
+</div>
+
 <!-- ─── Confirmation modal ─── -->
 <div class="modal-backdrop" id="switch-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
   <div class="modal">
@@ -978,33 +1208,34 @@
     }
   });
 
-  // ───── Savings calculator ─────
-  const volInput   = document.getElementById('volume-input');
-  const costStripe = document.getElementById('cost-stripe');
-  const costChekin = document.getElementById('cost-chekin');
-  const savings    = document.getElementById('savings-line');
-  const presetBtns = document.querySelectorAll('.calc-presets button');
-  const fmtEur     = n => '€ ' + n.toLocaleString('en-GB', {minimumFractionDigits:2, maximumFractionDigits:2});
+  // ───── Comparison modal ─────
+  const compareModal = document.getElementById('compare-modal');
+  const cmCloseBtn   = document.getElementById('cm-close-btn');
+  const cmDoneBtn    = document.getElementById('cm-done-btn');
+  let lastFocusedBeforeCompare = null;
 
-  function recalc(){
-    const v = parseFloat(volInput.value) || 0;
-    const avgTx = 90;
-    const tx = Math.max(1, Math.round(v / avgTx));
-    const stripeC = v * 0.015 + tx * 0.25;
-    const chekinC = v * 0.012 + tx * 0.25;
-    const diff = stripeC - chekinC;
-    costStripe.textContent = fmtEur(stripeC);
-    costChekin.textContent = fmtEur(chekinC);
-    savings.textContent = `You save ${fmtEur(diff)}/month · ${fmtEur(diff*12)}/year`;
-    // update preset pressed state
-    presetBtns.forEach(b => b.setAttribute('aria-pressed', String(parseFloat(b.dataset.preset) === v)));
+  function openCompare(){
+    lastFocusedBeforeCompare = document.activeElement;
+    compareModal.classList.add('open');
+    setTimeout(() => cmCloseBtn.focus(), 30);
   }
-  volInput.addEventListener('input', recalc);
-  presetBtns.forEach(b => b.addEventListener('click', () => {
-    volInput.value = b.dataset.preset;
-    recalc();
-  }));
-  recalc();
+  function closeCompare(){
+    compareModal.classList.remove('open');
+    if (lastFocusedBeforeCompare && lastFocusedBeforeCompare.focus) lastFocusedBeforeCompare.focus();
+  }
+  document.querySelectorAll('[data-open-compare]').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.preventDefault();
+      e.stopPropagation();
+      openCompare();
+    });
+  });
+  cmCloseBtn.addEventListener('click', closeCompare);
+  cmDoneBtn.addEventListener('click', closeCompare);
+  compareModal.addEventListener('click', e => { if (e.target === compareModal) closeCompare(); });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && compareModal.classList.contains('open')) closeCompare();
+  });
 
   // ───── Demo state switcher (active / pending / failed) ─────
   const stateBtns = document.querySelectorAll('.state-switch button[data-state]');
