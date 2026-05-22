@@ -114,11 +114,11 @@
   .card-head .who{display:flex;align-items:center;gap:12px;min-width:0;flex:1}
   .card-head .logo-mark{
     width:44px;height:44px;border-radius:10px;
-    display:grid;place-items:center;flex-shrink:0;overflow:hidden;
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;
   }
-  .logo-chekin{background:linear-gradient(135deg,#385CF8,#274BF0);color:#fff;font:800 18px var(--font-primary);letter-spacing:-.02em}
+  .logo-chekin{background:linear-gradient(135deg,#385CF8,#274BF0);color:#fff;font:800 18px var(--font-primary);letter-spacing:-.02em;line-height:1}
   .logo-stripe{background:#635BFF;color:#fff}
-  .logo-stripe svg{width:30px;height:14px}
+  .logo-stripe svg{width:30px;height:14px;display:block}
   .card-head .pname{font:700 17px var(--font-primary);color:var(--text-dark)}
   .card-head .psub{font:400 13px var(--font-primary);color:var(--text-gray-dark);margin-top:1px}
 
@@ -378,7 +378,7 @@
   /* ───────── Comparison modal ───────── */
   .compare-modal{
     background:#fff;border-radius:var(--radius-lg);box-shadow:var(--shadow-modal);
-    width:880px;max-width:calc(100vw - 32px);
+    width:940px;max-width:calc(100vw - 32px);
     max-height:calc(100vh - 64px); /* fallback */
     max-height:calc(100dvh - 64px); /* P2-11: dynamic viewport */
     display:flex;flex-direction:column;overflow:hidden;
@@ -386,7 +386,7 @@
   }
   .cm-head{
     display:flex;align-items:center;gap:var(--s-2);
-    padding:var(--s-3);border-bottom:1px solid var(--stroke-gray-lighter);
+    padding:var(--s-3) var(--s-4);border-bottom:1px solid var(--stroke-gray-lighter);
     flex-shrink:0;
   }
   .cm-head .ct{flex:1;min-width:0}
@@ -413,7 +413,7 @@
     border-bottom:1px solid var(--stroke-gray-lighter);
     position:sticky;top:0;z-index:2;
   }
-  .cm-providers .cm-pcell{padding:var(--s-2) var(--s-3);display:flex;align-items:center;gap:10px;text-align:left;font-weight:inherit}
+  .cm-providers .cm-pcell{padding:var(--s-2) var(--s-3);padding-top:18px;padding-bottom:18px;display:flex;align-items:center;gap:12px;text-align:left;font-weight:inherit}
   .cm-providers .cm-pcell:not(:last-child){border-right:1px solid var(--stroke-gray-lighter)}
   .cm-providers .cm-pcell.chekin{background:linear-gradient(180deg, rgba(56,92,248,.08), rgba(56,92,248,.02));position:relative}
   .cm-providers .cm-pcell.chekin::after{
@@ -421,11 +421,11 @@
   }
   .cm-providers .cm-feature-head{font:600 12px var(--font-primary);color:var(--text-gray-dark);text-transform:uppercase;letter-spacing:.06em}
   .cm-providers .logo-mark-sm{
-    width:32px;height:32px;border-radius:8px;display:grid;place-items:center;flex-shrink:0;
+    width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;
   }
-  .cm-providers .logo-mark-sm.logo-chekin{background:linear-gradient(135deg,#385CF8,#274BF0);color:#fff;font:800 14px var(--font-primary)}
+  .cm-providers .logo-mark-sm.logo-chekin{background:linear-gradient(135deg,#385CF8,#274BF0);color:#fff;font:800 14px var(--font-primary);line-height:1}
   .cm-providers .logo-mark-sm.logo-stripe{background:#635BFF}
-  .cm-providers .logo-mark-sm.logo-stripe svg{width:22px;height:10px}
+  .cm-providers .logo-mark-sm.logo-stripe svg{width:22px;height:10px;display:block}
   .cm-providers .pn{font:700 14px var(--font-primary);color:var(--text-dark);line-height:1.2}
   .cm-providers .ps{font:500 11px var(--font-primary);color:var(--text-gray-dark);margin-top:2px;display:flex;align-items:center;gap:4px}
   .cm-providers .ps .winner-badge{
@@ -447,28 +447,19 @@
     font:600 11px var(--font-primary);color:var(--text-gray-dark);
     text-transform:uppercase;letter-spacing:.07em;
     /* P2-16: more padding-top for separation */
-    padding:20px var(--s-3) 6px;background:transparent;
+    padding:24px var(--s-3) 10px;background:transparent;
     border-top:1px solid var(--stroke-gray-lighter);
     display:flex;align-items:center;justify-content:space-between;gap:10px;
   }
   .cm-section:first-of-type .cm-section-title > td{border-top:none}
-  .cm-section-title .copy-link{
-    appearance:none;border:1px solid transparent;background:transparent;
-    color:var(--text-gray-dark);cursor:pointer;padding:4px 6px;border-radius:var(--radius-sm);
-    font:500 10px var(--font-primary);text-transform:none;letter-spacing:0;
-    display:inline-flex;align-items:center;gap:4px;
-  }
-  .cm-section-title .copy-link:hover{background:var(--bg-neutral-light);color:var(--text-brand)}
-  .cm-section-title .copy-link svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2}
-  .cm-section-title .copy-link.copied{color:var(--text-success)}
 
   /* Comparison row */
   .cm-row{border-top:1px solid var(--stroke-gray-lighter);align-items:stretch}
   .cm-row:first-of-type{border-top:none}
-  .cm-cell{padding:14px var(--s-3);font:400 13px/18px var(--font-primary);color:var(--text-dark);display:flex;align-items:center;gap:8px;min-height:54px;text-align:left;vertical-align:middle}
+  .cm-cell{padding:18px var(--s-3);font:400 13px/20px var(--font-primary);color:var(--text-dark);display:flex;align-items:center;gap:10px;min-height:62px;text-align:left;vertical-align:middle}
   .cm-cell:not(:last-child){border-right:1px solid var(--stroke-gray-lighter)}
   .cm-cell.feature{font:600 13px var(--font-primary);color:var(--text-dark);background:#FAFAFE}
-  .cm-cell.feature .sub{font:400 11px var(--font-primary);color:var(--text-gray-dark);margin-top:2px;font-weight:500}
+  .cm-cell.feature .sub{font:400 11px var(--font-primary);color:var(--text-gray-dark);margin-top:3px;font-weight:500}
   .cm-cell.feature{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:0}
   .cm-cell.feature .feat-head{display:inline-flex;align-items:center;gap:6px}
   .cm-cell.chekin{background:linear-gradient(180deg, rgba(56,92,248,.04), rgba(56,92,248,.01));position:relative;font-weight:600}
@@ -516,14 +507,12 @@
 
   /* Footer */
   .cm-foot{
-    padding:var(--s-2) var(--s-3);border-top:1px solid var(--stroke-gray-lighter);
+    padding:var(--s-2) var(--s-4);border-top:1px solid var(--stroke-gray-lighter);
     display:flex;justify-content:space-between;align-items:center;gap:var(--s-2);
     background:#FAFAFE;flex-shrink:0;flex-wrap:wrap;
   }
   .cm-foot .foot-left{display:flex;flex-direction:column;gap:6px;min-width:0;flex:1}
   .cm-foot .foot-actions{display:flex;align-items:center;gap:10px;flex-shrink:0}
-  /* P0-3: source footnote */
-  .cm-foot .source-note{font:400 11px/1.4 var(--font-primary);color:var(--text-gray-dark)}
   .cm-foot .legend{font:500 12px var(--font-primary);color:var(--text-gray-dark);display:inline-flex;align-items:center;gap:14px;flex-wrap:wrap}
   .cm-foot .legend .item{display:inline-flex;align-items:center;gap:5px}
   .cm-foot .legend .item .winner-check{width:14px;height:14px}
@@ -608,6 +597,13 @@
       <!-- ─── METHOD SELECTOR ─── -->
       <section role="radiogroup" aria-labelledby="gw-label">
         <span class="sec-label" id="gw-label">Payment gateway</span>
+        <p style="font:400 14px/21px var(--font-primary);color:var(--text-gray-dark);margin:0 0 var(--s-2) 0">
+          Compare Chekin Payments and Stripe to find the best fit for your properties.
+          <button type="button" class="see-more-btn" data-open-compare="card" style="margin-left:8px" aria-label="See full comparison">
+            See differences
+            <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+        </p>
 
         <div class="method-grid">
 
@@ -659,7 +655,7 @@
               <div class="left">
                 <div class="commission-label">Per transaction</div>
                 <div class="commission-val">1.2% <span class="unit">+ €0.25</span></div>
-                <div class="commission-note">All cards · payout fee €0–€2 depending on bank</div>
+                <div class="commission-note">Payout fee depends on method — see details in Wallet</div>
               </div>
               <button type="button" class="see-more-btn" data-open-compare="card" aria-label="See full comparison with Stripe">
                 See differences
@@ -676,7 +672,7 @@
               <div class="who">
                 <div class="logo-mark logo-stripe">
                   <!-- Stripe wordmark (simplified, license-safe geometric) -->
-                  <svg viewBox="0 0 60 25" aria-label="Stripe"><text x="0" y="20" font-family="-apple-system, system-ui, sans-serif" font-weight="800" font-size="22" letter-spacing="-1.5" fill="#fff">stripe</text></svg>
+                  <svg viewBox="0 0 60 25" aria-label="Stripe"><text x="50%" y="50%" dominant-baseline="central" text-anchor="middle" font-family="-apple-system, system-ui, sans-serif" font-weight="800" font-size="22" letter-spacing="-1.5" fill="#fff">stripe</text></svg>
                 </div>
                 <div>
                   <div class="pname">Stripe</div>
@@ -775,7 +771,7 @@
           <div class="cp-head">
             <div class="cp-title">
               <span class="micro-logo logo-stripe">
-                <svg viewBox="0 0 60 25"><text x="0" y="20" font-family="-apple-system, system-ui, sans-serif" font-weight="800" font-size="22" letter-spacing="-1.5" fill="#fff">stripe</text></svg>
+                <svg viewBox="0 0 60 25"><text x="50%" y="50%" dominant-baseline="central" text-anchor="middle" font-family="-apple-system, system-ui, sans-serif" font-weight="800" font-size="22" letter-spacing="-1.5" fill="#fff">stripe</text></svg>
               </span>
               Stripe
             </div>
@@ -914,7 +910,7 @@
               <tr>
                 <td><div class="td-bold">Sophie Dubois</div><div class="td-sub">#BK-20465</div></td>
                 <td>Malasaña Studio</td>
-                <td><span class="gw-tag"><span class="gw-mark gw-stripe"><svg viewBox="0 0 60 25"><text x="0" y="20" font-family="-apple-system, system-ui, sans-serif" font-weight="800" font-size="22" letter-spacing="-1.5" fill="#fff">stripe</text></svg></span>Stripe</span></td>
+                <td><span class="gw-tag"><span class="gw-mark gw-stripe"><svg viewBox="0 0 60 25"><text x="50%" y="50%" dominant-baseline="central" text-anchor="middle" font-family="-apple-system, system-ui, sans-serif" font-weight="800" font-size="22" letter-spacing="-1.5" fill="#fff">stripe</text></svg></span>Stripe</span></td>
                 <td>Payment</td>
                 <td>19 May 2026</td>
                 <td><span class="td-bold">€ 185.00</span></td>
@@ -924,7 +920,7 @@
               <tr>
                 <td><div class="td-bold">Lukas Bauer</div><div class="td-sub">#BK-20451</div></td>
                 <td>Chueca Flat</td>
-                <td><span class="gw-tag"><span class="gw-mark gw-stripe"><svg viewBox="0 0 60 25"><text x="0" y="20" font-family="-apple-system, system-ui, sans-serif" font-weight="800" font-size="22" letter-spacing="-1.5" fill="#fff">stripe</text></svg></span>Stripe</span></td>
+                <td><span class="gw-tag"><span class="gw-mark gw-stripe"><svg viewBox="0 0 60 25"><text x="50%" y="50%" dominant-baseline="central" text-anchor="middle" font-family="-apple-system, system-ui, sans-serif" font-weight="800" font-size="22" letter-spacing="-1.5" fill="#fff">stripe</text></svg></span>Stripe</span></td>
                 <td>Deposit hold</td>
                 <td>17 May 2026</td>
                 <td><span class="td-bold">€ 500.00</span></td>
@@ -954,7 +950,7 @@
               <tr>
                 <td><div class="td-bold">Marco Esposito</div><div class="td-sub">#BK-20410</div></td>
                 <td>Retiro Room</td>
-                <td><span class="gw-tag"><span class="gw-mark gw-stripe"><svg viewBox="0 0 60 25"><text x="0" y="20" font-family="-apple-system, system-ui, sans-serif" font-weight="800" font-size="22" letter-spacing="-1.5" fill="#fff">stripe</text></svg></span>Stripe</span></td>
+                <td><span class="gw-tag"><span class="gw-mark gw-stripe"><svg viewBox="0 0 60 25"><text x="50%" y="50%" dominant-baseline="central" text-anchor="middle" font-family="-apple-system, system-ui, sans-serif" font-weight="800" font-size="22" letter-spacing="-1.5" fill="#fff">stripe</text></svg></span>Stripe</span></td>
                 <td>Deposit hold</td>
                 <td>11 May 2026</td>
                 <td><span class="td-bold">€ 200.00</span></td>
@@ -1017,7 +1013,7 @@
             </th>
             <th scope="col" class="cm-pcell">
               <div class="logo-mark-sm logo-stripe" aria-hidden="true">
-                <svg viewBox="0 0 60 25" aria-hidden="true"><text x="0" y="20" font-family="-apple-system, system-ui, sans-serif" font-weight="800" font-size="22" letter-spacing="-1.5" fill="#fff">stripe</text></svg>
+                <svg viewBox="0 0 60 25" aria-hidden="true"><text x="50%" y="50%" dominant-baseline="central" text-anchor="middle" font-family="-apple-system, system-ui, sans-serif" font-weight="800" font-size="22" letter-spacing="-1.5" fill="#fff">stripe</text></svg>
               </div>
               <div>
                 <div class="pn">Stripe</div>
@@ -1032,10 +1028,6 @@
           <tr class="cm-section-title">
             <td>
               <span>Costs</span>
-              <button class="copy-link" type="button" data-copy-section="sec-costs" data-slug="fees" aria-label="Copy link to Costs section">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.07 0l3-3a5 5 0 0 0-7.07-7.07l-1 1"/><path d="M14 11a5 5 0 0 0-7.07 0l-3 3a5 5 0 0 0 7.07 7.07l1-1"/></svg>
-                <span class="copy-label">Copy link</span>
-              </button>
             </td>
           </tr>
 
@@ -1081,10 +1073,6 @@
           <tr class="cm-section-title">
             <td>
               <span>Deposits &amp; security holds</span>
-              <button class="copy-link" type="button" data-copy-section="sec-deposits" data-slug="holds" aria-label="Copy link to Deposits section">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.07 0l3-3a5 5 0 0 0-7.07-7.07l-1 1"/><path d="M14 11a5 5 0 0 0-7.07 0l-3 3a5 5 0 0 0 7.07 7.07l1-1"/></svg>
-                <span class="copy-label">Copy link</span>
-              </button>
             </td>
           </tr>
 
@@ -1116,7 +1104,7 @@
             </td>
             <td class="cm-cell cell-value">
               <span class="val-row"><span class="val-main">Medium</span></span>
-              <span class="val-sub">~8% of 7-day re-auths fail<sup>†</sup></span>
+              <span class="val-sub">~8% of 7-day re-auths fail</span>
             </td>
           </tr>
         </tbody>
@@ -1126,10 +1114,6 @@
           <tr class="cm-section-title">
             <td>
               <span>Funds &amp; payouts</span>
-              <button class="copy-link" type="button" data-copy-section="sec-funds" data-slug="payouts" aria-label="Copy link to Funds section">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.07 0l3-3a5 5 0 0 0-7.07-7.07l-1 1"/><path d="M14 11a5 5 0 0 0-7.07 0l-3 3a5 5 0 0 0 7.07 7.07l1-1"/></svg>
-                <span class="copy-label">Copy link</span>
-              </button>
             </td>
           </tr>
 
@@ -1176,12 +1160,12 @@
           <tr class="cm-row">
             <th scope="row" class="cm-cell feature"><span class="feat-head">Payout fee</span></th>
             <td class="cm-cell chekin cell-value">
-              <span class="val-row"><span class="val-main">€0–€2</span></span>
-              <span class="val-sub">SEPA €0 · instant €0.50 · SWIFT €15</span>
+              <span class="val-row"><span class="val-main">Varies by method</span></span>
+              <span class="val-sub">Check your Wallet for details</span>
             </td>
             <td class="cm-cell cell-value">
               <span class="val-row"><span class="val-main">Included</span></span>
-              <span class="val-sub">In Stripe's processing fee</span>
+              <span class="val-sub">Stripe's processing fee</span>
             </td>
           </tr>
         </tbody>
@@ -1191,10 +1175,6 @@
           <tr class="cm-section-title">
             <td>
               <span>Onboarding &amp; access</span>
-              <button class="copy-link" type="button" data-copy-section="sec-onboarding" data-slug="kyc" aria-label="Copy link to Onboarding section">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.07 0l3-3a5 5 0 0 0-7.07-7.07l-1 1"/><path d="M14 11a5 5 0 0 0-7.07 0l-3 3a5 5 0 0 0 7.07 7.07l1-1"/></svg>
-                <span class="copy-label">Copy link</span>
-              </button>
             </td>
           </tr>
 
@@ -1230,64 +1210,13 @@
             </td>
           </tr>
 
-          <tr class="cm-row">
-            <th scope="row" class="cm-cell feature"><span class="feat-head">Supported currencies</span></th>
-            <td class="cm-cell chekin cell-value">
-              <span class="val-row"><span class="val-main">15+</span></span>
-              <span class="val-sub">EUR, GBP, USD and 12 more</span>
-            </td>
-            <td class="cm-cell cell-value">
-              <span class="val-row"><span class="val-main">135+</span><span class="winner-check" aria-label="Best option"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span></span>
-              <span class="val-sub">Broader global coverage</span>
-            </td>
-          </tr>
-
-          <tr class="cm-row">
-            <th scope="row" class="cm-cell feature"><span class="feat-head">Fraud tooling</span></th>
-            <td class="cm-cell chekin cell-value">
-              <span class="val-row"><span class="val-main">Standard 3DS + risk rules</span></span>
-            </td>
-            <td class="cm-cell cell-value">
-              <span class="val-row"><span class="val-main">Radar ML + custom rules</span><span class="winner-check" aria-label="Best option"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span></span>
-            </td>
-          </tr>
-
-          <tr class="cm-row">
-            <th scope="row" class="cm-cell feature"><span class="feat-head">API &amp; developer ecosystem</span></th>
-            <td class="cm-cell chekin cell-value">
-              <span class="val-row"><span class="val-main">REST API + webhooks</span></span>
-            </td>
-            <td class="cm-cell cell-value">
-              <span class="val-row"><span class="val-main">Mature SDKs, 20+ languages</span><span class="winner-check" aria-label="Best option"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span></span>
-            </td>
-          </tr>
-
-          <tr class="cm-row">
-            <th scope="row" class="cm-cell feature"><span class="feat-head">Native integration</span></th>
-            <td class="cm-cell chekin cell-value">
-              <span class="val-row"><span class="val-main">Yes</span><span class="winner-check" aria-label="Best option"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span></span>
-              <span class="val-sub">Built into your dashboard</span>
-            </td>
-            <td class="cm-cell cell-value">
-              <span class="val-row"><span class="val-main">Connect</span></span>
-              <span class="val-sub">External account link</span>
-            </td>
-          </tr>
         </tbody>
       </table>
 
     </div>
 
     <div class="cm-foot">
-      <div class="foot-left">
-        <div class="source-note">
-          <sup>†</sup> Source: Chekin internal data, Q1 2025 (n=12,400 7-day auth renewals across Stripe-connected hosts).
-        </div>
-        <div class="legend">
-          <span class="item"><span class="winner-check" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span>Best option</span>
-          <span class="item"><span class="neutral-dash" aria-hidden="true"></span>Neutral</span>
-        </div>
-      </div>
+      <div class="foot-left"></div>
       <div class="foot-actions">
         <button class="btn-secondary" id="cm-done-btn" type="button">Close</button>
         <button class="btn-cta-primary" id="cm-cta-btn" type="button">Continue with Chekin</button>
@@ -1542,31 +1471,6 @@
     info.addEventListener('focus', fire);
   });
 
-  // P2-15: copy-link buttons
-  compareModal.querySelectorAll('.copy-link').forEach(btn => {
-    btn.addEventListener('click', async () => {
-      const sectionId = btn.dataset.copySection;
-      const slug = btn.dataset.slug;
-      const url = window.location.origin + window.location.pathname + '?compare=' + slug + '#' + sectionId;
-      try {
-        await navigator.clipboard.writeText(url);
-      } catch(_){
-        // fallback
-        const ta = document.createElement('textarea');
-        ta.value = url; document.body.appendChild(ta); ta.select();
-        try { document.execCommand('copy'); } catch(__){}
-        document.body.removeChild(ta);
-      }
-      btn.classList.add('copied');
-      const lbl = btn.querySelector('.copy-label');
-      const prev = lbl ? lbl.textContent : '';
-      if (lbl) lbl.textContent = 'Copied';
-      setTimeout(() => {
-        btn.classList.remove('copied');
-        if (lbl) lbl.textContent = prev || 'Copy link';
-      }, 1600);
-    });
-  });
 
   // P2-15: open modal on load if ?compare= present
   (function bootDeepLink(){
