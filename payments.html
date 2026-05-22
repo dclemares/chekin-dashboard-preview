@@ -116,7 +116,8 @@
     width:44px;height:44px;border-radius:10px;
     display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;
   }
-  .logo-chekin{background:linear-gradient(135deg,#385CF8,#274BF0);color:#fff;font:800 18px var(--font-primary);letter-spacing:-.02em;line-height:1}
+  .logo-chekin{background:linear-gradient(135deg,#385CF8,#274BF0);color:#fff}
+  .logo-chekin svg{width:28px;height:28px}
   .logo-stripe{background:#635BFF;color:#fff}
   .logo-stripe svg{width:30px;height:14px;display:block}
   .card-head .pname{font:700 17px var(--font-primary);color:var(--text-dark)}
@@ -196,7 +197,8 @@
     padding:var(--s-2) var(--s-3);border-bottom:1px solid var(--stroke-gray-lighter);gap:var(--s-2);flex-wrap:wrap;
   }
   .cp-title{font:600 15px var(--font-primary);color:var(--text-dark);display:flex;align-items:center;gap:10px}
-  .micro-logo{width:24px;height:24px;border-radius:6px;display:grid;place-items:center;color:#fff;font:800 11px var(--font-primary)}
+  .micro-logo{width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#fff;font:800 11px var(--font-primary)}
+  .micro-logo svg{width:16px;height:16px}
   .micro-logo.logo-stripe svg{width:18px;height:9px}
   .cp-head .right{display:flex;align-items:center;gap:8px}
   .admin-badge{
@@ -423,7 +425,8 @@
   .cm-providers .logo-mark-sm{
     width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;
   }
-  .cm-providers .logo-mark-sm.logo-chekin{background:linear-gradient(135deg,#385CF8,#274BF0);color:#fff;font:800 14px var(--font-primary);line-height:1}
+  .cm-providers .logo-mark-sm.logo-chekin{background:linear-gradient(135deg,#385CF8,#274BF0);color:#fff}
+  .cm-providers .logo-mark-sm.logo-chekin svg{width:20px;height:20px}
   .cm-providers .logo-mark-sm.logo-stripe{background:#635BFF}
   .cm-providers .logo-mark-sm.logo-stripe svg{width:22px;height:10px;display:block}
   .cm-providers .pn{font:700 14px var(--font-primary);color:var(--text-dark);line-height:1.2}
@@ -613,7 +616,7 @@
 
             <div class="card-head">
               <div class="who">
-                <div class="logo-mark logo-chekin">C</div>
+                <div class="logo-mark logo-chekin" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none"><path d="M34 16c-2.2-2.4-5.4-4-9-4-7 0-12 5-12 12s5 12 12 12c3.6 0 6.8-1.6 9-4" stroke="#fff" stroke-width="4" stroke-linecap="round"/></svg></div>
                 <div>
                   <div class="pname">Chekin Payments</div>
                   <div class="psub">Native — built into your dashboard</div>
@@ -634,12 +637,12 @@
             </div>
 
             <div class="method-headline">Start collecting today. No paperwork.</div>
-            <div class="method-desc" id="chekin-desc">Your first guest can pay in 2 minutes. Money lands in your Chekin Wallet — you decide when to cash out.</div>
+            <div class="method-desc" id="chekin-desc">Your first guest can pay in 2 minutes. Funds are collected in your Chekin Wallet, where you can request payouts when needed.</div>
 
             <div class="feat-list">
               <div class="feat">
                 <span class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
-                <span>Deposits held <strong>up to 30 days</strong>, no re-authorisations needed</span>
+                <span>Deposit holds <strong>up to 30 days</strong> without repeated guest re-authorisations</span>
               </div>
               <div class="feat">
                 <span class="ic"><svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M2 10h20"/></svg></span>
@@ -657,10 +660,6 @@
                 <div class="commission-val">1.2% <span class="unit">+ €0.25</span></div>
                 <div class="commission-note">Payout fee depends on method — see details in Wallet</div>
               </div>
-              <button type="button" class="see-more-btn" data-open-compare="card" aria-label="See full comparison with Stripe">
-                See differences
-                <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-              </button>
             </div>
           </label>
 
@@ -684,8 +683,8 @@
 
             <div class="badge-row"></div>
 
-            <div class="method-headline">Bring your own Stripe account.</div>
-            <div class="method-desc" id="stripe-desc">Use it if you already have a verified Stripe account. Requires KYC and fiscal documentation before going live.</div>
+            <div class="method-headline">Use your existing Stripe account.</div>
+            <div class="method-desc" id="stripe-desc">Use your existing Stripe account if you prefer to manage payments externally. Requires KYC and fiscal documentation before going live.</div>
 
             <div class="feat-list">
               <div class="feat">
@@ -704,14 +703,10 @@
 
             <div class="commission-area">
               <div class="left">
-                <div class="commission-label">Per transaction</div>
+                <div class="commission-label">Per transaction (EEA standard)</div>
                 <div class="commission-val">1.5% <span class="unit">+ €0.25</span></div>
-                <div class="commission-note">EU cards · 2.5% + €0.25 non-EU</div>
+                <div class="commission-note">Premium EEA 1.9% · UK 2.5% · International 3.25% · +2% currency conversion</div>
               </div>
-              <button type="button" class="see-more-btn" data-open-compare="card" aria-label="See full comparison with Chekin Payments">
-                See differences
-                <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-              </button>
             </div>
           </label>
 
@@ -722,10 +717,10 @@
       <section id="config-wrapper">
 
         <!-- Chekin "active" status panel (compact, no details) -->
-        <div id="config-chekin" class="config-panel">
+        <div id="config-chekin" class="config-panel" style="display:none">
           <div class="cp-head">
             <div class="cp-title">
-              <span class="micro-logo logo-chekin">C</span>
+              <span class="micro-logo logo-chekin"><svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M34 16c-2.2-2.4-5.4-4-9-4-7 0-12 5-12 12s5 12 12 12c3.6 0 6.8-1.6 9-4" stroke="#fff" stroke-width="4" stroke-linecap="round"/></svg></span>
               Chekin Payments
             </div>
             <div class="right">
@@ -1000,7 +995,7 @@
           <tr class="cm-providers">
             <th scope="col" class="cm-pcell"><span class="cm-feature-head">Feature</span></th>
             <th scope="col" class="cm-pcell chekin">
-              <div class="logo-mark-sm logo-chekin" aria-hidden="true">C</div>
+              <div class="logo-mark-sm logo-chekin" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none"><path d="M34 16c-2.2-2.4-5.4-4-9-4-7 0-12 5-12 12s5 12 12 12c3.6 0 6.8-1.6 9-4" stroke="#fff" stroke-width="4" stroke-linecap="round"/></svg></div>
               <div>
                 <div class="pn">Chekin Payments</div>
                 <div class="ps">
@@ -1032,26 +1027,62 @@
           </tr>
 
           <tr class="cm-row">
-            <th scope="row" class="cm-cell feature"><span class="feat-head">Commission · EU cards</span><span class="sub">Per successful transaction</span></th>
+            <th scope="row" class="cm-cell feature"><span class="feat-head">Standard EEA cards</span><span class="sub">Per successful transaction</span></th>
             <td class="cm-cell chekin cell-value">
               <span class="val-row"><span class="val-main">1.2% + €0.25</span><span class="winner-check" aria-label="Best option"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span></span>
-              <span class="val-sub">All card brands</span>
+              <span class="val-sub">All card brands, flat rate</span>
             </td>
             <td class="cm-cell cell-value">
               <span class="val-row"><span class="val-main">1.5% + €0.25</span></span>
-              <span class="val-sub">Spain standard rate</span>
+              <span class="val-sub">Standard EEA rate</span>
             </td>
           </tr>
 
           <tr class="cm-row">
-            <th scope="row" class="cm-cell feature"><span class="feat-head">Commission · non-EU cards</span></th>
+            <th scope="row" class="cm-cell feature"><span class="feat-head">Premium EEA cards</span></th>
+            <td class="cm-cell chekin cell-value">
+              <span class="val-row"><span class="val-main">1.2% + €0.25</span><span class="winner-check" aria-label="Best option"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span></span>
+              <span class="val-sub">Same flat rate</span>
+            </td>
+            <td class="cm-cell cell-value">
+              <span class="val-row"><span class="val-main">1.9% + €0.25</span></span>
+              <span class="val-sub">Premium tier</span>
+            </td>
+          </tr>
+
+          <tr class="cm-row">
+            <th scope="row" class="cm-cell feature"><span class="feat-head">UK cards</span></th>
             <td class="cm-cell chekin cell-value">
               <span class="val-row"><span class="val-main">1.2% + €0.25</span><span class="winner-check" aria-label="Best option"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span></span>
               <span class="val-sub">Same flat rate</span>
             </td>
             <td class="cm-cell cell-value">
               <span class="val-row"><span class="val-main">2.5% + €0.25</span></span>
-              <span class="val-sub">Higher tier applies</span>
+              <span class="val-sub">UK card rate</span>
+            </td>
+          </tr>
+
+          <tr class="cm-row">
+            <th scope="row" class="cm-cell feature"><span class="feat-head">International cards</span></th>
+            <td class="cm-cell chekin cell-value">
+              <span class="val-row"><span class="val-main">1.2% + €0.25</span><span class="winner-check" aria-label="Best option"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span></span>
+              <span class="val-sub">Same flat rate</span>
+            </td>
+            <td class="cm-cell cell-value">
+              <span class="val-row"><span class="val-main">3.25% + €0.25</span></span>
+              <span class="val-sub">International rate</span>
+            </td>
+          </tr>
+
+          <tr class="cm-row">
+            <th scope="row" class="cm-cell feature"><span class="feat-head">Currency conversion</span></th>
+            <td class="cm-cell chekin cell-value">
+              <span class="val-row"><span class="val-main">Included</span><span class="winner-check" aria-label="Best option"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span></span>
+              <span class="val-sub">No surcharge</span>
+            </td>
+            <td class="cm-cell cell-value">
+              <span class="val-row"><span class="val-main">+2%</span></span>
+              <span class="val-sub">When applicable</span>
             </td>
           </tr>
 
@@ -1262,12 +1293,13 @@
   function paint(g){
     cardChekin.classList.toggle('selected', g === 'chekin');
     cardStripe.classList.toggle('selected', g === 'stripe');
-    cfgChekin.style.display = g === 'chekin' ? 'block' : 'none';
+    cfgChekin.style.display = 'none'; // config panel hidden per design
     cfgStripe.style.display = g === 'stripe' ? 'block' : 'none';
-    const active = g === 'chekin' ? cfgChekin : cfgStripe;
-    active.style.animation = 'none';
-    void active.offsetWidth;
-    active.style.animation = '';
+    if (g === 'stripe') {
+      cfgStripe.style.animation = 'none';
+      void cfgStripe.offsetWidth;
+      cfgStripe.style.animation = '';
+    }
   }
 
   function requestSwitch(g){
