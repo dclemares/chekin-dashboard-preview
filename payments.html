@@ -404,6 +404,92 @@
 
   .cm-body{padding:0;overflow:auto;flex:1}
 
+  /* ── Eyebrow badge in header ── */
+  .cm-eyebrow{
+    display:inline-flex;align-items:center;gap:5px;
+    font:600 11px var(--font-primary);color:var(--text-brand);
+    background:var(--bg-blue-light);border-radius:99px;
+    padding:3px 10px;margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em;
+  }
+  .cm-eyebrow svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2.5}
+
+  /* ── Summary benefit cards ── */
+  .cm-benefits{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:12px;
+    padding:var(--s-3) var(--s-4) 0;
+  }
+  .cm-benefit{
+    background:var(--bg-neutral-light);border-radius:var(--radius-sm);
+    padding:14px 16px;display:flex;flex-direction:column;gap:6px;
+    border:1px solid var(--stroke-gray-lighter);
+  }
+  .cm-benefit .b-icon{
+    width:32px;height:32px;border-radius:8px;
+    background:var(--bg-blue-light);color:var(--text-brand);
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  }
+  .cm-benefit .b-icon svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2}
+  .cm-benefit .b-title{font:600 13px var(--font-primary);color:var(--text-dark)}
+  .cm-benefit .b-desc{font:400 12px/1.4 var(--font-primary);color:var(--text-gray-dark)}
+
+  /* ── Highlighted deposit advantage ── */
+  .cm-highlight{
+    margin:16px var(--s-4) 0;padding:16px 20px;
+    background:linear-gradient(135deg,rgba(56,92,248,.06),rgba(56,92,248,.02));
+    border:1px solid rgba(56,92,248,.18);border-radius:var(--radius-sm);
+    display:flex;align-items:flex-start;gap:14px;
+  }
+  .cm-highlight .hl-icon{
+    width:36px;height:36px;border-radius:10px;
+    background:var(--text-brand);color:#fff;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .cm-highlight .hl-icon svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2}
+  .cm-highlight .hl-body{flex:1;min-width:0}
+  .cm-highlight .hl-title{font:600 14px var(--font-primary);color:var(--text-dark);margin:0 0 4px}
+  .cm-highlight .hl-text{font:400 13px/1.5 var(--font-primary);color:var(--text-gray-dark);margin:0}
+
+  /* ── Section divider between cards and table ── */
+  .cm-divider{
+    margin:20px var(--s-4) 0;padding:0 0 4px;
+    font:600 12px var(--font-primary);color:var(--text-gray-dark);
+    text-transform:uppercase;letter-spacing:.06em;
+    border-bottom:1px solid var(--stroke-gray-lighter);
+    display:flex;align-items:center;gap:8px;
+  }
+  .cm-divider svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2}
+
+  /* ── Deposit rows emphasis ── */
+  .cm-row.deposit-row .cm-cell.chekin{
+    background:linear-gradient(180deg, rgba(56,92,248,.08), rgba(56,92,248,.03));
+  }
+  .cm-row.deposit-row .cm-cell.chekin .val-main{
+    font-weight:700;color:var(--text-brand);
+  }
+
+  /* ── Improved footer with reassurance ── */
+  .cm-foot .foot-reassurance{
+    font:400 12px/1.4 var(--font-primary);color:var(--text-gray-dark);
+    display:flex;align-items:center;gap:6px;
+  }
+  .cm-foot .foot-reassurance svg{width:14px;height:14px;stroke:var(--text-success);fill:none;stroke-width:2;flex-shrink:0}
+  .cm-foot .btn-cta-secondary{
+    appearance:none;border:1px solid var(--stroke-gray-light);
+    background:#fff;color:var(--text-gray-dark);
+    font:500 13px var(--font-primary);
+    padding:10px 18px;border-radius:var(--radius-sm);
+    cursor:pointer;transition:background .15s,border-color .15s;
+  }
+  .cm-foot .btn-cta-secondary:hover{background:var(--bg-neutral-light);border-color:var(--stroke-gray-medium)}
+
+  @media (max-width:720px){
+    .cm-benefits{grid-template-columns:repeat(2,1fr)}
+    .cm-highlight{flex-direction:column;gap:10px}
+  }
+  @media (max-width:480px){
+    .cm-benefits{grid-template-columns:1fr}
+  }
+
   /* P2-7: semantic table — render as grid via display rules */
   .cm-table{width:100%;border-collapse:collapse;table-layout:fixed}
   .cm-table thead, .cm-table tbody, .cm-table tr{display:block}
@@ -979,8 +1065,12 @@
   <div class="compare-modal">
     <div class="cm-head">
       <div class="ct">
-        <h3 id="compare-title" tabindex="-1">Chekin Payments vs Stripe</h3>
-        <div class="csub" id="compare-subtitle">Side-by-side breakdown of fees, holds, payouts and onboarding.</div>
+        <div class="cm-eyebrow">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Payment comparison
+        </div>
+        <h3 id="compare-title" tabindex="-1">Choose the best gateway for your properties</h3>
+        <div class="csub" id="compare-subtitle">Transparent side-by-side breakdown so you can decide with confidence.</div>
       </div>
       <button class="cm-close" id="cm-close-btn" aria-label="Close comparison">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
@@ -988,6 +1078,45 @@
     </div>
 
     <div class="cm-body" id="cm-body">
+
+      <!-- Summary benefit cards -->
+      <div class="cm-benefits" aria-label="Key advantages of Chekin Payments">
+        <div class="cm-benefit">
+          <div class="b-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+          <div class="b-title">Lower fees</div>
+          <div class="b-desc">Flat 1.2% + €0.25 on all cards — no premium or international surcharges.</div>
+        </div>
+        <div class="cm-benefit">
+          <div class="b-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+          <div class="b-title">30-day holds</div>
+          <div class="b-desc">Hold deposits up to 30 days without re-authorisation or guest friction.</div>
+        </div>
+        <div class="cm-benefit">
+          <div class="b-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+          <div class="b-title">Instant start</div>
+          <div class="b-desc">Go live from day one — no KYC paperwork or onboarding delays.</div>
+        </div>
+        <div class="cm-benefit">
+          <div class="b-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/><path d="M12 6v6l4 2"/></svg></div>
+          <div class="b-title">On-demand payouts</div>
+          <div class="b-desc">Cash out to your bank anytime from the Chekin Wallet.</div>
+        </div>
+      </div>
+
+      <!-- Highlighted deposit advantage -->
+      <div class="cm-highlight">
+        <div class="hl-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <div class="hl-body">
+          <p class="hl-title">Deposit holds that actually last the full stay</p>
+          <p class="hl-text">Stripe's 7-day cap forces re-authorisations — ~8% of which fail, leaving you unprotected mid-stay. Chekin holds deposits for up to 30 days in a single charge, so the guest experience stays seamless and your security holds remain intact.</p>
+        </div>
+      </div>
+
+      <!-- Divider into detailed comparison -->
+      <div class="cm-divider">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        Detailed comparison
+      </div>
 
       <table class="cm-table" aria-label="Chekin Payments vs Stripe comparison">
         <thead>
@@ -1107,7 +1236,7 @@
             </td>
           </tr>
 
-          <tr class="cm-row">
+          <tr class="cm-row deposit-row">
             <th scope="row" class="cm-cell feature">
               <span class="feat-head">
                 Hold duration
@@ -1128,7 +1257,7 @@
             </td>
           </tr>
 
-          <tr class="cm-row">
+          <tr class="cm-row deposit-row">
             <th scope="row" class="cm-cell feature"><span class="feat-head">Risk of failed renewal</span></th>
             <td class="cm-cell chekin cell-value">
               <span class="val-row"><span class="val-main">None</span><span class="winner-check" aria-label="Best option"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span></span>
@@ -1189,14 +1318,22 @@
           </tr>
 
           <tr class="cm-row">
-            <th scope="row" class="cm-cell feature"><span class="feat-head">Payout fee</span></th>
+            <th scope="row" class="cm-cell feature">
+              <span class="feat-head">
+                Payout fee
+                <button class="cm-info" type="button" tabindex="0" aria-label="About payout fees">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+                  <span class="cm-tip" role="tooltip" data-feature="Payout fee">Chekin charges a small fee per withdrawal — amount depends on the payout method you choose in Wallet settings. Stripe bundles payout costs into their processing fee.</span>
+                </button>
+              </span>
+            </th>
             <td class="cm-cell chekin cell-value">
-              <span class="val-row"><span class="val-main">Varies by method</span></span>
-              <span class="val-sub">Check your Wallet for details</span>
+              <span class="val-row"><span class="val-main">Small fee per withdrawal</span></span>
+              <span class="val-sub">Depends on method — see Wallet settings</span>
             </td>
             <td class="cm-cell cell-value">
-              <span class="val-row"><span class="val-main">Included</span></span>
-              <span class="val-sub">Stripe's processing fee</span>
+              <span class="val-row"><span class="val-main">Bundled in processing</span></span>
+              <span class="val-sub">No separate payout charge</span>
             </td>
           </tr>
         </tbody>
@@ -1232,12 +1369,12 @@
               </span>
             </th>
             <td class="cm-cell chekin cell-value">
-              <span class="val-row"><span class="val-main">Not required</span><span class="winner-check" aria-label="Best option"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span></span>
-              <span class="val-sub">Handled by Chekin</span>
+              <span class="val-row"><span class="val-main">Handled by Chekin</span><span class="winner-check" aria-label="Best option"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span></span>
+              <span class="val-sub">We manage compliance under our license</span>
             </td>
             <td class="cm-cell cell-value">
-              <span class="val-row"><span class="val-main">Required</span></span>
-              <span class="val-sub">Company + tax data</span>
+              <span class="val-row"><span class="val-main">You must submit</span></span>
+              <span class="val-sub">Company + tax data before first charge</span>
             </td>
           </tr>
 
@@ -1247,10 +1384,15 @@
     </div>
 
     <div class="cm-foot">
-      <div class="foot-left"></div>
+      <div class="foot-left">
+        <div class="foot-reassurance">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          You can switch gateways anytime — no lock-in, no downtime.
+        </div>
+      </div>
       <div class="foot-actions">
-        <button class="btn-secondary" id="cm-done-btn" type="button">Close</button>
-        <button class="btn-cta-primary" id="cm-cta-btn" type="button">Continue with Chekin</button>
+        <button class="btn-cta-secondary" id="cm-done-btn" type="button">Keep Stripe</button>
+        <button class="btn-cta-primary" id="cm-cta-btn" type="button">Set up Chekin Payments</button>
       </div>
     </div>
   </div>
@@ -1366,11 +1508,13 @@
   function refreshCompareCta(){
     const isStripe = rStripe.checked;
     if (isStripe){
-      cmCtaBtn.textContent = 'Switch to Chekin';
+      cmCtaBtn.textContent = 'Set up Chekin Payments';
       cmCtaBtn.dataset.intent = 'switch';
+      cmDoneBtn.textContent = 'Keep Stripe';
     } else {
-      cmCtaBtn.textContent = 'Continue with Chekin';
+      cmCtaBtn.textContent = 'Set up Chekin Payments';
       cmCtaBtn.dataset.intent = 'continue';
+      cmDoneBtn.textContent = 'Close';
     }
   }
 
