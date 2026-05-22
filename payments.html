@@ -22,8 +22,9 @@
     --stroke-gray-light:#DEDEEB;
     --stroke-gray-medium:#CECEDE;
     --text-dark:#161643;
-    --text-gray-dark:#6B6B95;
-    --text-gray-medium:#9696B9;
+    /* P2: bumped contrast on functional grays */
+    --text-gray-dark:#54547A;        /* was #6B6B95 → now ~5.9:1 on white */
+    --text-gray-medium:#7B7BA0;      /* was #9696B9 → now ~4.5:1 on white */
     --text-gray-light:#CECEDE;
     --text-white:#FFFFFF;
     --text-brand:#385CF8;
@@ -57,9 +58,29 @@
   .page{padding:var(--s-5) var(--s-6) 80px;max-width:1120px;width:100%;margin:0 auto;display:flex;flex-direction:column;gap:var(--s-4)}
 
   /* ───────── Page head ───────── */
-  .pagehead{display:flex;justify-content:space-between;align-items:flex-start;gap:var(--s-3)}
+  .pagehead{display:flex;justify-content:space-between;align-items:flex-start;gap:var(--s-3);flex-wrap:wrap}
   .pagehead h1{font:600 24px/30px var(--font-primary);color:var(--text-dark);margin:0;letter-spacing:-.005em}
   .pagehead .sub{font:400 14px/21px var(--font-primary);color:var(--text-gray-dark);margin-top:5px;max-width:580px}
+
+  /* Demo state switcher (devtool look) */
+  .state-switch{
+    display:flex;align-items:center;gap:8px;padding:4px;
+    background:#fff;border:1px solid var(--stroke-gray-lighter);
+    border-radius:var(--radius-md);box-shadow:var(--shadow-card);
+  }
+  .state-switch .lbl{font:600 11px var(--font-primary);color:var(--text-gray-dark);text-transform:uppercase;letter-spacing:.05em;padding:0 8px;border-right:1px solid var(--stroke-gray-lighter)}
+  .state-switch button{
+    border:none;background:transparent;cursor:pointer;
+    font:600 12px var(--font-primary);color:var(--text-gray-dark);
+    padding:6px 10px;border-radius:6px;display:inline-flex;align-items:center;gap:6px;
+  }
+  .state-switch button:hover{background:var(--bg-neutral-light);color:var(--text-dark)}
+  .state-switch button[aria-pressed="true"]{background:var(--text-dark);color:#fff}
+  .state-switch button[aria-pressed="true"] .d{background:#fff}
+  .state-switch button .d{width:6px;height:6px;border-radius:50%}
+  .state-switch button .d.active{background:#0F9F80}
+  .state-switch button .d.pending{background:#B45309}
+  .state-switch button .d.failed{background:var(--text-danger)}
 
   .sec-label{font:600 11px var(--font-primary);color:var(--text-gray-dark);text-transform:uppercase;letter-spacing:.07em;margin-bottom:var(--s-2);display:block}
 
@@ -80,10 +101,26 @@
   .method-card:hover{border-color:var(--stroke-gray-medium)}
   .method-card.selected{border-color:var(--text-brand);box-shadow:0 0 0 3px rgba(56,92,248,.12), var(--shadow-card)}
   .method-card.recommended.selected{background:linear-gradient(180deg, rgba(56,92,248,.025), #fff 40%)}
-  .method-card:focus-within{outline:none;border-color:var(--text-brand);box-shadow:0 0 0 3px rgba(56,92,248,.2)}
+  /* P2: unify selected + focus halo (no double shadow) */
+  .method-card:focus-within{outline:none;border-color:var(--text-brand)}
+  .method-card:focus-within:not(.selected){box-shadow:0 0 0 3px rgba(56,92,248,.2), var(--shadow-card)}
+  .method-card.selected:focus-within{box-shadow:0 0 0 3px rgba(56,92,248,.28), var(--shadow-card)}
 
   /* Native radio visually hidden but accessible */
   .method-radio{position:absolute;opacity:0;pointer-events:none}
+
+  /* Card header: logo + name + status pill (moved up) */
+  .card-head{display:flex;align-items:center;gap:12px;margin-bottom:var(--s-2)}
+  .card-head .who{display:flex;align-items:center;gap:12px;min-width:0;flex:1}
+  .card-head .logo-mark{
+    width:44px;height:44px;border-radius:10px;
+    display:grid;place-items:center;flex-shrink:0;overflow:hidden;
+  }
+  .logo-chekin{background:linear-gradient(135deg,#385CF8,#274BF0);color:#fff;font:800 18px var(--font-primary);letter-spacing:-.02em}
+  .logo-stripe{background:#635BFF;color:#fff}
+  .logo-stripe svg{width:30px;height:14px}
+  .card-head .pname{font:700 17px var(--font-primary);color:var(--text-dark)}
+  .card-head .psub{font:400 13px var(--font-primary);color:var(--text-gray-dark);margin-top:1px}
 
   /* Badge area */
   .badge-row{display:flex;align-items:center;gap:var(--s-1);margin-bottom:var(--s-2);min-height:22px;flex-wrap:wrap}
@@ -93,29 +130,23 @@
   .badge-social{font:500 11px var(--font-primary);color:var(--text-gray-dark);display:inline-flex;align-items:center;gap:4px}
   .badge-social svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:1.8}
 
-  /* Provider logo + name */
-  .method-logo{display:flex;align-items:center;gap:12px;margin-bottom:var(--s-2)}
-  .method-logo .logo-mark{
-    width:44px;height:44px;border-radius:10px;
-    display:grid;place-items:center;flex-shrink:0;overflow:hidden;
-  }
-  .logo-chekin{background:linear-gradient(135deg,#385CF8,#274BF0);color:#fff;font:800 18px var(--font-primary);letter-spacing:-.02em}
-  .logo-stripe{background:#635BFF;color:#fff;font:800 22px var(--font-primary);letter-spacing:-.04em}
-  .method-logo .pname{font:700 17px var(--font-primary);color:var(--text-dark)}
-  .method-logo .psub{font:400 13px var(--font-primary);color:var(--text-gray-dark);margin-top:1px}
-
   /* Outcome headline */
   .method-headline{font:600 15px/22px var(--font-primary);color:var(--text-dark);margin-bottom:6px}
   .method-desc{font:400 13px/19px var(--font-primary);color:var(--text-gray-dark);margin-bottom:var(--s-2)}
 
-  /* Feature list */
+  /* Feature list — neutral comparative (no good/bad icons) */
   .feat-list{display:flex;flex-direction:column;gap:8px;margin-bottom:var(--s-2)}
   .feat{display:flex;align-items:flex-start;gap:9px;font:400 13px/19px var(--font-primary);color:var(--text-dark)}
-  .feat svg{width:14px;height:14px;flex-shrink:0;margin-top:3px;stroke-width:2.4}
-  .feat-check svg{stroke:#0F9F80}
-  .feat-neutral svg{stroke:var(--text-gray-medium)}
+  .feat .ic{
+    width:22px;height:22px;border-radius:6px;flex-shrink:0;
+    display:grid;place-items:center;
+    background:var(--bg-neutral-light);
+  }
+  .feat .ic svg{width:13px;height:13px;stroke:var(--text-gray-dark);fill:none;stroke-width:1.8}
+  .method-card.recommended .feat .ic{background:rgba(56,92,248,.08)}
+  .method-card.recommended .feat .ic svg{stroke:var(--text-brand)}
 
-  /* Commission */
+  /* Commission row (no status here anymore) */
   .commission-area{
     border-top:1px solid var(--stroke-gray-lighter);
     padding-top:var(--s-2);
@@ -124,42 +155,10 @@
   }
   .commission-area .left{min-width:0}
   .commission-label{font:500 11px var(--font-primary);color:var(--text-gray-dark);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
-  .commission-val{font:700 22px/26px var(--font-primary);color:var(--text-dark);letter-spacing:-.01em}
+  .commission-val{font:700 20px/24px var(--font-primary);color:var(--text-dark);letter-spacing:-.01em}
   .commission-val .unit{font:600 13px var(--font-primary);color:var(--text-gray-dark);margin-left:4px}
   .commission-note{font:400 11px/15px var(--font-primary);color:var(--text-gray-dark);margin-top:4px}
   .method-card.recommended .commission-val{color:var(--text-brand)}
-
-  /* ───────── Savings calculator ───────── */
-  .calc-card{
-    background:#fff;border:1px solid var(--stroke-gray-lighter);
-    border-radius:var(--radius-lg);box-shadow:var(--shadow-card);
-    padding:var(--s-3);
-    display:grid;grid-template-columns:auto 1px 1fr 1fr;gap:var(--s-3);align-items:center;
-  }
-  .calc-input{display:flex;flex-direction:column;gap:6px}
-  .calc-label{font:500 11px var(--font-primary);color:var(--text-gray-dark);text-transform:uppercase;letter-spacing:.05em}
-  .calc-field{
-    display:flex;align-items:center;
-    height:44px;padding:0 12px;border:1px solid var(--stroke-gray-light);border-radius:var(--radius-md);
-    background:var(--bg-neutral-light);font:600 16px var(--font-primary);color:var(--text-dark);
-    width:200px;
-  }
-  .calc-field:focus-within{background:#fff;border-color:var(--text-brand);box-shadow:0 0 0 3px rgba(56,92,248,.12)}
-  .calc-field input{
-    border:none;background:transparent;font:600 16px var(--font-primary);color:var(--text-dark);
-    outline:none;width:100%;text-align:right;font-variant-numeric:tabular-nums;
-  }
-  .calc-field .currency{color:var(--text-gray-medium);font-weight:500;margin-right:6px}
-  .calc-divider{width:1px;height:54px;background:var(--stroke-gray-lighter)}
-
-  .calc-result{display:flex;flex-direction:column;gap:3px;min-width:0}
-  .calc-r-label{font:500 11px var(--font-primary);color:var(--text-gray-dark);text-transform:uppercase;letter-spacing:.05em;display:flex;align-items:center;gap:6px}
-  .calc-r-label .dot-c{width:8px;height:8px;border-radius:50%;background:var(--text-brand)}
-  .calc-r-label .dot-s{width:8px;height:8px;border-radius:50%;background:#635BFF}
-  .calc-r-val{font:700 22px/26px var(--font-primary);color:var(--text-dark);letter-spacing:-.01em;font-variant-numeric:tabular-nums}
-  .calc-r-sub{font:500 12px var(--font-primary);color:var(--text-gray-dark)}
-  .calc-result.highlight .calc-r-val{color:var(--text-success)}
-  .calc-result.highlight .calc-r-sub{color:var(--text-success);font-weight:600}
 
   /* ───────── Status pill ───────── */
   .status-pill{
@@ -176,7 +175,52 @@
   .status-failed .dot{background:var(--text-danger)}
   .status-inactive{background:var(--bg-neutral-light);color:var(--text-gray-dark)}
   .status-inactive .dot{background:var(--text-gray-medium)}
-  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{animation:none !important;transition:none !important}
+  }
+
+  /* ───────── Savings calculator ───────── */
+  .calc-card{
+    background:#fff;border:1px solid var(--stroke-gray-lighter);
+    border-radius:var(--radius-lg);box-shadow:var(--shadow-card);
+    padding:var(--s-3);
+    display:grid;grid-template-columns:auto 1px 1fr 1fr;gap:var(--s-3);align-items:center;
+  }
+  .calc-input{display:flex;flex-direction:column;gap:8px}
+  .calc-label{font:500 11px var(--font-primary);color:var(--text-gray-dark);text-transform:uppercase;letter-spacing:.05em}
+  .calc-field{
+    display:flex;align-items:center;
+    height:44px;padding:0 12px;border:1px solid var(--stroke-gray-light);border-radius:var(--radius-md);
+    background:var(--bg-neutral-light);font:600 16px var(--font-primary);color:var(--text-dark);
+    width:200px;
+  }
+  .calc-field:focus-within{background:#fff;border-color:var(--text-brand);box-shadow:0 0 0 3px rgba(56,92,248,.12)}
+  .calc-field input{
+    border:none;background:transparent;font:600 16px var(--font-primary);color:var(--text-dark);
+    outline:none;width:100%;text-align:right;font-variant-numeric:tabular-nums;
+  }
+  .calc-field .currency{color:var(--text-gray-dark);font-weight:600;margin-right:6px}
+  .calc-divider{width:1px;height:64px;background:var(--stroke-gray-lighter)}
+
+  /* Presets */
+  .calc-presets{display:flex;gap:4px;flex-wrap:wrap}
+  .calc-presets button{
+    border:1px solid var(--stroke-gray-lighter);background:#fff;
+    font:600 11px var(--font-primary);color:var(--text-gray-dark);
+    padding:5px 9px;border-radius:99px;cursor:pointer;
+  }
+  .calc-presets button:hover{border-color:var(--stroke-gray-medium);color:var(--text-dark)}
+  .calc-presets button[aria-pressed="true"]{background:var(--bg-blue-light);border-color:var(--text-brand);color:var(--text-brand)}
+
+  .calc-result{display:flex;flex-direction:column;gap:3px;min-width:0}
+  .calc-r-label{font:500 11px var(--font-primary);color:var(--text-gray-dark);text-transform:uppercase;letter-spacing:.05em;display:flex;align-items:center;gap:6px}
+  .calc-r-label .dot-c{width:8px;height:8px;border-radius:50%;background:var(--text-brand)}
+  .calc-r-label .dot-s{width:8px;height:8px;border-radius:50%;background:#635BFF}
+  .calc-r-val{font:700 26px/30px var(--font-primary);color:var(--text-dark);letter-spacing:-.012em;font-variant-numeric:tabular-nums}
+  .calc-r-sub{font:500 12px var(--font-primary);color:var(--text-gray-dark)}
+  .calc-result.highlight .calc-r-val{color:var(--text-success)}
+  .calc-result.highlight .calc-r-sub{color:var(--text-success);font-weight:600}
 
   /* ───────── Config panel ───────── */
   .config-panel{
@@ -191,11 +235,41 @@
 
   .cp-head{
     display:flex;justify-content:space-between;align-items:center;
-    padding:var(--s-2) var(--s-3);border-bottom:1px solid var(--stroke-gray-lighter);
+    padding:var(--s-2) var(--s-3);border-bottom:1px solid var(--stroke-gray-lighter);gap:var(--s-2);flex-wrap:wrap;
   }
   .cp-title{font:600 15px var(--font-primary);color:var(--text-dark);display:flex;align-items:center;gap:10px}
   .micro-logo{width:24px;height:24px;border-radius:6px;display:grid;place-items:center;color:#fff;font:800 11px var(--font-primary)}
+  .micro-logo.logo-stripe svg{width:18px;height:9px}
+  .cp-head .right{display:flex;align-items:center;gap:8px}
+  .admin-badge{
+    display:inline-flex;align-items:center;gap:5px;
+    font:600 11px var(--font-primary);color:var(--text-gray-dark);
+    background:var(--bg-neutral-light);padding:3px 8px;border-radius:4px;
+  }
+  .admin-badge svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:1.8}
   .cp-body{padding:var(--s-3)}
+
+  /* Status-specific banners inside config panel */
+  .status-banner{
+    display:flex;align-items:flex-start;gap:12px;
+    padding:var(--s-2) var(--s-3);border-radius:var(--radius-md);
+    margin-bottom:var(--s-2);
+  }
+  .status-banner .sb-icon{width:32px;height:32px;border-radius:8px;display:grid;place-items:center;flex-shrink:0}
+  .status-banner .sb-icon svg{width:16px;height:16px;fill:none;stroke-width:2}
+  .status-banner .sb-info{flex:1;min-width:0}
+  .status-banner .sb-info .t{font:600 14px var(--font-primary);color:var(--text-dark)}
+  .status-banner .sb-info .d{font:400 13px/18px var(--font-primary);color:var(--text-gray-dark);margin-top:2px}
+  .status-banner.banner-active{background:linear-gradient(135deg, rgba(56,92,248,.05), rgba(56,92,248,.02));border:1px solid rgba(56,92,248,.15)}
+  .status-banner.banner-active .sb-icon{background:rgba(56,92,248,.1)}
+  .status-banner.banner-active .sb-icon svg{stroke:var(--text-brand)}
+  .status-banner.banner-pending{background:var(--bg-warning-light);border:1px solid rgba(180,83,9,.18)}
+  .status-banner.banner-pending .sb-icon{background:rgba(180,83,9,.12)}
+  .status-banner.banner-pending .sb-icon svg{stroke:#B45309}
+  .status-banner.banner-failed{background:var(--bg-danger-light);border:1px solid rgba(255,36,103,.18)}
+  .status-banner.banner-failed .sb-icon{background:rgba(255,36,103,.12)}
+  .status-banner.banner-failed .sb-icon svg{stroke:var(--text-danger)}
+  .status-banner .sb-cta{margin-left:auto;flex-shrink:0}
 
   /* Stripe connect block */
   .stripe-connect{
@@ -207,31 +281,13 @@
   .stripe-connect .sc-info .t{font:600 14px var(--font-primary);color:var(--text-dark)}
   .stripe-connect .sc-info .d{font:400 13px/18px var(--font-primary);color:var(--text-gray-dark);margin-top:2px}
 
-  /* Instant activate (Chekin) */
-  .instant-activate{
-    display:flex;align-items:center;gap:var(--s-2);
-    padding:var(--s-2) var(--s-3);
-    border-radius:var(--radius-md);
-    background:linear-gradient(135deg, rgba(56,92,248,.05), rgba(56,92,248,.02));
-    border:1px solid rgba(56,92,248,.15);
-    margin-bottom:var(--s-2);
-  }
-  .ia-icon{
-    width:40px;height:40px;border-radius:10px;
-    background:rgba(56,92,248,.1);
-    display:grid;place-items:center;flex-shrink:0;
-  }
-  .ia-icon svg{width:20px;height:20px;stroke:var(--text-brand);fill:none;stroke-width:1.8}
-  .ia-info{flex:1}
-  .ia-info .t{font:600 14px var(--font-primary);color:var(--text-dark)}
-  .ia-info .d{font:400 13px/18px var(--font-primary);color:var(--text-gray-dark);margin-top:2px}
-
   /* Detail rows */
   .detail-rows{display:flex;flex-direction:column}
   .detail-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--stroke-gray-lighter);gap:var(--s-2)}
   .detail-row:last-child{border-bottom:none}
   .dr-label{font:500 13px var(--font-primary);color:var(--text-gray-dark)}
   .dr-val{font:600 13px var(--font-primary);color:var(--text-dark);display:inline-flex;align-items:center;gap:6px;text-align:right}
+  .dr-val .why{font:500 12px var(--font-primary);color:var(--text-gray-dark);margin-left:4px;font-weight:500}
   .dr-val svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.8}
 
   .payout-disclosure{
@@ -241,16 +297,19 @@
     padding:10px 14px;background:var(--bg-neutral-light);border-radius:var(--radius-sm);
   }
   .payout-disclosure svg{width:14px;height:14px;stroke:var(--text-gray-medium);fill:none;stroke-width:1.8;flex-shrink:0;margin-top:1px}
+  .payout-disclosure b{color:var(--text-dark);font-weight:600}
 
   /* ───────── Buttons ───────── */
   .btn-primary{height:40px;padding:0 18px;background:var(--text-brand);border:none;color:#fff;font:600 14px var(--font-primary);border-radius:var(--radius-md);cursor:pointer;display:inline-flex;align-items:center;gap:8px;white-space:nowrap;transition:opacity .15s}
   .btn-primary:hover{opacity:.88}
   .btn-primary svg{width:14px;height:14px;stroke:#fff;fill:none;stroke-width:2.2}
+  .btn-primary.danger{background:var(--text-danger)}
   .btn-secondary{height:40px;padding:0 16px;background:#fff;border:1px solid var(--stroke-gray-medium);color:var(--text-dark);font:600 14px var(--font-primary);border-radius:var(--radius-md);cursor:pointer;display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
   .btn-secondary:hover{background:var(--bg-neutral-light)}
   .btn-secondary svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.8}
   .btn-ghost{height:32px;padding:0 10px;background:transparent;border:none;color:var(--text-brand);font:600 13px var(--font-primary);border-radius:var(--radius-md);cursor:pointer;display:inline-flex;align-items:center;gap:6px}
   .btn-ghost:hover{background:var(--bg-blue-light)}
+  .btn-sm{height:32px;padding:0 12px;font:600 12px var(--font-primary)}
 
   /* ───────── Divider ───────── */
   .divider{height:1px;background:var(--stroke-gray-lighter)}
@@ -289,6 +348,13 @@
   td{padding:14px 20px;font:400 14px var(--font-primary);color:var(--text-dark);vertical-align:middle}
   td .td-sub{font:400 12px var(--font-primary);color:var(--text-gray-dark);margin-top:2px}
   td .td-bold{font-weight:600}
+
+  /* Gateway tag in table */
+  .gw-tag{display:inline-flex;align-items:center;gap:6px;font:600 12px var(--font-primary);color:var(--text-dark)}
+  .gw-tag .gw-mark{width:18px;height:18px;border-radius:5px;display:grid;place-items:center;color:#fff;font:800 9px var(--font-primary);flex-shrink:0}
+  .gw-tag .gw-mark.gw-chekin{background:linear-gradient(135deg,#385CF8,#274BF0)}
+  .gw-tag .gw-mark.gw-stripe{background:#635BFF}
+  .gw-tag .gw-mark.gw-stripe svg{width:13px;height:6px}
 
   .chip{display:inline-flex;align-items:center;gap:5px;font:600 12px var(--font-primary);padding:3px 10px;border-radius:99px}
   .chip-success{background:var(--bg-success-light);color:#0F9F80}
@@ -346,6 +412,8 @@
     .calc-field{width:100%}
     .kpi-row{grid-template-columns:repeat(2,1fr)}
     .page{padding:var(--s-3) var(--s-3) 64px}
+    /* P1: Chekin first on mobile */
+    .calc-result.highlight{order:-1}
   }
 </style>
 </head>
@@ -375,6 +443,14 @@
           <h1>Payments</h1>
           <div class="sub">Pick how you charge guests and hold deposits. The selected gateway applies to every property in this workspace.</div>
         </div>
+
+        <!-- Demo state switcher (P0) -->
+        <div class="state-switch" role="group" aria-label="Demo: simulate gateway status">
+          <span class="lbl">Demo state</span>
+          <button data-state="active" aria-pressed="true"><span class="d active"></span>Active</button>
+          <button data-state="pending" aria-pressed="false"><span class="d pending"></span>Pending validation</button>
+          <button data-state="failed" aria-pressed="false"><span class="d failed"></span>Failed</button>
+        </div>
       </div>
 
       <!-- ─── METHOD SELECTOR ─── -->
@@ -387,6 +463,17 @@
           <label class="method-card recommended selected" id="card-chekin" for="r-chekin">
             <input type="radio" name="gateway" id="r-chekin" class="method-radio" checked aria-describedby="chekin-desc">
 
+            <div class="card-head">
+              <div class="who">
+                <div class="logo-mark logo-chekin">C</div>
+                <div>
+                  <div class="pname">Chekin Payments</div>
+                  <div class="psub">Native — built into your dashboard</div>
+                </div>
+              </div>
+              <span class="status-pill status-active" id="pill-chekin"><span class="dot"></span>Active</span>
+            </div>
+
             <div class="badge-row">
               <span class="badge badge-recommended">
                 <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
@@ -398,30 +485,30 @@
               </span>
             </div>
 
-            <div class="method-logo">
-              <div class="logo-mark logo-chekin">C</div>
-              <div>
-                <div class="pname">Chekin Payments</div>
-                <div class="psub">Native — built into your dashboard</div>
-              </div>
-            </div>
-
             <div class="method-headline">Start collecting today. No paperwork.</div>
             <div class="method-desc" id="chekin-desc">Your first guest can pay in 2 minutes. Money lands in your Chekin Wallet — you decide when to cash out.</div>
 
             <div class="feat-list">
-              <div class="feat feat-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Deposits held <strong>up to 30 days</strong>, no re-authorisations</div>
-              <div class="feat feat-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Money in your <strong>wallet</strong>, payout on demand</div>
-              <div class="feat feat-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Zero onboarding — <strong>active from day one</strong></div>
+              <div class="feat">
+                <span class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
+                <span>Deposits held <strong>up to 30 days</strong>, no re-authorisations needed</span>
+              </div>
+              <div class="feat">
+                <span class="ic"><svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M2 10h20"/></svg></span>
+                <span>Funds in your <strong>Chekin Wallet</strong> — payout on demand</span>
+              </div>
+              <div class="feat">
+                <span class="ic"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></span>
+                <span>Zero onboarding — <strong>active from day one</strong></span>
+              </div>
             </div>
 
             <div class="commission-area">
               <div class="left">
                 <div class="commission-label">Per transaction</div>
                 <div class="commission-val">1.2% <span class="unit">+ €0.25</span></div>
-                <div class="commission-note">All cards · payout fee may apply</div>
+                <div class="commission-note">All cards · payout fee €0–€2 depending on bank</div>
               </div>
-              <span class="status-pill status-active"><span class="dot"></span>Active</span>
             </div>
           </label>
 
@@ -429,23 +516,38 @@
           <label class="method-card" id="card-stripe" for="r-stripe">
             <input type="radio" name="gateway" id="r-stripe" class="method-radio" aria-describedby="stripe-desc">
 
-            <div class="badge-row"></div>
-
-            <div class="method-logo">
-              <div class="logo-mark logo-stripe">S</div>
-              <div>
-                <div class="pname">Stripe</div>
-                <div class="psub">Third-party processor — connect your own</div>
+            <div class="card-head">
+              <div class="who">
+                <div class="logo-mark logo-stripe">
+                  <!-- Stripe wordmark (simplified, license-safe geometric) -->
+                  <svg viewBox="0 0 60 25" aria-label="Stripe"><text x="0" y="20" font-family="-apple-system, system-ui, sans-serif" font-weight="800" font-size="22" letter-spacing="-1.5" fill="#fff">stripe</text></svg>
+                </div>
+                <div>
+                  <div class="pname">Stripe</div>
+                  <div class="psub">Third-party processor — bring your own</div>
+                </div>
               </div>
+              <span class="status-pill status-inactive" id="pill-stripe"><span class="dot"></span>Not connected</span>
             </div>
+
+            <div class="badge-row"></div>
 
             <div class="method-headline">Bring your own Stripe account.</div>
             <div class="method-desc" id="stripe-desc">Use it if you already have a verified Stripe account. Requires KYC and fiscal documentation before going live.</div>
 
             <div class="feat-list">
-              <div class="feat feat-neutral"><svg viewBox="0 0 24 24"><path d="M12 6v6l4 2"/><circle cx="12" cy="12" r="10"/></svg>Deposits re-authorised <strong>every 7 days</strong></div>
-              <div class="feat feat-neutral"><svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg>Funds go to your <strong>Stripe account</strong></div>
-              <div class="feat feat-neutral"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>KYC required — company and fiscal data</div>
+              <div class="feat">
+                <span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+                <span>Deposits re-authorised <strong>every 7 days</strong> — guest's bank must approve again</span>
+              </div>
+              <div class="feat">
+                <span class="ic"><svg viewBox="0 0 24 24"><path d="M3 7h18M3 12h18M3 17h18"/></svg></span>
+                <span>Funds go to your <strong>Stripe balance</strong> — Stripe payout schedule</span>
+              </div>
+              <div class="feat">
+                <span class="ic"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg></span>
+                <span>KYC required — company and fiscal data before activation</span>
+              </div>
             </div>
 
             <div class="commission-area">
@@ -454,7 +556,6 @@
                 <div class="commission-val">1.5% <span class="unit">+ €0.25</span></div>
                 <div class="commission-note">EU cards · 2.5% + €0.25 non-EU</div>
               </div>
-              <span class="status-pill status-inactive"><span class="dot"></span>Not connected</span>
             </div>
           </label>
 
@@ -470,6 +571,11 @@
             <div class="calc-field">
               <span class="currency">€</span>
               <input type="number" id="volume-input" value="4500" min="0" step="100" aria-label="Monthly volume in euros">
+            </div>
+            <div class="calc-presets" role="group" aria-label="Volume presets">
+              <button data-preset="800" aria-pressed="false">Single property · €800</button>
+              <button data-preset="4500" aria-pressed="true">3–10 units · €4.5k</button>
+              <button data-preset="25000" aria-pressed="false">10+ units · €25k</button>
             </div>
           </div>
 
@@ -499,18 +605,41 @@
               <span class="micro-logo logo-chekin">C</span>
               Chekin Payments
             </div>
-            <span class="status-pill status-active"><span class="dot"></span>Active</span>
+            <div class="right">
+              <span class="admin-badge" title="Only workspace admins can switch the payment gateway">
+                <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                Admin only
+              </span>
+              <span class="status-pill status-active" id="cfg-pill-chekin"><span class="dot"></span>Active</span>
+            </div>
           </div>
           <div class="cp-body">
 
-            <div class="instant-activate">
-              <div class="ia-icon">
-                <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-              </div>
-              <div class="ia-info">
+            <!-- Status banner — swaps based on demo state -->
+            <div class="status-banner banner-active" id="banner-active">
+              <div class="sb-icon"><svg viewBox="0 0 24 24" stroke="currentColor"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+              <div class="sb-info">
                 <div class="t">Your account is ready</div>
                 <div class="d">Chekin Payments is live. Guests can pay and deposits are held automatically — no extra setup.</div>
               </div>
+            </div>
+
+            <div class="status-banner banner-pending" id="banner-pending" style="display:none">
+              <div class="sb-icon"><svg viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+              <div class="sb-info">
+                <div class="t">Validating your business data</div>
+                <div class="d">We're reviewing the information you submitted. This usually takes a few hours. You can still receive bookings — charges will resume once validation completes.</div>
+              </div>
+              <div class="sb-cta"><button class="btn-secondary btn-sm">View checklist</button></div>
+            </div>
+
+            <div class="status-banner banner-failed" id="banner-failed" style="display:none">
+              <div class="sb-icon"><svg viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg></div>
+              <div class="sb-info">
+                <div class="t">Validation failed — action required</div>
+                <div class="d">Some of the documents you provided couldn't be verified. New charges are paused until you resolve this. Open holds remain unaffected.</div>
+              </div>
+              <div class="sb-cta"><button class="btn-primary btn-sm">Fix now</button></div>
             </div>
 
             <div class="detail-rows">
@@ -521,13 +650,17 @@
               <div class="detail-row">
                 <span class="dr-label">Deposit hold</span>
                 <span class="dr-val" style="color:#0F9F80">
-                  <svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>
                   Up to 30 days, uninterrupted
+                  <span class="why" style="color:var(--text-gray-dark)">— guest sees one charge, no reminders</span>
                 </span>
               </div>
               <div class="detail-row">
                 <span class="dr-label">Funds destination</span>
                 <span class="dr-val">Chekin Wallet → payout on demand</span>
+              </div>
+              <div class="detail-row">
+                <span class="dr-label">Payout time</span>
+                <span class="dr-val">1–2 business days (SEPA) · same day (instant, fee applies)</span>
               </div>
               <div class="detail-row">
                 <span class="dr-label">Supported currencies</span>
@@ -537,7 +670,7 @@
 
             <div class="payout-disclosure">
               <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
-              Payout fee depends on your bank country and method (SEPA, SWIFT, card). Manage from your Wallet settings.
+              <span><b>Payout fee:</b> €0 for SEPA standard · €0.50 SEPA instant · €15 SWIFT · 1% card. No minimum balance, no monthly fee.</span>
             </div>
           </div>
         </div>
@@ -546,10 +679,18 @@
         <div id="config-stripe" class="config-panel" style="display:none">
           <div class="cp-head">
             <div class="cp-title">
-              <span class="micro-logo logo-stripe">S</span>
+              <span class="micro-logo logo-stripe">
+                <svg viewBox="0 0 60 25"><text x="0" y="20" font-family="-apple-system, system-ui, sans-serif" font-weight="800" font-size="22" letter-spacing="-1.5" fill="#fff">stripe</text></svg>
+              </span>
               Stripe
             </div>
-            <span class="status-pill status-inactive"><span class="dot"></span>Not connected</span>
+            <div class="right">
+              <span class="admin-badge">
+                <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                Admin only
+              </span>
+              <span class="status-pill status-inactive" id="cfg-pill-stripe"><span class="dot"></span>Not connected</span>
+            </div>
           </div>
           <div class="cp-body">
 
@@ -575,11 +716,18 @@
               </div>
               <div class="detail-row">
                 <span class="dr-label">Deposit hold</span>
-                <span class="dr-val" style="color:#B45309">7-day cycle · re-authorisation required</span>
+                <span class="dr-val" style="color:#B45309">
+                  7-day cycle · re-authorisation required
+                  <span class="why" style="color:var(--text-gray-dark)">— guest's bank may decline on renewal</span>
+                </span>
               </div>
               <div class="detail-row">
                 <span class="dr-label">Funds destination</span>
-                <span class="dr-val">Stripe account · Stripe payout schedule</span>
+                <span class="dr-val">Stripe balance · Stripe payout schedule</span>
+              </div>
+              <div class="detail-row">
+                <span class="dr-label">Onboarding time</span>
+                <span class="dr-val">1–3 business days (KYC review)</span>
               </div>
             </div>
           </div>
@@ -627,6 +775,7 @@
             <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
             <input type="text" placeholder="Search guest, booking ID…">
           </div>
+          <button class="filter-pill">All gateways <svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
           <button class="filter-pill">All types <svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
           <button class="filter-pill">All statuses <svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
           <button class="filter-pill"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Last 30 days <svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
@@ -638,6 +787,7 @@
               <tr>
                 <th>Guest / Booking</th>
                 <th>Property</th>
+                <th>Gateway</th>
                 <th>Type</th>
                 <th>Date</th>
                 <th>Amount</th>
@@ -649,6 +799,7 @@
               <tr>
                 <td><div class="td-bold">Martina García</div><div class="td-sub">#BK-20481</div></td>
                 <td>Puerta del Sol</td>
+                <td><span class="gw-tag"><span class="gw-mark gw-chekin">C</span>Chekin</span></td>
                 <td>Payment</td>
                 <td>22 May 2026</td>
                 <td><span class="td-bold">€ 240.00</span></td>
@@ -658,6 +809,7 @@
               <tr>
                 <td><div class="td-bold">James O'Brien</div><div class="td-sub">#BK-20479</div></td>
                 <td>Gran Vía 14</td>
+                <td><span class="gw-tag"><span class="gw-mark gw-chekin">C</span>Chekin</span></td>
                 <td>Deposit hold</td>
                 <td>21 May 2026</td>
                 <td><span class="td-bold">€ 300.00</span></td>
@@ -667,6 +819,7 @@
               <tr>
                 <td><div class="td-bold">Sophie Dubois</div><div class="td-sub">#BK-20465</div></td>
                 <td>Malasaña Studio</td>
+                <td><span class="gw-tag"><span class="gw-mark gw-stripe"><svg viewBox="0 0 60 25"><text x="0" y="20" font-family="-apple-system, system-ui, sans-serif" font-weight="800" font-size="22" letter-spacing="-1.5" fill="#fff">stripe</text></svg></span>Stripe</span></td>
                 <td>Payment</td>
                 <td>19 May 2026</td>
                 <td><span class="td-bold">€ 185.00</span></td>
@@ -676,6 +829,7 @@
               <tr>
                 <td><div class="td-bold">Lukas Bauer</div><div class="td-sub">#BK-20451</div></td>
                 <td>Chueca Flat</td>
+                <td><span class="gw-tag"><span class="gw-mark gw-stripe"><svg viewBox="0 0 60 25"><text x="0" y="20" font-family="-apple-system, system-ui, sans-serif" font-weight="800" font-size="22" letter-spacing="-1.5" fill="#fff">stripe</text></svg></span>Stripe</span></td>
                 <td>Deposit hold</td>
                 <td>17 May 2026</td>
                 <td><span class="td-bold">€ 500.00</span></td>
@@ -685,6 +839,7 @@
               <tr>
                 <td><div class="td-bold">Yuki Tanaka</div><div class="td-sub">#BK-20438</div></td>
                 <td>Lavapiés Loft</td>
+                <td><span class="gw-tag"><span class="gw-mark gw-chekin">C</span>Chekin</span></td>
                 <td>Refund</td>
                 <td>15 May 2026</td>
                 <td class="amount-neg"><span class="td-bold">− € 120.00</span></td>
@@ -694,6 +849,7 @@
               <tr>
                 <td><div class="td-bold">Ana Ferreira</div><div class="td-sub">#BK-20422</div></td>
                 <td>Sol Terrace</td>
+                <td><span class="gw-tag"><span class="gw-mark gw-chekin">C</span>Chekin</span></td>
                 <td>Payment</td>
                 <td>13 May 2026</td>
                 <td><span class="td-bold">€ 320.00</span></td>
@@ -703,6 +859,7 @@
               <tr>
                 <td><div class="td-bold">Marco Esposito</div><div class="td-sub">#BK-20410</div></td>
                 <td>Retiro Room</td>
+                <td><span class="gw-tag"><span class="gw-mark gw-stripe"><svg viewBox="0 0 60 25"><text x="0" y="20" font-family="-apple-system, system-ui, sans-serif" font-weight="800" font-size="22" letter-spacing="-1.5" fill="#fff">stripe</text></svg></span>Stripe</span></td>
                 <td>Deposit hold</td>
                 <td>11 May 2026</td>
                 <td><span class="td-bold">€ 200.00</span></td>
@@ -723,16 +880,6 @@
               <button class="pg-btn">21</button>
               <button class="pg-btn" aria-label="Next page"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button>
             </div>
-          </div>
-        </div>
-
-        <!-- Empty state (hidden by default, shown if no transactions) -->
-        <div class="table-wrap" id="tx-empty" style="display:none">
-          <div class="empty-tx">
-            <div class="ill"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18M7 15h3"/></svg></div>
-            <div class="t">No transactions yet</div>
-            <div class="d">Once your first guest pays through Chekin Payments, you'll see every charge, hold and refund right here.</div>
-            <button class="btn-secondary" style="margin-top:8px"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Send a test check-in</button>
           </div>
         </div>
       </section>
@@ -763,6 +910,7 @@
   // ───── Gateway switcher with confirmation ─────
   let currentGateway = 'chekin';
   let pendingGateway = null;
+  let lastFocusedBeforeModal = null;
 
   const cardChekin = document.getElementById('card-chekin');
   const cardStripe = document.getElementById('card-stripe');
@@ -771,6 +919,8 @@
   const cfgChekin  = document.getElementById('config-chekin');
   const cfgStripe  = document.getElementById('config-stripe');
   const modal      = document.getElementById('switch-modal');
+  const modalCancel  = document.getElementById('m-cancel');
+  const modalConfirm = document.getElementById('m-confirm');
 
   function paint(g){
     cardChekin.classList.toggle('selected', g === 'chekin');
@@ -786,13 +936,17 @@
   function requestSwitch(g){
     if (g === currentGateway) return;
     pendingGateway = g;
+    lastFocusedBeforeModal = document.activeElement;
     modal.classList.add('open');
+    // P2: focus trap — initial focus
+    setTimeout(() => modalCancel.focus(), 30);
   }
   function closeModal(){
     modal.classList.remove('open');
     rChekin.checked = currentGateway === 'chekin';
     rStripe.checked = currentGateway === 'stripe';
     pendingGateway = null;
+    if (lastFocusedBeforeModal && lastFocusedBeforeModal.focus) lastFocusedBeforeModal.focus();
   }
   function confirmSwitch(){
     if (!pendingGateway) return;
@@ -800,20 +954,36 @@
     paint(currentGateway);
     modal.classList.remove('open');
     pendingGateway = null;
+    if (lastFocusedBeforeModal && lastFocusedBeforeModal.focus) lastFocusedBeforeModal.focus();
   }
 
   rChekin.addEventListener('change', () => requestSwitch('chekin'));
   rStripe.addEventListener('change', () => requestSwitch('stripe'));
-  document.getElementById('m-cancel').addEventListener('click', closeModal);
-  document.getElementById('m-confirm').addEventListener('click', confirmSwitch);
+  modalCancel.addEventListener('click', closeModal);
+  modalConfirm.addEventListener('click', confirmSwitch);
   modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape' && modal.classList.contains('open')) closeModal(); });
+
+  // P2: focus trap inside modal
+  document.addEventListener('keydown', e => {
+    if (!modal.classList.contains('open')) return;
+    if (e.key === 'Escape'){ closeModal(); return; }
+    if (e.key === 'Tab'){
+      const focusables = [modalCancel, modalConfirm];
+      const idx = focusables.indexOf(document.activeElement);
+      e.preventDefault();
+      const next = e.shiftKey
+        ? focusables[(idx - 1 + focusables.length) % focusables.length]
+        : focusables[(idx + 1) % focusables.length];
+      next.focus();
+    }
+  });
 
   // ───── Savings calculator ─────
   const volInput   = document.getElementById('volume-input');
   const costStripe = document.getElementById('cost-stripe');
   const costChekin = document.getElementById('cost-chekin');
   const savings    = document.getElementById('savings-line');
+  const presetBtns = document.querySelectorAll('.calc-presets button');
   const fmtEur     = n => '€ ' + n.toLocaleString('en-GB', {minimumFractionDigits:2, maximumFractionDigits:2});
 
   function recalc(){
@@ -826,9 +996,42 @@
     costStripe.textContent = fmtEur(stripeC);
     costChekin.textContent = fmtEur(chekinC);
     savings.textContent = `You save ${fmtEur(diff)}/month · ${fmtEur(diff*12)}/year`;
+    // update preset pressed state
+    presetBtns.forEach(b => b.setAttribute('aria-pressed', String(parseFloat(b.dataset.preset) === v)));
   }
   volInput.addEventListener('input', recalc);
+  presetBtns.forEach(b => b.addEventListener('click', () => {
+    volInput.value = b.dataset.preset;
+    recalc();
+  }));
   recalc();
+
+  // ───── Demo state switcher (active / pending / failed) ─────
+  const stateBtns = document.querySelectorAll('.state-switch button[data-state]');
+  const pillChekin    = document.getElementById('pill-chekin');
+  const cfgPillChekin = document.getElementById('cfg-pill-chekin');
+  const bannerActive  = document.getElementById('banner-active');
+  const bannerPending = document.getElementById('banner-pending');
+  const bannerFailed  = document.getElementById('banner-failed');
+
+  const STATE_LABELS = {
+    active:  { txt:'Active',             cls:'status-active'  },
+    pending: { txt:'Pending validation', cls:'status-pending' },
+    failed:  { txt:'Validation failed',  cls:'status-failed'  }
+  };
+
+  function applyState(state){
+    const info = STATE_LABELS[state];
+    [pillChekin, cfgPillChekin].forEach(p => {
+      p.className = 'status-pill ' + info.cls;
+      p.innerHTML = '<span class="dot"></span>' + info.txt;
+    });
+    bannerActive.style.display  = state === 'active'  ? 'flex' : 'none';
+    bannerPending.style.display = state === 'pending' ? 'flex' : 'none';
+    bannerFailed.style.display  = state === 'failed'  ? 'flex' : 'none';
+    stateBtns.forEach(b => b.setAttribute('aria-pressed', String(b.dataset.state === state)));
+  }
+  stateBtns.forEach(b => b.addEventListener('click', () => applyState(b.dataset.state)));
 </script>
 
 <script src="ds/_sidebar.js"></script>
