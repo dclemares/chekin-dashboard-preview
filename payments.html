@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="ds/_sidebar.css">
 <link rel="stylesheet" href="ds/_agent.css">
 <style>
+  /* ───────── Dashboard surface tokens (mirrors DS) ───────── */
   :root{
     --bg-dark:#161643;
     --bg-screen:#FDFDFF;
@@ -20,7 +21,6 @@
     --stroke-gray-lighter:#E5E6EE;
     --stroke-gray-light:#DEDEEB;
     --stroke-gray-medium:#CECEDE;
-    --stroke-success:#AAF4E3;
     --text-dark:#161643;
     --text-gray-dark:#6B6B95;
     --text-gray-medium:#9696B9;
@@ -29,20 +29,23 @@
     --text-brand:#385CF8;
     --text-danger:#FF2467;
     --text-success:#0F9F80;
-    --text-warning:#D97706;
+    --text-warning:#B45309;
     --shadow-card:0 0 5px 0 rgba(143,143,143,.2);
     --shadow-card-hover:0 6px 16px 0 rgba(143,143,143,.25);
-    --shadow-dropdown:0 4px 10px 0 rgba(143,143,143,.2);
+    --shadow-modal:0 16px 48px rgba(22,22,67,.24);
     --radius-sm:6px;
     --radius-md:8px;
     --radius-lg:14px;
+
+    /* 8px spacing scale (from DS) */
+    --s-1:8px; --s-2:16px; --s-3:24px; --s-4:32px; --s-5:40px; --s-6:48px;
   }
   *{box-sizing:border-box}
   body{margin:0;background:var(--bg-screen);font-family:var(--font-primary);color:var(--text-dark);font-feature-settings:"ss01"}
 
-  /* ───────── LAYOUT ───────── */
+  /* ───────── Layout ───────── */
   main{display:flex;flex-direction:column;min-width:0}
-  header.top{display:flex;align-items:center;gap:16px;padding:0 32px;height:64px;border-bottom:1px solid var(--stroke-gray-lighter);background:var(--bg-white);position:sticky;top:0;z-index:5}
+  header.top{display:flex;align-items:center;gap:16px;padding:0 var(--s-4);height:64px;border-bottom:1px solid var(--stroke-gray-lighter);background:var(--bg-white);position:sticky;top:0;z-index:5}
   .crumbs{font:500 14px var(--font-primary);color:var(--text-gray-dark)}
   .crumbs b{color:var(--text-dark);font-weight:600}
   .iconbtn{width:40px;height:40px;border-radius:var(--radius-md);background:#fff;border:1px solid var(--stroke-gray-lighter);display:grid;place-items:center;cursor:pointer;position:relative;flex-shrink:0}
@@ -51,225 +54,222 @@
   .iconbtn .pip{position:absolute;top:8px;right:8px;width:8px;height:8px;border-radius:50%;background:var(--text-danger);border:2px solid #fff}
   .user-av{width:40px;height:40px;border-radius:50%;background:var(--bg-sky-light);color:var(--text-brand);display:grid;place-items:center;font:700 14px var(--font-primary);cursor:pointer;flex-shrink:0}
 
-  .page{padding:40px 48px 80px;max-width:1120px;width:100%;margin:0 auto;display:flex;flex-direction:column;gap:36px}
+  .page{padding:var(--s-5) var(--s-6) 80px;max-width:1120px;width:100%;margin:0 auto;display:flex;flex-direction:column;gap:var(--s-4)}
 
-  /* ───────── PAGE HEAD ───────── */
-  .pagehead{display:flex;justify-content:space-between;align-items:flex-start;gap:24px}
+  /* ───────── Page head ───────── */
+  .pagehead{display:flex;justify-content:space-between;align-items:flex-start;gap:var(--s-3)}
   .pagehead h1{font:600 24px/30px var(--font-primary);color:var(--text-dark);margin:0;letter-spacing:-.005em}
   .pagehead .sub{font:400 14px/21px var(--font-primary);color:var(--text-gray-dark);margin-top:5px;max-width:580px}
 
-  /* ───────── SECTION TITLE ───────── */
-  .sec-label{font:600 11px var(--font-primary);color:var(--text-gray-dark);text-transform:uppercase;letter-spacing:.07em;margin-bottom:14px}
+  .sec-label{font:600 11px var(--font-primary);color:var(--text-gray-dark);text-transform:uppercase;letter-spacing:.07em;margin-bottom:var(--s-2);display:block}
 
-  /* ───────── PAYMENT METHOD SELECTOR ───────── */
-  .method-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:0}
+  /* ───────── Method selector (radio cards) ───────── */
+  .method-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--s-2)}
 
   .method-card{
     background:var(--bg-white);
     border:2px solid var(--stroke-gray-lighter);
     border-radius:var(--radius-lg);
-    padding:24px;
-    cursor:pointer;
+    padding:var(--s-3);
     position:relative;
-    transition:border-color .15s, box-shadow .15s;
-    display:flex;flex-direction:column;gap:0;
+    transition:border-color .15s, box-shadow .15s, background .15s;
+    display:flex;flex-direction:column;
     box-shadow:var(--shadow-card);
+    cursor:pointer;
   }
-  .method-card:hover{border-color:var(--stroke-gray-medium);box-shadow:var(--shadow-card-hover)}
-  .method-card.selected{border-color:var(--text-brand);box-shadow:0 0 0 3px rgba(56,92,248,.12)}
-  .method-card.recommended.selected{border-color:var(--text-brand)}
+  .method-card:hover{border-color:var(--stroke-gray-medium)}
+  .method-card.selected{border-color:var(--text-brand);box-shadow:0 0 0 3px rgba(56,92,248,.12), var(--shadow-card)}
+  .method-card.recommended.selected{background:linear-gradient(180deg, rgba(56,92,248,.025), #fff 40%)}
+  .method-card:focus-within{outline:none;border-color:var(--text-brand);box-shadow:0 0 0 3px rgba(56,92,248,.2)}
 
-  /* Radio dot */
-  .method-card .radio{
-    width:20px;height:20px;border-radius:50%;border:2px solid var(--stroke-gray-medium);
-    display:grid;place-items:center;flex-shrink:0;transition:border-color .15s;
-    position:absolute;top:22px;right:22px;background:#fff;
-  }
-  .method-card.selected .radio{border-color:var(--text-brand);background:var(--text-brand)}
-  .method-card .radio::after{content:"";width:8px;height:8px;border-radius:50%;background:#fff;display:none}
-  .method-card.selected .radio::after{display:block}
+  /* Native radio visually hidden but accessible */
+  .method-radio{position:absolute;opacity:0;pointer-events:none}
 
-  /* Badges */
-  .badge-row{display:flex;align-items:center;gap:8px;margin-bottom:14px;min-height:24px}
-  .badge{font:600 11px var(--font-primary);padding:3px 9px;border-radius:4px;display:inline-flex;align-items:center;gap:4px;letter-spacing:.01em}
+  /* Badge area */
+  .badge-row{display:flex;align-items:center;gap:var(--s-1);margin-bottom:var(--s-2);min-height:22px;flex-wrap:wrap}
+  .badge{font:600 11px var(--font-primary);padding:3px 9px;border-radius:4px;display:inline-flex;align-items:center;gap:5px;letter-spacing:.01em}
   .badge-recommended{background:#E8F4FF;color:#1D6FE0;border:1px solid #BFD9FF}
-  .badge-addon{background:var(--bg-neutral-light);color:var(--text-gray-dark);border:1px solid var(--stroke-gray-light)}
-  .badge-addon svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2}
+  .badge-recommended svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2.5}
+  .badge-social{font:500 11px var(--font-primary);color:var(--text-gray-dark);display:inline-flex;align-items:center;gap:4px}
+  .badge-social svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:1.8}
 
-  /* Provider logo area */
-  .method-logo{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+  /* Provider logo + name */
+  .method-logo{display:flex;align-items:center;gap:12px;margin-bottom:var(--s-2)}
   .method-logo .logo-mark{
-    width:40px;height:40px;border-radius:10px;
-    display:grid;place-items:center;flex-shrink:0;
+    width:44px;height:44px;border-radius:10px;
+    display:grid;place-items:center;flex-shrink:0;overflow:hidden;
   }
-  .logo-chekin{background:linear-gradient(135deg,#385CF8,#274BF0)}
-  .logo-stripe{background:#635BFF}
-  .method-logo .logo-mark svg{width:22px;height:22px;stroke:#fff;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+  .logo-chekin{background:linear-gradient(135deg,#385CF8,#274BF0);color:#fff;font:800 18px var(--font-primary);letter-spacing:-.02em}
+  .logo-stripe{background:#635BFF;color:#fff;font:800 22px var(--font-primary);letter-spacing:-.04em}
   .method-logo .pname{font:700 17px var(--font-primary);color:var(--text-dark)}
   .method-logo .psub{font:400 13px var(--font-primary);color:var(--text-gray-dark);margin-top:1px}
 
-  /* Description */
-  .method-desc{font:400 14px/21px var(--font-primary);color:var(--text-gray-dark);margin-bottom:18px}
+  /* Outcome headline */
+  .method-headline{font:600 15px/22px var(--font-primary);color:var(--text-dark);margin-bottom:6px}
+  .method-desc{font:400 13px/19px var(--font-primary);color:var(--text-gray-dark);margin-bottom:var(--s-2)}
 
   /* Feature list */
-  .feat-list{display:flex;flex-direction:column;gap:8px;margin-bottom:20px}
+  .feat-list{display:flex;flex-direction:column;gap:8px;margin-bottom:var(--s-2)}
   .feat{display:flex;align-items:flex-start;gap:9px;font:400 13px/19px var(--font-primary);color:var(--text-dark)}
-  .feat svg{width:15px;height:15px;flex-shrink:0;margin-top:2px;stroke-width:2.2}
+  .feat svg{width:14px;height:14px;flex-shrink:0;margin-top:3px;stroke-width:2.4}
   .feat-check svg{stroke:#0F9F80}
   .feat-neutral svg{stroke:var(--text-gray-medium)}
 
-  /* Commission pill */
+  /* Commission */
   .commission-area{
     border-top:1px solid var(--stroke-gray-lighter);
-    padding-top:16px;
+    padding-top:var(--s-2);
     margin-top:auto;
+    display:flex;justify-content:space-between;align-items:flex-end;gap:var(--s-2);
   }
-  .commission-label{font:500 11px var(--font-primary);color:var(--text-gray-medium);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+  .commission-area .left{min-width:0}
+  .commission-label{font:500 11px var(--font-primary);color:var(--text-gray-dark);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
   .commission-val{font:700 22px/26px var(--font-primary);color:var(--text-dark);letter-spacing:-.01em}
   .commission-val .unit{font:600 13px var(--font-primary);color:var(--text-gray-dark);margin-left:4px}
-  .commission-note{font:400 12px/16px var(--font-primary);color:var(--text-gray-medium);margin-top:4px}
-
-  /* Highlight stripe for recommended */
-  .method-card.recommended{background:var(--bg-white)}
+  .commission-note{font:400 11px/15px var(--font-primary);color:var(--text-gray-dark);margin-top:4px}
   .method-card.recommended .commission-val{color:var(--text-brand)}
 
-  /* ───────── STATUS BADGE ───────── */
-  .status-row{display:flex;align-items:center;gap:10px;margin-top:16px}
+  /* ───────── Savings calculator ───────── */
+  .calc-card{
+    background:#fff;border:1px solid var(--stroke-gray-lighter);
+    border-radius:var(--radius-lg);box-shadow:var(--shadow-card);
+    padding:var(--s-3);
+    display:grid;grid-template-columns:auto 1px 1fr 1fr;gap:var(--s-3);align-items:center;
+  }
+  .calc-input{display:flex;flex-direction:column;gap:6px}
+  .calc-label{font:500 11px var(--font-primary);color:var(--text-gray-dark);text-transform:uppercase;letter-spacing:.05em}
+  .calc-field{
+    display:flex;align-items:center;
+    height:44px;padding:0 12px;border:1px solid var(--stroke-gray-light);border-radius:var(--radius-md);
+    background:var(--bg-neutral-light);font:600 16px var(--font-primary);color:var(--text-dark);
+    width:200px;
+  }
+  .calc-field:focus-within{background:#fff;border-color:var(--text-brand);box-shadow:0 0 0 3px rgba(56,92,248,.12)}
+  .calc-field input{
+    border:none;background:transparent;font:600 16px var(--font-primary);color:var(--text-dark);
+    outline:none;width:100%;text-align:right;font-variant-numeric:tabular-nums;
+  }
+  .calc-field .currency{color:var(--text-gray-medium);font-weight:500;margin-right:6px}
+  .calc-divider{width:1px;height:54px;background:var(--stroke-gray-lighter)}
+
+  .calc-result{display:flex;flex-direction:column;gap:3px;min-width:0}
+  .calc-r-label{font:500 11px var(--font-primary);color:var(--text-gray-dark);text-transform:uppercase;letter-spacing:.05em;display:flex;align-items:center;gap:6px}
+  .calc-r-label .dot-c{width:8px;height:8px;border-radius:50%;background:var(--text-brand)}
+  .calc-r-label .dot-s{width:8px;height:8px;border-radius:50%;background:#635BFF}
+  .calc-r-val{font:700 22px/26px var(--font-primary);color:var(--text-dark);letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+  .calc-r-sub{font:500 12px var(--font-primary);color:var(--text-gray-dark)}
+  .calc-result.highlight .calc-r-val{color:var(--text-success)}
+  .calc-result.highlight .calc-r-sub{color:var(--text-success);font-weight:600}
+
+  /* ───────── Status pill ───────── */
   .status-pill{
     display:inline-flex;align-items:center;gap:6px;
-    font:600 13px var(--font-primary);
-    padding:5px 12px;border-radius:99px;
+    font:600 12px var(--font-primary);
+    padding:4px 10px;border-radius:99px;white-space:nowrap;
   }
   .status-pill .dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
-
-  .status-active{background:#E8FCF7;color:#0F9F80}
+  .status-active{background:var(--bg-success-light);color:#0F9F80}
   .status-active .dot{background:#0F9F80}
-
-  .status-pending{background:#FFF8E6;color:#D97706}
-  .status-pending .dot{background:#D97706;animation:blink 1.6s ease-in-out infinite}
-  @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
-
+  .status-pending{background:var(--bg-warning-light);color:#B45309}
+  .status-pending .dot{background:#B45309;animation:pulse 2s ease-in-out infinite}
   .status-failed{background:var(--bg-danger-light);color:var(--text-danger)}
   .status-failed .dot{background:var(--text-danger)}
+  .status-inactive{background:var(--bg-neutral-light);color:var(--text-gray-dark)}
+  .status-inactive .dot{background:var(--text-gray-medium)}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
 
-  /* ───────── CONFIG PANEL ───────── */
+  /* ───────── Config panel ───────── */
   .config-panel{
     background:var(--bg-white);
     border:1px solid var(--stroke-gray-lighter);
     border-radius:var(--radius-lg);
     box-shadow:var(--shadow-card);
     overflow:hidden;
+    animation:fadeIn .25s ease-out;
   }
-  .config-panel .cp-head{
-    display:flex;justify-content:space-between;align-items:center;
-    padding:20px 24px;border-bottom:1px solid var(--stroke-gray-lighter);
-  }
-  .config-panel .cp-head .cp-title{font:600 15px var(--font-primary);color:var(--text-dark);display:flex;align-items:center;gap:8px}
-  .config-panel .cp-head .cp-title svg{width:16px;height:16px;stroke:var(--text-brand);fill:none;stroke-width:1.8}
-  .config-panel .cp-body{padding:24px}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
 
-  /* Stripe connect CTA */
+  .cp-head{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:var(--s-2) var(--s-3);border-bottom:1px solid var(--stroke-gray-lighter);
+  }
+  .cp-title{font:600 15px var(--font-primary);color:var(--text-dark);display:flex;align-items:center;gap:10px}
+  .micro-logo{width:24px;height:24px;border-radius:6px;display:grid;place-items:center;color:#fff;font:800 11px var(--font-primary)}
+  .cp-body{padding:var(--s-3)}
+
+  /* Stripe connect block */
   .stripe-connect{
-    display:flex;align-items:center;gap:20px;
-    padding:20px 24px;background:var(--bg-neutral-light);
-    border-radius:var(--radius-md);margin-bottom:16px;
+    display:flex;align-items:center;gap:var(--s-3);
+    padding:var(--s-2) var(--s-3);background:var(--bg-neutral-light);
+    border-radius:var(--radius-md);margin-bottom:var(--s-2);
   }
   .stripe-connect .sc-info{flex:1;min-width:0}
   .stripe-connect .sc-info .t{font:600 14px var(--font-primary);color:var(--text-dark)}
-  .stripe-connect .sc-info .d{font:400 13px var(--font-primary);color:var(--text-gray-dark);margin-top:2px}
+  .stripe-connect .sc-info .d{font:400 13px/18px var(--font-primary);color:var(--text-gray-dark);margin-top:2px}
 
-  /* Chekin instant activate */
+  /* Instant activate (Chekin) */
   .instant-activate{
-    display:flex;align-items:center;gap:16px;
-    padding:20px 24px;
+    display:flex;align-items:center;gap:var(--s-2);
+    padding:var(--s-2) var(--s-3);
     border-radius:var(--radius-md);
     background:linear-gradient(135deg, rgba(56,92,248,.05), rgba(56,92,248,.02));
     border:1px solid rgba(56,92,248,.15);
-    margin-bottom:16px;
+    margin-bottom:var(--s-2);
   }
-  .instant-activate .ia-icon{
-    width:44px;height:44px;border-radius:10px;
+  .ia-icon{
+    width:40px;height:40px;border-radius:10px;
     background:rgba(56,92,248,.1);
     display:grid;place-items:center;flex-shrink:0;
   }
-  .instant-activate .ia-icon svg{width:22px;height:22px;stroke:var(--text-brand);fill:none;stroke-width:1.6}
-  .instant-activate .ia-info{flex:1}
-  .instant-activate .ia-info .t{font:600 14px var(--font-primary);color:var(--text-dark)}
-  .instant-activate .ia-info .d{font:400 13px/18px var(--font-primary);color:var(--text-gray-dark);margin-top:2px}
+  .ia-icon svg{width:20px;height:20px;stroke:var(--text-brand);fill:none;stroke-width:1.8}
+  .ia-info{flex:1}
+  .ia-info .t{font:600 14px var(--font-primary);color:var(--text-dark)}
+  .ia-info .d{font:400 13px/18px var(--font-primary);color:var(--text-gray-dark);margin-top:2px}
 
-  /* Payout note */
-  .payout-note{
+  /* Detail rows */
+  .detail-rows{display:flex;flex-direction:column}
+  .detail-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--stroke-gray-lighter);gap:var(--s-2)}
+  .detail-row:last-child{border-bottom:none}
+  .dr-label{font:500 13px var(--font-primary);color:var(--text-gray-dark)}
+  .dr-val{font:600 13px var(--font-primary);color:var(--text-dark);display:inline-flex;align-items:center;gap:6px;text-align:right}
+  .dr-val svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.8}
+
+  .payout-disclosure{
+    margin-top:var(--s-2);
     display:flex;align-items:flex-start;gap:8px;
     font:400 12px/17px var(--font-primary);color:var(--text-gray-dark);
     padding:10px 14px;background:var(--bg-neutral-light);border-radius:var(--radius-sm);
   }
-  .payout-note svg{width:14px;height:14px;stroke:var(--text-gray-medium);fill:none;stroke-width:1.8;flex-shrink:0;margin-top:1px}
+  .payout-disclosure svg{width:14px;height:14px;stroke:var(--text-gray-medium);fill:none;stroke-width:1.8;flex-shrink:0;margin-top:1px}
 
-  /* Detail rows in config */
-  .detail-rows{display:flex;flex-direction:column;gap:0}
-  .detail-row{display:flex;justify-content:space-between;align-items:center;padding:13px 0;border-bottom:1px solid var(--stroke-gray-lighter)}
-  .detail-row:last-child{border-bottom:none}
-  .detail-row .dr-label{font:500 13px var(--font-primary);color:var(--text-gray-dark)}
-  .detail-row .dr-val{font:600 13px var(--font-primary);color:var(--text-dark);display:flex;align-items:center;gap:6px}
-  .detail-row .dr-val svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.8}
-
-  /* ───────── BUTTONS ───────── */
+  /* ───────── Buttons ───────── */
   .btn-primary{height:40px;padding:0 18px;background:var(--text-brand);border:none;color:#fff;font:600 14px var(--font-primary);border-radius:var(--radius-md);cursor:pointer;display:inline-flex;align-items:center;gap:8px;white-space:nowrap;transition:opacity .15s}
   .btn-primary:hover{opacity:.88}
   .btn-primary svg{width:14px;height:14px;stroke:#fff;fill:none;stroke-width:2.2}
-
-  .btn-secondary{height:40px;padding:0 16px;background:#fff;border:1px solid var(--stroke-gray-medium);color:var(--text-dark);font:600 14px var(--font-primary);border-radius:var(--radius-md);cursor:pointer;display:inline-flex;align-items:center;gap:8px;white-space:nowrap;transition:background .15s}
+  .btn-secondary{height:40px;padding:0 16px;background:#fff;border:1px solid var(--stroke-gray-medium);color:var(--text-dark);font:600 14px var(--font-primary);border-radius:var(--radius-md);cursor:pointer;display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
   .btn-secondary:hover{background:var(--bg-neutral-light)}
   .btn-secondary svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.8}
-
-  .btn-ghost{height:36px;padding:0 14px;background:transparent;border:none;color:var(--text-brand);font:600 13px var(--font-primary);border-radius:var(--radius-md);cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:background .15s}
+  .btn-ghost{height:32px;padding:0 10px;background:transparent;border:none;color:var(--text-brand);font:600 13px var(--font-primary);border-radius:var(--radius-md);cursor:pointer;display:inline-flex;align-items:center;gap:6px}
   .btn-ghost:hover{background:var(--bg-blue-light)}
-  .btn-ghost svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2}
 
-  .btn-danger-ghost{height:36px;padding:0 14px;background:transparent;border:none;color:var(--text-danger);font:600 13px var(--font-primary);border-radius:var(--radius-md);cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:background .15s}
-  .btn-danger-ghost:hover{background:var(--bg-danger-light)}
-  .btn-danger-ghost svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2}
+  /* ───────── Divider ───────── */
+  .divider{height:1px;background:var(--stroke-gray-lighter)}
 
-  /* ───────── ADDON TOGGLE ───────── */
-  .addon-card{
-    background:var(--bg-white);
-    border:1px dashed var(--stroke-gray-medium);
-    border-radius:var(--radius-lg);
-    padding:20px 24px;
-    display:flex;align-items:center;gap:16px;
-    opacity:.65;
-    position:relative;
-  }
-  .addon-card .addon-icon{
-    width:40px;height:40px;border-radius:10px;background:var(--bg-neutral-light);
-    display:grid;place-items:center;flex-shrink:0;
-  }
-  .addon-card .addon-icon svg{width:20px;height:20px;stroke:var(--text-gray-dark);fill:none;stroke-width:1.6}
-  .addon-card .addon-info{flex:1}
-  .addon-card .addon-info .t{font:600 14px var(--font-primary);color:var(--text-dark);display:flex;align-items:center;gap:8px}
-  .addon-card .addon-info .d{font:400 13px var(--font-primary);color:var(--text-gray-dark);margin-top:2px}
-  /* Custom toggle switch (visual only, disabled) */
-  .toggle-switch{
-    width:40px;height:22px;border-radius:99px;background:var(--stroke-gray-medium);
-    position:relative;flex-shrink:0;cursor:not-allowed;
-  }
-  .toggle-switch::after{
-    content:"";width:18px;height:18px;border-radius:50%;background:#fff;
-    position:absolute;top:2px;left:2px;
-    box-shadow:0 1px 3px rgba(0,0,0,.2);
-    transition:left .2s;
-  }
+  /* ───────── KPI summary above transactions ───────── */
+  .kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--s-2);margin-bottom:var(--s-2)}
+  .kpi-mini{background:#fff;border:1px solid var(--stroke-gray-lighter);border-radius:var(--radius-md);padding:14px 16px}
+  .kpi-mini .l{font:500 11px var(--font-primary);color:var(--text-gray-dark);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;display:flex;align-items:center;gap:5px}
+  .kpi-mini .v{font:700 20px/24px var(--font-primary);color:var(--text-dark);font-variant-numeric:tabular-nums}
+  .kpi-mini .v .u{font:500 12px var(--font-primary);color:var(--text-gray-dark);margin-left:4px}
+  .kpi-mini.danger .v{color:var(--text-danger)}
+  .kpi-mini.warning .v{color:#B45309}
 
-  /* ───────── DIVIDER ───────── */
-  .divider{height:1px;background:var(--stroke-gray-lighter);margin:0}
-
-  /* ───────── TRANSACTIONS SECTION ───────── */
-  .section-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+  /* ───────── Transactions ───────── */
+  .section-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--s-2)}
   .section-hd h2{font:600 15px var(--font-primary);color:var(--text-dark);margin:0;text-transform:uppercase;letter-spacing:.05em}
   .section-hd .hd-actions{display:flex;align-items:center;gap:8px}
 
-  /* Filter bar */
-  .filter-bar{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+  .filter-bar{display:flex;align-items:center;gap:10px;margin-bottom:var(--s-2)}
   .filter-bar .search-wrap{position:relative;flex:1;max-width:320px}
   .filter-bar .search-wrap svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);width:14px;height:14px;stroke:var(--text-gray-medium);fill:none;stroke-width:2;pointer-events:none}
   .filter-bar .search-wrap input{width:100%;height:36px;padding:0 12px 0 34px;border:1px solid var(--stroke-gray-lighter);border-radius:var(--radius-md);background:var(--bg-white);font:400 13px var(--font-primary);color:var(--text-dark);outline:none}
@@ -279,7 +279,6 @@
   .filter-pill svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2}
   .filter-pill:hover{border-color:var(--stroke-gray-medium);background:var(--bg-neutral-light)}
 
-  /* Table */
   .table-wrap{background:var(--bg-white);border:1px solid var(--stroke-gray-lighter);border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-card)}
   table{width:100%;border-collapse:collapse}
   thead tr{background:var(--bg-neutral-light);border-bottom:1px solid var(--stroke-gray-lighter)}
@@ -288,25 +287,20 @@
   tbody tr:last-child{border-bottom:none}
   tbody tr:hover{background:#FAFAFE}
   td{padding:14px 20px;font:400 14px var(--font-primary);color:var(--text-dark);vertical-align:middle}
-  td .td-sub{font:400 12px var(--font-primary);color:var(--text-gray-medium);margin-top:2px}
+  td .td-sub{font:400 12px var(--font-primary);color:var(--text-gray-dark);margin-top:2px}
   td .td-bold{font-weight:600}
 
-  /* Table status chips */
   .chip{display:inline-flex;align-items:center;gap:5px;font:600 12px var(--font-primary);padding:3px 10px;border-radius:99px}
   .chip-success{background:var(--bg-success-light);color:#0F9F80}
   .chip-success .dot{width:6px;height:6px;border-radius:50%;background:#0F9F80}
-  .chip-pending{background:var(--bg-warning-light);color:#D97706}
-  .chip-pending .dot{width:6px;height:6px;border-radius:50%;background:#D97706}
+  .chip-pending{background:var(--bg-warning-light);color:#B45309}
+  .chip-pending .dot{width:6px;height:6px;border-radius:50%;background:#B45309}
   .chip-failed{background:var(--bg-danger-light);color:var(--text-danger)}
   .chip-failed .dot{width:6px;height:6px;border-radius:50%;background:var(--text-danger)}
   .chip-refund{background:var(--bg-neutral-light);color:var(--text-gray-dark)}
   .chip-refund .dot{width:6px;height:6px;border-radius:50%;background:var(--text-gray-medium)}
-
-  /* Amount negative */
   .amount-neg{color:var(--text-danger)}
-  .amount-pos{color:var(--text-success)}
 
-  /* Pagination */
   .pagination{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;border-top:1px solid var(--stroke-gray-lighter);background:var(--bg-white)}
   .pagination .pg-info{font:500 13px var(--font-primary);color:var(--text-gray-dark)}
   .pagination .pg-btns{display:flex;gap:4px}
@@ -315,19 +309,51 @@
   .pg-btn.active{background:var(--text-brand);color:#fff;border-color:var(--text-brand)}
   .pg-btn svg{width:14px;height:14px;stroke:var(--text-gray-dark);fill:none;stroke-width:2}
 
-  /* ───────── JS TRANSITIONS ───────── */
-  .config-block{display:none}
-  .config-block.visible{display:block}
-  .method-card{user-select:none}
+  /* Empty state */
+  .empty-tx{padding:56px 24px;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;background:#fff}
+  .empty-tx .ill{width:72px;height:72px;border-radius:50%;background:var(--bg-sky-light);display:grid;place-items:center}
+  .empty-tx .ill svg{width:32px;height:32px;stroke:var(--text-brand);fill:none;stroke-width:1.6}
+  .empty-tx .t{font:600 15px var(--font-primary);color:var(--text-dark)}
+  .empty-tx .d{font:400 13px/19px var(--font-primary);color:var(--text-gray-dark);max-width:340px}
+
+  /* ───────── Confirmation modal ───────── */
+  .modal-backdrop{
+    position:fixed;inset:0;background:rgba(22,22,67,.45);
+    display:none;align-items:center;justify-content:center;z-index:100;
+    animation:bgIn .15s ease-out;
+  }
+  .modal-backdrop.open{display:flex}
+  @keyframes bgIn{from{opacity:0}to{opacity:1}}
+  .modal{
+    background:#fff;border-radius:var(--radius-lg);box-shadow:var(--shadow-modal);
+    width:460px;max-width:calc(100vw - 32px);padding:var(--s-3);
+    animation:modalIn .18s ease-out;
+  }
+  @keyframes modalIn{from{opacity:0;transform:translateY(8px) scale(.98)}to{opacity:1;transform:none}}
+  .m-icon{width:44px;height:44px;border-radius:12px;background:var(--bg-warning-light);display:grid;place-items:center;margin-bottom:var(--s-2)}
+  .m-icon svg{width:22px;height:22px;stroke:#B45309;fill:none;stroke-width:1.8}
+  .modal h3{font:600 17px/22px var(--font-primary);color:var(--text-dark);margin:0 0 8px}
+  .modal p{font:400 14px/20px var(--font-primary);color:var(--text-gray-dark);margin:0 0 var(--s-2)}
+  .modal ul{margin:0 0 var(--s-3);padding:0 0 0 18px;color:var(--text-gray-dark);font:400 13px/20px var(--font-primary)}
+  .modal ul li{margin-bottom:4px}
+  .m-actions{display:flex;justify-content:flex-end;gap:8px}
+
+  /* ───────── Responsive ───────── */
+  @media (max-width:1024px){
+    .method-grid{grid-template-columns:1fr}
+    .calc-card{grid-template-columns:1fr;gap:var(--s-2)}
+    .calc-divider{display:none}
+    .calc-field{width:100%}
+    .kpi-row{grid-template-columns:repeat(2,1fr)}
+    .page{padding:var(--s-3) var(--s-3) 64px}
+  }
 </style>
 </head>
 <body>
 
 <div class="app" data-screen-label="Payments">
-  <!-- Sidebar -->
   <div id="sidebar-slot" data-nav="payments"></div>
 
-  <!-- Main -->
   <main>
     <header class="top">
       <div class="crumbs">Settings · <b>Payments</b></div>
@@ -346,156 +372,134 @@
       <!-- Page head -->
       <div class="pagehead">
         <div>
-          <h1>Payment methods</h1>
-          <div class="sub">Choose how you collect payments and deposits from your guests. The active method applies to all properties in this workspace.</div>
+          <h1>Payments</h1>
+          <div class="sub">Pick how you charge guests and hold deposits. The selected gateway applies to every property in this workspace.</div>
         </div>
       </div>
 
-      <!-- ─── PAYMENT METHOD SELECTOR ─── -->
-      <section>
-        <div class="sec-label">Active payment gateway</div>
+      <!-- ─── METHOD SELECTOR ─── -->
+      <section role="radiogroup" aria-labelledby="gw-label">
+        <span class="sec-label" id="gw-label">Payment gateway</span>
 
         <div class="method-grid">
 
-          <!-- ── CHEKIN PAYMENTS (recommended, default selected) ── -->
-          <div class="method-card recommended selected" id="card-chekin" onclick="selectMethod('chekin')">
-            <div class="radio"></div>
+          <!-- CHEKIN -->
+          <label class="method-card recommended selected" id="card-chekin" for="r-chekin">
+            <input type="radio" name="gateway" id="r-chekin" class="method-radio" checked aria-describedby="chekin-desc">
 
             <div class="badge-row">
               <span class="badge badge-recommended">
-                <svg viewBox="0 0 24 24" style="width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
                 Recommended
+              </span>
+              <span class="badge-social">
+                <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                Used by 8,400+ hosts
               </span>
             </div>
 
             <div class="method-logo">
-              <div class="logo-mark logo-chekin">
-                <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 9h18"/><path d="M7 14h3M14 14h3"/></svg>
-              </div>
+              <div class="logo-mark logo-chekin">C</div>
               <div>
                 <div class="pname">Chekin Payments</div>
-                <div class="psub">Native payment infrastructure</div>
+                <div class="psub">Native — built into your dashboard</div>
               </div>
             </div>
 
-            <div class="method-desc">Collect payments and deposits directly through Chekin. Start using it from day one — no external KYC, no waiting. Money lands in your wallet instantly.</div>
+            <div class="method-headline">Start collecting today. No paperwork.</div>
+            <div class="method-desc" id="chekin-desc">Your first guest can pay in 2 minutes. Money lands in your Chekin Wallet — you decide when to cash out.</div>
 
             <div class="feat-list">
-              <div class="feat feat-check">
-                <svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>
-                Deposit holds up to <strong>30 days</strong> uninterrupted — no renewals
-              </div>
-              <div class="feat feat-check">
-                <svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>
-                Money goes to your <strong>Chekin wallet</strong> — payout when you want
-              </div>
-              <div class="feat feat-check">
-                <svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>
-                Ready to use immediately, <strong>zero onboarding</strong> friction
-              </div>
-              <div class="feat feat-check">
-                <svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>
-                Single dashboard for payments, check-ins and reporting
-              </div>
+              <div class="feat feat-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Deposits held <strong>up to 30 days</strong>, no re-authorisations</div>
+              <div class="feat feat-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Money in your <strong>wallet</strong>, payout on demand</div>
+              <div class="feat feat-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Zero onboarding — <strong>active from day one</strong></div>
             </div>
 
             <div class="commission-area">
-              <div class="commission-label">Commission per transaction</div>
-              <div class="commission-val">1.2% <span class="unit">+ €0.25</span></div>
-              <div class="commission-note">All payment types. <span id="payout-note" title="Payout fee depends on your bank account country and payout method selected.">Payout fee applies.*</span></div>
-            </div>
-
-            <!-- Status (shown when selected) -->
-            <div class="status-row" id="status-chekin">
+              <div class="left">
+                <div class="commission-label">Per transaction</div>
+                <div class="commission-val">1.2% <span class="unit">+ €0.25</span></div>
+                <div class="commission-note">All cards · payout fee may apply</div>
+              </div>
               <span class="status-pill status-active"><span class="dot"></span>Active</span>
             </div>
-          </div>
+          </label>
 
-          <!-- ── STRIPE ── -->
-          <div class="method-card" id="card-stripe" onclick="selectMethod('stripe')">
-            <div class="radio"></div>
+          <!-- STRIPE -->
+          <label class="method-card" id="card-stripe" for="r-stripe">
+            <input type="radio" name="gateway" id="r-stripe" class="method-radio" aria-describedby="stripe-desc">
 
-            <div class="badge-row">
-              <!-- empty placeholder so layout is consistent -->
-            </div>
+            <div class="badge-row"></div>
 
             <div class="method-logo">
-              <div class="logo-mark logo-stripe">
-                <svg viewBox="0 0 24 24"><path d="M3 9h18M3 15h18M7 9v6M17 9v6"/><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
-              </div>
+              <div class="logo-mark logo-stripe">S</div>
               <div>
                 <div class="pname">Stripe</div>
-                <div class="psub">Third-party payment processor</div>
+                <div class="psub">Third-party processor — connect your own</div>
               </div>
             </div>
 
-            <div class="method-desc">Connect your existing Stripe account to process payments. Requires KYC verification and submission of fiscal and company details before going live.</div>
+            <div class="method-headline">Bring your own Stripe account.</div>
+            <div class="method-desc" id="stripe-desc">Use it if you already have a verified Stripe account. Requires KYC and fiscal documentation before going live.</div>
 
             <div class="feat-list">
-              <div class="feat feat-neutral">
-                <svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg>
-                Deposit holds renewed every <strong>7 days</strong> — manual re-authorisation
-              </div>
-              <div class="feat feat-neutral">
-                <svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg>
-                Funds go to your <strong>Stripe account</strong> — subject to Stripe's schedule
-              </div>
-              <div class="feat feat-neutral">
-                <svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg>
-                KYC required — submit company and fiscal documentation
-              </div>
-              <div class="feat feat-neutral">
-                <svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg>
-                Separate platform for payment management
-              </div>
+              <div class="feat feat-neutral"><svg viewBox="0 0 24 24"><path d="M12 6v6l4 2"/><circle cx="12" cy="12" r="10"/></svg>Deposits re-authorised <strong>every 7 days</strong></div>
+              <div class="feat feat-neutral"><svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg>Funds go to your <strong>Stripe account</strong></div>
+              <div class="feat feat-neutral"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>KYC required — company and fiscal data</div>
             </div>
 
             <div class="commission-area">
-              <div class="commission-label">Commission per transaction</div>
-              <div class="commission-val">1.5% <span class="unit">+ €0.25</span></div>
-              <div class="commission-note">EU cards · 2.5% + €0.25 non-EU · Stripe's standard Spain rates</div>
+              <div class="left">
+                <div class="commission-label">Per transaction</div>
+                <div class="commission-val">1.5% <span class="unit">+ €0.25</span></div>
+                <div class="commission-note">EU cards · 2.5% + €0.25 non-EU</div>
+              </div>
+              <span class="status-pill status-inactive"><span class="dot"></span>Not connected</span>
             </div>
-
-            <!-- Status (hidden until selected) -->
-            <div class="status-row" id="status-stripe" style="display:none">
-              <span class="status-pill status-pending"><span class="dot"></span>Pending validation</span>
-            </div>
-          </div>
+          </label>
 
         </div>
       </section>
 
-      <!-- ─── ADDON CARD (admin only) ─── -->
-      <div class="addon-card">
-        <div class="addon-icon">
-          <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-        </div>
-        <div class="addon-info">
-          <div class="t">
-            Add-on
-            <span class="badge badge-addon">
-              <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-              Admin only
-            </span>
+      <!-- ─── SAVINGS CALCULATOR ─── -->
+      <section>
+        <span class="sec-label">Estimated savings</span>
+        <div class="calc-card">
+          <div class="calc-input">
+            <span class="calc-label">Monthly volume</span>
+            <div class="calc-field">
+              <span class="currency">€</span>
+              <input type="number" id="volume-input" value="4500" min="0" step="100" aria-label="Monthly volume in euros">
+            </div>
           </div>
-          <div class="d">This feature can only be enabled from the admin panel. Contact your account manager to activate it.</div>
+
+          <div class="calc-divider"></div>
+
+          <div class="calc-result">
+            <div class="calc-r-label"><span class="dot-s"></span>With Stripe</div>
+            <div class="calc-r-val" id="cost-stripe">€ 80.00</div>
+            <div class="calc-r-sub">1.5% + €0.25 per tx</div>
+          </div>
+
+          <div class="calc-result highlight">
+            <div class="calc-r-label"><span class="dot-c"></span>With Chekin Payments</div>
+            <div class="calc-r-val" id="cost-chekin">€ 66.50</div>
+            <div class="calc-r-sub" id="savings-line">You save €13.50/month · €162/year</div>
+          </div>
         </div>
-        <div class="toggle-switch"></div>
-      </div>
+      </section>
 
-      <!-- ─── CONFIGURATION PANEL ─── -->
+      <!-- ─── CONFIG PANEL ─── -->
+      <section id="config-wrapper">
 
-      <!-- Chekin Payments config -->
-      <div id="config-chekin" class="config-block visible">
-        <div class="config-panel">
+        <!-- Chekin config (default visible) -->
+        <div id="config-chekin" class="config-panel">
           <div class="cp-head">
             <div class="cp-title">
-              <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-              Chekin Payments — Configuration
+              <span class="micro-logo logo-chekin">C</span>
+              Chekin Payments
             </div>
-            <div style="display:flex;gap:8px">
-              <span class="status-pill status-active" style="font-size:12px"><span class="dot"></span>Active</span>
-            </div>
+            <span class="status-pill status-active"><span class="dot"></span>Active</span>
           </div>
           <div class="cp-body">
 
@@ -505,7 +509,7 @@
               </div>
               <div class="ia-info">
                 <div class="t">Your account is ready</div>
-                <div class="d">Chekin Payments is active on your account. Guests can pay and deposits are held automatically. No additional setup required.</div>
+                <div class="d">Chekin Payments is live. Guests can pay and deposits are held automatically — no extra setup.</div>
               </div>
             </div>
 
@@ -515,10 +519,10 @@
                 <span class="dr-val">1.2% + €0.25 per transaction</span>
               </div>
               <div class="detail-row">
-                <span class="dr-label">Deposit hold duration</span>
-                <span class="dr-val">
-                  <svg viewBox="0 0 24 24" style="stroke:#0F9F80"><path d="M20 6 9 17l-5-5"/></svg>
-                  Up to 30 days uninterrupted
+                <span class="dr-label">Deposit hold</span>
+                <span class="dr-val" style="color:#0F9F80">
+                  <svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>
+                  Up to 30 days, uninterrupted
                 </span>
               </div>
               <div class="detail-row">
@@ -527,39 +531,32 @@
               </div>
               <div class="detail-row">
                 <span class="dr-label">Supported currencies</span>
-                <span class="dr-val">EUR, GBP, USD and more</span>
+                <span class="dr-val">EUR, GBP, USD and 12 more</span>
               </div>
             </div>
 
-            <div style="margin-top:16px">
-              <div class="payout-note">
-                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
-                * Payout fee depends on your bank account country and the payout method selected. You can review payout options from your Wallet settings.
-              </div>
+            <div class="payout-disclosure">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+              Payout fee depends on your bank country and method (SEPA, SWIFT, card). Manage from your Wallet settings.
             </div>
-
           </div>
         </div>
-      </div>
 
-      <!-- Stripe config -->
-      <div id="config-stripe" class="config-block">
-        <div class="config-panel">
+        <!-- Stripe config (hidden by default) -->
+        <div id="config-stripe" class="config-panel" style="display:none">
           <div class="cp-head">
             <div class="cp-title">
-              <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 9h18"/></svg>
-              Stripe — Configuration
+              <span class="micro-logo logo-stripe">S</span>
+              Stripe
             </div>
-            <div style="display:flex;gap:8px">
-              <span class="status-pill status-pending" style="font-size:12px"><span class="dot"></span>Pending validation</span>
-            </div>
+            <span class="status-pill status-inactive"><span class="dot"></span>Not connected</span>
           </div>
           <div class="cp-body">
 
             <div class="stripe-connect">
               <div class="sc-info">
                 <div class="t">Connect your Stripe account</div>
-                <div class="d">You'll be redirected to Stripe to complete KYC verification and connect your account. This process requires company and fiscal information.</div>
+                <div class="d">You'll be redirected to Stripe to complete KYC, company and fiscal verification.</div>
               </div>
               <button class="btn-primary">
                 <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
@@ -569,39 +566,26 @@
 
             <div class="detail-rows">
               <div class="detail-row">
-                <span class="dr-label">Commission — EU cards</span>
+                <span class="dr-label">Commission · EU cards</span>
                 <span class="dr-val">1.5% + €0.25</span>
               </div>
               <div class="detail-row">
-                <span class="dr-label">Commission — non-EU cards</span>
+                <span class="dr-label">Commission · non-EU cards</span>
                 <span class="dr-val">2.5% + €0.25</span>
               </div>
               <div class="detail-row">
-                <span class="dr-label">Deposit hold duration</span>
-                <span class="dr-val">
-                  <svg viewBox="0 0 24 24" style="stroke:var(--text-warning)"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
-                  7-day cycle — re-authorisation required
-                </span>
+                <span class="dr-label">Deposit hold</span>
+                <span class="dr-val" style="color:#B45309">7-day cycle · re-authorisation required</span>
               </div>
               <div class="detail-row">
                 <span class="dr-label">Funds destination</span>
-                <span class="dr-val">Stripe account — subject to Stripe's payout schedule</span>
-              </div>
-              <div class="detail-row">
-                <span class="dr-label">Account status</span>
-                <span class="dr-val">
-                  <span class="status-pill status-pending" style="font-size:12px;padding:3px 10px"><span class="dot"></span>Pending validation</span>
-                  <button class="btn-ghost" style="margin-left:4px">
-                    <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-                    Go to Stripe
-                  </button>
-                </span>
+                <span class="dr-val">Stripe account · Stripe payout schedule</span>
               </div>
             </div>
-
           </div>
         </div>
-      </div>
+
+      </section>
 
       <!-- ─── DIVIDER ─── -->
       <div class="divider"></div>
@@ -618,31 +602,42 @@
           </div>
         </div>
 
+        <!-- KPI summary -->
+        <div class="kpi-row">
+          <div class="kpi-mini">
+            <div class="l">Collected · 30d</div>
+            <div class="v">€ 12,840<span class="u">.00</span></div>
+          </div>
+          <div class="kpi-mini">
+            <div class="l">In hold (deposits)</div>
+            <div class="v">€ 2,100<span class="u">.00</span></div>
+          </div>
+          <div class="kpi-mini warning">
+            <div class="l">Pending</div>
+            <div class="v">€ 385<span class="u">.00</span></div>
+          </div>
+          <div class="kpi-mini danger">
+            <div class="l">Failed</div>
+            <div class="v">€ 500<span class="u">.00</span></div>
+          </div>
+        </div>
+
         <div class="filter-bar">
           <div class="search-wrap">
             <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
             <input type="text" placeholder="Search guest, booking ID…">
           </div>
-          <button class="filter-pill">
-            All types
-            <svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
-          </button>
-          <button class="filter-pill">
-            All statuses
-            <svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
-          </button>
-          <button class="filter-pill">
-            <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
-            Last 30 days
-            <svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
-          </button>
+          <button class="filter-pill">All types <svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
+          <button class="filter-pill">All statuses <svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
+          <button class="filter-pill"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Last 30 days <svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
         </div>
 
-        <div class="table-wrap">
+        <div class="table-wrap" id="tx-table">
           <table>
             <thead>
               <tr>
                 <th>Guest / Booking</th>
+                <th>Property</th>
                 <th>Type</th>
                 <th>Date</th>
                 <th>Amount</th>
@@ -652,81 +647,67 @@
             </thead>
             <tbody>
               <tr>
-                <td>
-                  <div class="td-bold">Martina García</div>
-                  <div class="td-sub">#BK-20481 · Puerta del Sol</div>
-                </td>
+                <td><div class="td-bold">Martina García</div><div class="td-sub">#BK-20481</div></td>
+                <td>Puerta del Sol</td>
                 <td>Payment</td>
                 <td>22 May 2026</td>
                 <td><span class="td-bold">€ 240.00</span></td>
                 <td><span class="chip chip-success"><span class="dot"></span>Paid</span></td>
-                <td><button class="btn-ghost" style="height:32px;padding:0 10px;font-size:12px">View</button></td>
+                <td><button class="btn-ghost" aria-label="View transaction BK-20481">View</button></td>
               </tr>
               <tr>
-                <td>
-                  <div class="td-bold">James O'Brien</div>
-                  <div class="td-sub">#BK-20479 · Gran Vía 14</div>
-                </td>
+                <td><div class="td-bold">James O'Brien</div><div class="td-sub">#BK-20479</div></td>
+                <td>Gran Vía 14</td>
                 <td>Deposit hold</td>
                 <td>21 May 2026</td>
                 <td><span class="td-bold">€ 300.00</span></td>
                 <td><span class="chip chip-success"><span class="dot"></span>Held</span></td>
-                <td><button class="btn-ghost" style="height:32px;padding:0 10px;font-size:12px">View</button></td>
+                <td><button class="btn-ghost" aria-label="View transaction BK-20479">View</button></td>
               </tr>
               <tr>
-                <td>
-                  <div class="td-bold">Sophie Dubois</div>
-                  <div class="td-sub">#BK-20465 · Malasaña Studio</div>
-                </td>
+                <td><div class="td-bold">Sophie Dubois</div><div class="td-sub">#BK-20465</div></td>
+                <td>Malasaña Studio</td>
                 <td>Payment</td>
                 <td>19 May 2026</td>
                 <td><span class="td-bold">€ 185.00</span></td>
                 <td><span class="chip chip-pending"><span class="dot"></span>Processing</span></td>
-                <td><button class="btn-ghost" style="height:32px;padding:0 10px;font-size:12px">View</button></td>
+                <td><button class="btn-ghost" aria-label="View transaction BK-20465">View</button></td>
               </tr>
               <tr>
-                <td>
-                  <div class="td-bold">Lukas Bauer</div>
-                  <div class="td-sub">#BK-20451 · Chueca Flat</div>
-                </td>
+                <td><div class="td-bold">Lukas Bauer</div><div class="td-sub">#BK-20451</div></td>
+                <td>Chueca Flat</td>
                 <td>Deposit hold</td>
                 <td>17 May 2026</td>
                 <td><span class="td-bold">€ 500.00</span></td>
                 <td><span class="chip chip-failed"><span class="dot"></span>Failed</span></td>
-                <td><button class="btn-ghost" style="height:32px;padding:0 10px;font-size:12px">View</button></td>
+                <td><button class="btn-ghost" aria-label="View transaction BK-20451">View</button></td>
               </tr>
               <tr>
-                <td>
-                  <div class="td-bold">Yuki Tanaka</div>
-                  <div class="td-sub">#BK-20438 · Lavapiés Loft</div>
-                </td>
+                <td><div class="td-bold">Yuki Tanaka</div><div class="td-sub">#BK-20438</div></td>
+                <td>Lavapiés Loft</td>
                 <td>Refund</td>
                 <td>15 May 2026</td>
                 <td class="amount-neg"><span class="td-bold">− € 120.00</span></td>
                 <td><span class="chip chip-refund"><span class="dot"></span>Refunded</span></td>
-                <td><button class="btn-ghost" style="height:32px;padding:0 10px;font-size:12px">View</button></td>
+                <td><button class="btn-ghost" aria-label="View transaction BK-20438">View</button></td>
               </tr>
               <tr>
-                <td>
-                  <div class="td-bold">Ana Ferreira</div>
-                  <div class="td-sub">#BK-20422 · Sol Terrace</div>
-                </td>
+                <td><div class="td-bold">Ana Ferreira</div><div class="td-sub">#BK-20422</div></td>
+                <td>Sol Terrace</td>
                 <td>Payment</td>
                 <td>13 May 2026</td>
                 <td><span class="td-bold">€ 320.00</span></td>
                 <td><span class="chip chip-success"><span class="dot"></span>Paid</span></td>
-                <td><button class="btn-ghost" style="height:32px;padding:0 10px;font-size:12px">View</button></td>
+                <td><button class="btn-ghost" aria-label="View transaction BK-20422">View</button></td>
               </tr>
               <tr>
-                <td>
-                  <div class="td-bold">Marco Esposito</div>
-                  <div class="td-sub">#BK-20410 · Retiro Room</div>
-                </td>
+                <td><div class="td-bold">Marco Esposito</div><div class="td-sub">#BK-20410</div></td>
+                <td>Retiro Room</td>
                 <td>Deposit hold</td>
                 <td>11 May 2026</td>
                 <td><span class="td-bold">€ 200.00</span></td>
                 <td><span class="chip chip-pending"><span class="dot"></span>Processing</span></td>
-                <td><button class="btn-ghost" style="height:32px;padding:0 10px;font-size:12px">View</button></td>
+                <td><button class="btn-ghost" aria-label="View transaction BK-20410">View</button></td>
               </tr>
             </tbody>
           </table>
@@ -734,14 +715,24 @@
           <div class="pagination">
             <div class="pg-info">Showing 1–7 of 143 transactions</div>
             <div class="pg-btns">
-              <button class="pg-btn"><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></button>
+              <button class="pg-btn" aria-label="Previous page"><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></button>
               <button class="pg-btn active">1</button>
               <button class="pg-btn">2</button>
               <button class="pg-btn">3</button>
               <button class="pg-btn">…</button>
               <button class="pg-btn">21</button>
-              <button class="pg-btn"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button>
+              <button class="pg-btn" aria-label="Next page"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button>
             </div>
+          </div>
+        </div>
+
+        <!-- Empty state (hidden by default, shown if no transactions) -->
+        <div class="table-wrap" id="tx-empty" style="display:none">
+          <div class="empty-tx">
+            <div class="ill"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18M7 15h3"/></svg></div>
+            <div class="t">No transactions yet</div>
+            <div class="d">Once your first guest pays through Chekin Payments, you'll see every charge, hold and refund right here.</div>
+            <button class="btn-secondary" style="margin-top:8px"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Send a test check-in</button>
           </div>
         </div>
       </section>
@@ -750,20 +741,94 @@
   </main>
 </div>
 
+<!-- ─── Confirmation modal ─── -->
+<div class="modal-backdrop" id="switch-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal">
+    <div class="m-icon"><svg viewBox="0 0 24 24"><path d="M12 9v4M12 17h.01M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg></div>
+    <h3 id="modal-title">Switch payment gateway?</h3>
+    <p>You're about to change the active gateway. This affects future transactions only — open holds and pending payments stay on the current provider until they settle.</p>
+    <ul>
+      <li>Historical transactions remain visible</li>
+      <li>Open deposit holds keep their original provider</li>
+      <li>New bookings will use the new gateway</li>
+    </ul>
+    <div class="m-actions">
+      <button class="btn-secondary" id="m-cancel">Cancel</button>
+      <button class="btn-primary" id="m-confirm">Confirm switch</button>
+    </div>
+  </div>
+</div>
+
 <script>
-  function selectMethod(method) {
-    // Update cards
-    document.getElementById('card-chekin').classList.toggle('selected', method === 'chekin');
-    document.getElementById('card-stripe').classList.toggle('selected', method === 'stripe');
+  // ───── Gateway switcher with confirmation ─────
+  let currentGateway = 'chekin';
+  let pendingGateway = null;
 
-    // Update status rows inside cards
-    document.getElementById('status-chekin').style.display = method === 'chekin' ? 'flex' : 'none';
-    document.getElementById('status-stripe').style.display = method === 'stripe' ? 'flex' : 'none';
+  const cardChekin = document.getElementById('card-chekin');
+  const cardStripe = document.getElementById('card-stripe');
+  const rChekin    = document.getElementById('r-chekin');
+  const rStripe    = document.getElementById('r-stripe');
+  const cfgChekin  = document.getElementById('config-chekin');
+  const cfgStripe  = document.getElementById('config-stripe');
+  const modal      = document.getElementById('switch-modal');
 
-    // Show/hide config panels
-    document.getElementById('config-chekin').classList.toggle('visible', method === 'chekin');
-    document.getElementById('config-stripe').classList.toggle('visible', method === 'stripe');
+  function paint(g){
+    cardChekin.classList.toggle('selected', g === 'chekin');
+    cardStripe.classList.toggle('selected', g === 'stripe');
+    cfgChekin.style.display = g === 'chekin' ? 'block' : 'none';
+    cfgStripe.style.display = g === 'stripe' ? 'block' : 'none';
+    const active = g === 'chekin' ? cfgChekin : cfgStripe;
+    active.style.animation = 'none';
+    void active.offsetWidth;
+    active.style.animation = '';
   }
+
+  function requestSwitch(g){
+    if (g === currentGateway) return;
+    pendingGateway = g;
+    modal.classList.add('open');
+  }
+  function closeModal(){
+    modal.classList.remove('open');
+    rChekin.checked = currentGateway === 'chekin';
+    rStripe.checked = currentGateway === 'stripe';
+    pendingGateway = null;
+  }
+  function confirmSwitch(){
+    if (!pendingGateway) return;
+    currentGateway = pendingGateway;
+    paint(currentGateway);
+    modal.classList.remove('open');
+    pendingGateway = null;
+  }
+
+  rChekin.addEventListener('change', () => requestSwitch('chekin'));
+  rStripe.addEventListener('change', () => requestSwitch('stripe'));
+  document.getElementById('m-cancel').addEventListener('click', closeModal);
+  document.getElementById('m-confirm').addEventListener('click', confirmSwitch);
+  modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && modal.classList.contains('open')) closeModal(); });
+
+  // ───── Savings calculator ─────
+  const volInput   = document.getElementById('volume-input');
+  const costStripe = document.getElementById('cost-stripe');
+  const costChekin = document.getElementById('cost-chekin');
+  const savings    = document.getElementById('savings-line');
+  const fmtEur     = n => '€ ' + n.toLocaleString('en-GB', {minimumFractionDigits:2, maximumFractionDigits:2});
+
+  function recalc(){
+    const v = parseFloat(volInput.value) || 0;
+    const avgTx = 90;
+    const tx = Math.max(1, Math.round(v / avgTx));
+    const stripeC = v * 0.015 + tx * 0.25;
+    const chekinC = v * 0.012 + tx * 0.25;
+    const diff = stripeC - chekinC;
+    costStripe.textContent = fmtEur(stripeC);
+    costChekin.textContent = fmtEur(chekinC);
+    savings.textContent = `You save ${fmtEur(diff)}/month · ${fmtEur(diff*12)}/year`;
+  }
+  volInput.addEventListener('input', recalc);
+  recalc();
 </script>
 
 <script src="ds/_sidebar.js"></script>
