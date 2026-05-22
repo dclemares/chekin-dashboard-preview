@@ -413,51 +413,11 @@
   .cm-close svg{width:18px;height:18px;stroke:var(--text-gray-dark);fill:none;stroke-width:2}
 
   /* Body */
-  .cm-body{overflow:auto;flex:1;padding:28px 40px 0}
-
-  /* Summary grid (4 benefit cards) */
-  .cm-summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px}
-  .cm-summary-card{
-    border:1px solid var(--stroke-gray-lighter);
-    background:linear-gradient(180deg,#fff 0%,#f8faff 100%);
-    border-radius:18px;padding:18px;min-height:140px;
-  }
-  .cm-summary-icon{
-    width:38px;height:38px;border-radius:12px;
-    background:#eef2ff;color:var(--text-brand);
-    display:flex;align-items:center;justify-content:center;
-    font:900 16px var(--font-primary);margin-bottom:14px;
-  }
-  .cm-summary-card h4{margin:0 0 7px;color:var(--text-dark);font:900 16px/1.25 var(--font-primary);letter-spacing:-.01em}
-  .cm-summary-card p{margin:0;color:var(--text-gray-dark);font:400 14px/1.45 var(--font-primary)}
-
-  /* Highlight box */
-  .cm-highlight{
-    display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:18px;
-    padding:20px 22px;border-radius:20px;
-    background:linear-gradient(90deg,rgba(56,92,248,.1),rgba(15,159,128,.1)),#fff;
-    border:1px solid #dce4ff;margin-bottom:28px;
-  }
-  .cm-highlight-icon{
-    width:54px;height:54px;border-radius:16px;
-    background:var(--text-brand);color:#fff;
-    display:flex;align-items:center;justify-content:center;
-    font:900 18px var(--font-primary);
-    box-shadow:0 12px 30px rgba(56,92,248,.25);
-  }
-  .cm-highlight-icon svg{width:28px;height:28px;stroke:#fff;fill:none;stroke-width:2.5}
-  .cm-highlight h4{margin:0 0 6px;color:var(--text-dark);font:900 20px/1.2 var(--font-primary);letter-spacing:-.02em}
-  .cm-highlight p{margin:0;color:var(--text-gray-dark);font:400 15px/1.45 var(--font-primary)}
-  .cm-highlight-badge{
-    padding:9px 14px;border-radius:999px;
-    background:var(--bg-success-light);color:var(--text-success);
-    font:850 13px var(--font-primary);white-space:nowrap;
-  }
+  .cm-body{overflow:auto;flex:1;padding:0}
 
   /* Comparison table wrapper */
   .cm-table-wrap{
-    border:1px solid var(--stroke-gray-lighter);border-radius:22px;
-    overflow:hidden;margin-bottom:28px;background:#fff;
+    overflow:hidden;background:#fff;
   }
   .cm-table{width:100%;border-collapse:separate;border-spacing:0;table-layout:fixed}
   .cm-table th,.cm-table td{border-bottom:1px solid var(--stroke-gray-lighter);vertical-align:middle}
@@ -551,13 +511,6 @@
     background:linear-gradient(90deg,rgba(15,159,128,.1),rgba(56,92,248,.04)),#fff;
   }
 
-  /* Soft note */
-  .cm-soft-note{
-    margin:0 0 28px;padding:16px 18px;border-radius:16px;
-    background:#fafbff;border:1px solid var(--stroke-gray-lighter);
-    color:var(--text-gray-dark);font:400 14px/1.5 var(--font-primary);
-  }
-  .cm-soft-note strong{color:var(--text-dark)}
 
   /* Footer */
   .cm-foot{
@@ -587,8 +540,6 @@
     .compare-modal{border-radius:18px}
     .cm-head,.cm-body,.cm-foot{padding-left:22px;padding-right:22px}
     .cm-head h3{font-size:26px}
-    .cm-summary-grid{grid-template-columns:repeat(2,1fr)}
-    .cm-highlight{grid-template-columns:1fr}
     .cm-table-wrap{overflow-x:auto}
     .cm-table{min-width:920px}
     .cm-foot{align-items:stretch;flex-direction:column}
@@ -601,7 +552,6 @@
     .cm-info-dot:focus .cm-tip{transform:translateX(0) translateY(0)}
   }
   @media (max-width:620px){
-    .cm-summary-grid{grid-template-columns:1fr}
     .cm-head{padding-top:24px}
     .cm-head h3{font-size:23px}
     .cm-head .csub{font-size:15px}
@@ -1045,42 +995,6 @@
 
     <main class="cm-body" id="cm-body">
 
-      <!-- Summary cards -->
-      <section class="cm-summary-grid" aria-label="Main Chekin Payments benefits">
-        <article class="cm-summary-card">
-          <div class="cm-summary-icon">%</div>
-          <h4>Lower processing fees</h4>
-          <p>Chekin Payments keeps the same simple structure while improving the variable fee compared with Stripe.</p>
-        </article>
-        <article class="cm-summary-card">
-          <div class="cm-summary-icon">30</div>
-          <h4>30-day deposit holds</h4>
-          <p>Avoid Stripe's 7-day reauthorization cycle and reduce failed deposit renewals.</p>
-        </article>
-        <article class="cm-summary-card">
-          <div class="cm-summary-icon">&euro;</div>
-          <h4>Wallet-based payouts</h4>
-          <p>Funds are available in your Chekin Wallet and can be paid out when needed.</p>
-        </article>
-        <article class="cm-summary-card">
-          <div class="cm-summary-icon">&check;</div>
-          <h4>Faster activation</h4>
-          <p>No external Stripe onboarding flow required. Chekin handles the setup inside your dashboard.</p>
-        </article>
-      </section>
-
-      <!-- Highlight box -->
-      <section class="cm-highlight">
-        <div class="cm-highlight-icon">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-        </div>
-        <div>
-          <h4>Best option for security deposits</h4>
-          <p>Chekin Payments supports uninterrupted deposit holds for up to 30 days. Stripe may require renewal every 7 days, which can create extra friction and failed authorizations.</p>
-        </div>
-        <span class="cm-highlight-badge">Recommended</span>
-      </section>
-
       <!-- Comparison table -->
       <section class="cm-table-wrap" aria-label="Chekin Payments and Stripe comparison">
         <table class="cm-table">
@@ -1207,10 +1121,6 @@
         </table>
       </section>
 
-      <p class="cm-soft-note">
-        <strong>Note:</strong> Fees are shown before activation so the property can review the setup before enabling the payment processor.
-        Chekin Payments is recommended because it combines lower processing fees with a deposit flow designed for hospitality operations.
-      </p>
     </main>
 
     <footer class="cm-foot">
