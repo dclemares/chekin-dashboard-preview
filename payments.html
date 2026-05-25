@@ -164,6 +164,7 @@
   }
   .logo-chekin{background:linear-gradient(135deg,#385CF8,#274BF0);color:#fff}
   .logo-chekin svg{width:28px;height:28px}
+  .card-head .logo-chekin img{height:22px;width:auto;display:block;filter:brightness(0) invert(1)}
   .logo-stripe{background:#635BFF;color:#fff}
   .logo-stripe svg{width:30px;height:14px;display:block}
   .card-head .pname{font:700 17px var(--font-primary);color:var(--text-dark)}
@@ -553,6 +554,7 @@
     background:linear-gradient(135deg,#385CF8,#274BF0);
     padding:3px;color:#fff;
   }
+  .cm-eyebrow img{height:14px;width:auto;display:block}
 
   /* ── Summary benefit cards ── */
   .cm-benefits{
@@ -687,6 +689,7 @@
     box-shadow:0 2px 8px rgba(56,92,248,.30);
   }
   .cm-providers .logo-mark-sm.logo-chekin svg{width:20px;height:20px}
+  .cm-providers .logo-mark-sm.logo-chekin img{height:16px;width:auto;display:block;filter:brightness(0) invert(1)}
   .cm-providers .logo-mark-sm.logo-stripe{background:#635BFF}
   .cm-providers .logo-mark-sm.logo-stripe svg{width:22px;height:10px;display:block}
   .cm-providers .pn{font:700 14px var(--font-primary);color:var(--text-dark);line-height:1.2}
@@ -847,7 +850,7 @@
   /* Brand row */
   .l1v2 .brand{display:flex;align-items:center;justify-content:space-between;gap:8px;height:44px;padding:0 6px;border-bottom:0;flex-shrink:0}
   .l1v2 .brand-mark{display:flex;align-items:center;gap:8px;color:#fff;text-decoration:none;min-width:0;height:28px}
-  .l1v2 .brand-mark .brand-logo{height:22px;width:auto;display:block;flex-shrink:0}
+  .l1v2 .brand-mark .brand-logo{height:24px;width:auto;display:block;flex-shrink:0;filter:brightness(0) invert(1)}
   .l1v2 .brand-word{font:700 16px/1 var(--font-primary,Inter,sans-serif);letter-spacing:.01em}
   .l1v2 .collapse-btn{
     width:28px;height:28px;border-radius:7px;background:transparent;border:1px solid rgba(255,255,255,.10);
@@ -859,14 +862,6 @@
   .app[data-sidebar="compact"] .l1v2 .brand-word{display:none}
   .app[data-sidebar="compact"] .l1v2 .brand{justify-content:center;padding:0}
   .app[data-sidebar="compact"] .l1v2 .brand-mark{justify-content:center}
-  /* In compact mode, swap full wordmark for compact "C" mark */
-  .app[data-sidebar="compact"] .l1v2 .brand-logo{display:none}
-  .app[data-sidebar="compact"] .l1v2 .brand-mark::before{
-    content:"";
-    width:28px;height:28px;border-radius:8px;
-    background:#385CF8 url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M17 8c-1.1-1.2-2.7-2-4.5-2-3.5 0-6 2.5-6 6s2.5 6 6 6c1.8 0 3.4-.8 4.5-2' stroke='white' stroke-width='2.4' stroke-linecap='round' fill='none'/></svg>") center/18px 18px no-repeat;
-    display:block;flex-shrink:0;
-  }
 
   /* Search bar */
   .l1v2 .sb-search{
@@ -993,11 +988,7 @@
   <aside class="l1 l1v2" aria-label="Primary">
     <div class="brand">
       <a class="brand-mark" href="index.html" aria-label="Chekin home">
-        <svg class="brand-logo" viewBox="0 0 120 32" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
-          <!-- Chekin wordmark, white on dark with brand-blue check accent over the 'i' -->
-          <text x="0" y="24" font-family="'Proxima Nova','Montserrat',Inter,system-ui,sans-serif" font-weight="800" font-size="26" fill="#FFFFFF" letter-spacing="-0.5">Chekin</text>
-          <path d="M86.5 5 L89 7.6 L94.2 2.4" stroke="#385BF8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-        </svg>
+        <img class="brand-logo" src="ds/assets/logos/chekin-logo.png" alt="Chekin">
       </a>
       <button class="collapse-btn" id="sb-toggle" type="button" aria-label="Toggle sidebar" title="Collapse sidebar">
         <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
@@ -1131,10 +1122,7 @@
             <div class="card-head">
               <div class="who">
                 <div class="logo-mark logo-chekin" aria-hidden="true">
-                  <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M23 9.5c-1.5-1.6-3.7-2.6-6.2-2.6C11.4 6.9 7.3 11 7.3 16.1s4.1 9.2 9.5 9.2c2.5 0 4.7-1 6.2-2.6" stroke="#fff" stroke-width="3.4" stroke-linecap="round" fill="none"/>
-                    <path d="M21 4.5l1.7 1.8L26 3" stroke="#9DB3FF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-                  </svg>
+                  <img src="ds/assets/logos/chekin-logo.png" alt="Chekin">
                 </div>
                 <div>
                   <div class="pname">Chekin Payments</div>
@@ -1397,9 +1385,7 @@
     <div class="cm-head">
       <div class="ct">
         <div class="cm-eyebrow">
-          <svg viewBox="0 0 32 32" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
-            <path d="M23 9.5c-1.5-1.6-3.7-2.6-6.2-2.6C11.4 6.9 7.3 11 7.3 16.1s4.1 9.2 9.5 9.2c2.5 0 4.7-1 6.2-2.6" stroke="currentColor" stroke-width="4" stroke-linecap="round" fill="none"/>
-          </svg>
+          <img src="ds/assets/logos/chekin-logo.png" alt="Chekin">
           Chekin Payments
         </div>
         <h3 id="compare-title" tabindex="-1">Designed for short-term rentals — not generic checkout</h3>
@@ -1458,10 +1444,7 @@
             <th scope="col" class="cm-pcell"><span class="cm-feature-head">Feature</span></th>
             <th scope="col" class="cm-pcell chekin">
               <div class="logo-mark-sm logo-chekin" aria-hidden="true">
-                <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M23 9.5c-1.5-1.6-3.7-2.6-6.2-2.6C11.4 6.9 7.3 11 7.3 16.1s4.1 9.2 9.5 9.2c2.5 0 4.7-1 6.2-2.6" stroke="#fff" stroke-width="3.4" stroke-linecap="round" fill="none"/>
-                  <path d="M21 4.5l1.7 1.8L26 3" stroke="#9DB3FF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-                </svg>
+                <img src="ds/assets/logos/chekin-logo.png" alt="Chekin">
               </div>
               <div>
                 <div class="pn">Chekin Payments</div>
