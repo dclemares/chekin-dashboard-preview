@@ -222,6 +222,44 @@
   .status-pending .dot{background:#B45309;animation:pulse 2s ease-in-out infinite}
   .status-failed{background:var(--bg-danger-light);color:var(--text-danger)}
   .status-failed .dot{background:var(--text-danger)}
+
+  /* ───────── Contextual state banner inside the Chekin card ───────── */
+  .card-state-banner{
+    display:flex;align-items:flex-start;gap:10px;
+    padding:10px 12px;border-radius:10px;border:1px solid transparent;
+    margin:0 0 var(--s-2) 0;
+  }
+  .card-state-banner .csb-icon{width:18px;height:18px;flex-shrink:0;display:grid;place-items:center;margin-top:1px}
+  .card-state-banner .csb-icon svg{width:18px;height:18px;display:none}
+  .card-state-banner .csb-body{flex:1;min-width:0}
+  .card-state-banner .csb-title{font:600 13px var(--font-primary);line-height:1.3}
+  .card-state-banner .csb-desc{font:400 12px/16px var(--font-primary);color:var(--text-gray-dark);margin-top:2px}
+  .card-state-banner .csb-action{
+    flex-shrink:0;border:0;background:transparent;cursor:pointer;
+    font:600 12px var(--font-primary);padding:6px 10px;border-radius:8px;
+    color:#fff;
+  }
+  .card-state-banner .csb-action[hidden]{display:none}
+  /* Active */
+  .card-state-banner.state-active{background:var(--bg-success-light);border-color:rgba(15,159,128,.20);color:#0A6A55}
+  .card-state-banner.state-active .csb-svg-active{display:block;color:#0F9F80}
+  .card-state-banner.state-active .csb-title{color:#0A6A55}
+  /* Pending */
+  .card-state-banner.state-pending{background:var(--bg-warning-light);border-color:rgba(180,83,9,.22);color:#7C3D00}
+  .card-state-banner.state-pending .csb-svg-pending{display:block;color:#B45309}
+  .card-state-banner.state-pending .csb-title{color:#7C3D00}
+  .card-state-banner.state-pending .csb-action{background:#B45309}
+  .card-state-banner.state-pending .csb-action:hover{background:#92400E}
+  /* Failed */
+  .card-state-banner.state-failed{background:var(--bg-danger-light);border-color:rgba(200,31,75,.22);color:#7A0F33}
+  .card-state-banner.state-failed .csb-svg-failed{display:block;color:var(--text-danger)}
+  .card-state-banner.state-failed .csb-title{color:#7A0F33}
+  .card-state-banner.state-failed .csb-action{background:var(--text-danger)}
+  .card-state-banner.state-failed .csb-action:hover{background:#A8163E}
+
+  /* Card border tint based on state */
+  .method-card.recommended[data-state="pending"]{border-color:rgba(180,83,9,.30)}
+  .method-card.recommended[data-state="failed"]{border-color:rgba(200,31,75,.30)}
   .status-inactive{background:var(--bg-neutral-light);color:var(--text-gray-dark)}
   .status-inactive .dot{background:var(--text-gray-medium)}
   @keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
@@ -1134,6 +1172,20 @@
               <span class="status-pill status-active" id="pill-chekin"><span class="dot"></span>Active</span>
             </div>
 
+            <!-- Contextual state banner (driven by demo state switcher) -->
+            <div class="card-state-banner state-active" id="chekin-state-banner">
+              <div class="csb-icon" aria-hidden="true">
+                <svg class="csb-svg-active" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                <svg class="csb-svg-pending" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                <svg class="csb-svg-failed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
+              </div>
+              <div class="csb-body">
+                <div class="csb-title" id="csb-title">Your account is ready</div>
+                <div class="csb-desc" id="csb-desc">You can start accepting payments right away.</div>
+              </div>
+              <button type="button" class="csb-action" id="csb-action" hidden>Resolve</button>
+            </div>
+
             <div class="badge-row">
               <span class="badge badge-recommended">
                 <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
@@ -1984,6 +2036,18 @@
     failed:  { txt:'Validation failed',  cls:'status-failed'  }
   };
 
+  const STATE_BANNER = {
+    active:  { title:'Your account is ready',  desc:'You can start accepting payments right away.', action:null },
+    pending: { title:'Identity check in progress', desc:'We\u2019re reviewing your details. New payments still arrive in your Wallet.', action:'Check progress' },
+    failed:  { title:'Validation failed',      desc:'We couldn\u2019t verify some details. Resolve this to keep receiving payouts.', action:'Resolve now' }
+  };
+
+  const cardChekinEl = document.getElementById('card-chekin');
+  const stateBanner  = document.getElementById('chekin-state-banner');
+  const csbTitle     = document.getElementById('csb-title');
+  const csbDesc      = document.getElementById('csb-desc');
+  const csbAction    = document.getElementById('csb-action');
+
   function applyState(state){
     const info = STATE_LABELS[state];
     [pillChekin, cfgPillChekin].forEach(p => {
@@ -1994,6 +2058,20 @@
     if (bannerActive)  bannerActive.style.display  = state === 'active'  ? 'flex' : 'none';
     if (bannerPending) bannerPending.style.display = state === 'pending' ? 'flex' : 'none';
     if (bannerFailed)  bannerFailed.style.display  = state === 'failed'  ? 'flex' : 'none';
+
+    // Update contextual banner inside the Chekin card
+    if (stateBanner){
+      stateBanner.className = 'card-state-banner state-' + state;
+      const b = STATE_BANNER[state];
+      if (csbTitle)  csbTitle.textContent  = b.title;
+      if (csbDesc)   csbDesc.textContent   = b.desc;
+      if (csbAction){
+        if (b.action){ csbAction.textContent = b.action; csbAction.hidden = false; }
+        else { csbAction.hidden = true; }
+      }
+    }
+    if (cardChekinEl) cardChekinEl.dataset.state = state;
+
     stateBtns.forEach(b => b.setAttribute('aria-pressed', String(b.dataset.state === state)));
   }
   stateBtns.forEach(b => b.addEventListener('click', () => applyState(b.dataset.state)));
