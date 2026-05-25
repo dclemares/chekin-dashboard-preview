@@ -162,9 +162,9 @@
     width:44px;height:44px;border-radius:10px;
     display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;
   }
-  .logo-chekin{background:linear-gradient(135deg,#385CF8,#274BF0);color:#fff}
+  .logo-chekin{background:transparent;color:#fff}
   .logo-chekin svg{width:28px;height:28px}
-  .card-head .logo-chekin img{height:22px;width:auto;display:block;filter:brightness(0) invert(1)}
+  .card-head .logo-chekin img{width:44px;height:44px;display:block;border-radius:10px}
   .logo-stripe{background:#635BFF;color:#fff}
   .logo-stripe svg{width:30px;height:14px;display:block}
   .card-head .pname{font:700 17px var(--font-primary);color:var(--text-dark)}
@@ -554,7 +554,7 @@
     background:linear-gradient(135deg,#385CF8,#274BF0);
     padding:3px;color:#fff;
   }
-  .cm-eyebrow img{height:14px;width:auto;display:block}
+  .cm-eyebrow img{width:18px;height:18px;display:block;border-radius:50%}
 
   /* ── Summary benefit cards ── */
   .cm-benefits{
@@ -685,11 +685,11 @@
     width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;
   }
   .cm-providers .logo-mark-sm.logo-chekin{
-    background:linear-gradient(135deg,#385CF8,#274BF0);color:#fff;
+    background:transparent;color:#fff;
     box-shadow:0 2px 8px rgba(56,92,248,.30);
   }
   .cm-providers .logo-mark-sm.logo-chekin svg{width:20px;height:20px}
-  .cm-providers .logo-mark-sm.logo-chekin img{height:16px;width:auto;display:block;filter:brightness(0) invert(1)}
+  .cm-providers .logo-mark-sm.logo-chekin img{width:32px;height:32px;display:block;border-radius:8px}
   .cm-providers .logo-mark-sm.logo-stripe{background:#635BFF}
   .cm-providers .logo-mark-sm.logo-stripe svg{width:22px;height:10px;display:block}
   .cm-providers .pn{font:700 14px var(--font-primary);color:var(--text-dark);line-height:1.2}
@@ -862,6 +862,8 @@
   .app[data-sidebar="compact"] .l1v2 .brand-word{display:none}
   .app[data-sidebar="compact"] .l1v2 .brand{justify-content:center;padding:0}
   .app[data-sidebar="compact"] .l1v2 .brand-mark{justify-content:center}
+  /* In compact mode, swap wordmark for the Chekin isotipo */
+  .app[data-sidebar="compact"] .l1v2 .brand-mark .brand-logo{content:url("ds/assets/logos/chekin-isotipo.svg");width:28px;height:28px;filter:none}
 
   /* Search bar */
   .l1v2 .sb-search{
@@ -1122,7 +1124,7 @@
             <div class="card-head">
               <div class="who">
                 <div class="logo-mark logo-chekin" aria-hidden="true">
-                  <img src="ds/assets/logos/chekin-logo.png" alt="Chekin">
+                  <img src="ds/assets/logos/chekin-isotipo.svg" alt="Chekin">
                 </div>
                 <div>
                   <div class="pname">Chekin Payments</div>
@@ -1385,7 +1387,7 @@
     <div class="cm-head">
       <div class="ct">
         <div class="cm-eyebrow">
-          <img src="ds/assets/logos/chekin-logo.png" alt="Chekin">
+          <img src="ds/assets/logos/chekin-isotipo.svg" alt="Chekin">
           Chekin Payments
         </div>
         <h3 id="compare-title" tabindex="-1">Designed for short-term rentals — not generic checkout</h3>
@@ -1444,7 +1446,7 @@
             <th scope="col" class="cm-pcell"><span class="cm-feature-head">Feature</span></th>
             <th scope="col" class="cm-pcell chekin">
               <div class="logo-mark-sm logo-chekin" aria-hidden="true">
-                <img src="ds/assets/logos/chekin-logo.png" alt="Chekin">
+                <img src="ds/assets/logos/chekin-isotipo.svg" alt="Chekin">
               </div>
               <div>
                 <div class="pn">Chekin Payments</div>
