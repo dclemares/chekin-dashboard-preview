@@ -42,6 +42,11 @@
     --s-1:8px; --s-2:16px; --s-3:24px; --s-4:32px; --s-5:40px; --s-6:48px;
   }
   *{box-sizing:border-box}
+
+  /* ── L2 secondary nav width state ── */
+  :root{ --l2-width:0px; }
+  .app[data-l2="open"]{ --l2-width:260px; }
+
   body{
     margin:0;font-family:var(--font-primary);color:var(--text-dark);font-feature-settings:"ss01";
     background:
@@ -70,6 +75,62 @@
   .user-av{width:40px;height:40px;border-radius:50%;background:var(--bg-sky-light);color:var(--text-brand);display:grid;place-items:center;font:700 14px var(--font-primary);cursor:pointer;flex-shrink:0}
 
   .page{padding:var(--s-5) var(--s-6) 80px;max-width:1120px;width:100%;margin:0 auto;display:flex;flex-direction:column;gap:var(--s-4)}
+
+  /* ───────── L2 Secondary nav ───────── */
+  aside.l2{
+    width:var(--l2-width);min-width:0;flex-shrink:0;
+    background:#FAFBFF;border-right:1px solid var(--stroke-gray-lighter);
+    position:sticky;top:0;height:100vh;align-self:flex-start;z-index:4;
+    overflow:hidden;transition:width .25s cubic-bezier(.2,.7,.3,1);
+    display:flex;flex-direction:column;
+  }
+  aside.l2 .l2-inner{
+    width:260px;flex-shrink:0;display:flex;flex-direction:column;height:100%;
+    opacity:0;transition:opacity .15s;
+  }
+  .app[data-l2="open"] aside.l2 .l2-inner{opacity:1;transition:opacity .25s .1s}
+  .l2-head{
+    padding:18px 20px 14px;display:flex;align-items:center;justify-content:space-between;
+    border-bottom:1px solid var(--stroke-gray-lighter);
+  }
+  .l2-head h2{font:700 14px var(--font-primary);color:var(--text-dark);margin:0;letter-spacing:-.005em}
+  .l2-close{
+    width:28px;height:28px;border-radius:6px;border:1px solid var(--stroke-gray-lighter);
+    background:#fff;display:grid;place-items:center;cursor:pointer;color:var(--text-gray-dark);
+    transition:background .15s, color .15s;
+  }
+  .l2-close:hover{background:var(--bg-neutral-light);color:var(--text-dark)}
+  .l2-close svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2}
+  .l2-section{padding:14px 12px 4px;font:700 11px var(--font-primary);color:var(--text-gray-dark);text-transform:uppercase;letter-spacing:.07em}
+  .l2-list{padding:4px 8px 12px;display:flex;flex-direction:column;gap:1px}
+  .l2-item{
+    display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:8px;
+    font:500 14px var(--font-primary);color:var(--text-dark);cursor:pointer;text-decoration:none;
+    transition:background .15s;
+  }
+  .l2-item:hover{background:rgba(56,92,248,.06)}
+  .l2-item.active{background:rgba(56,92,248,.10);color:var(--text-brand);font-weight:600}
+  .l2-item svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;flex-shrink:0}
+  .l2-item .l2-count{margin-left:auto;font:600 11px var(--font-primary);background:var(--bg-neutral-light);color:var(--text-gray-dark);padding:2px 7px;border-radius:99px}
+  .l2-item.active .l2-count{background:var(--bg-blue-light);color:var(--text-brand)}
+
+  /* L2 toggle button in top header */
+  .l2-toggle{
+    display:inline-flex;align-items:center;gap:6px;
+    height:36px;padding:0 12px;border-radius:8px;
+    background:transparent;border:1px solid var(--stroke-gray-lighter);
+    color:var(--text-gray-dark);font:500 13px var(--font-primary);cursor:pointer;
+    transition:background .15s, color .15s, border-color .15s;
+  }
+  .l2-toggle:hover{background:var(--bg-neutral-light);color:var(--text-dark)}
+  .l2-toggle svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8}
+  .app[data-l2="open"] .l2-toggle{
+    background:var(--bg-blue-light);color:var(--text-brand);border-color:rgba(56,92,248,.25);
+  }
+
+  /* Layout reaction: app grid responds to L2 state */
+  .app[data-l2="open"]{grid-template-columns:280px var(--l2-width) 1fr}
+  .app:not([data-l2="open"]) aside.l2{display:none}
 
   /* ───────── Page head ───────── */
   .pagehead{display:flex;justify-content:space-between;align-items:flex-start;gap:var(--s-3);flex-wrap:wrap}
@@ -400,10 +461,16 @@
   /* ───────── Confirmation modal ───────── */
   .modal-backdrop{
     position:fixed;inset:0;
+    /* Offset by L1 (280px) + L2 (var) so modal centers on content area */
+    left:calc(280px + var(--l2-width, 0px));
     background:radial-gradient(circle at center, rgba(22,22,67,.55), rgba(22,22,67,.70));
     backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
     display:none;align-items:center;justify-content:center;z-index:100;
     animation:bgIn .2s ease-out;
+    transition:left .25s cubic-bezier(.2,.7,.3,1);
+  }
+  @media (max-width:1024px){
+    .modal-backdrop{left:0}
   }
   .modal-backdrop.open{display:flex}
   @keyframes bgIn{from{opacity:0}to{opacity:1}}
@@ -441,7 +508,8 @@
       0 0 0 1px rgba(22,22,67,.06),
       0 24px 64px rgba(22,22,67,.28),
       0 8px 24px rgba(22,22,67,.12);
-    width:980px;max-width:calc(100vw - 32px);
+    width:980px;
+    max-width:calc(100vw - 280px - var(--l2-width, 0px) - 32px);
     max-height:calc(100vh - 64px); /* fallback */
     max-height:calc(100dvh - 64px); /* P2-11: dynamic viewport */
     display:flex;flex-direction:column;overflow:hidden;
@@ -772,11 +840,73 @@
 </head>
 <body>
 
-<div class="app" data-screen-label="Payments">
+<div class="app" data-screen-label="Payments" data-l2="closed">
   <div id="sidebar-slot" data-nav="payments"></div>
+
+  <!-- ─── L2 Secondary nav: Help & Resources ─── -->
+  <aside class="l2" id="l2-panel" aria-label="Help and resources">
+    <div class="l2-inner">
+      <div class="l2-head">
+        <h2>Help &amp; Resources</h2>
+        <button class="l2-close" id="l2-close-btn" aria-label="Close help panel" type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="l2-section">Get started</div>
+      <div class="l2-list">
+        <a class="l2-item active" href="#">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          Quick start
+        </a>
+        <a class="l2-item" href="#">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4z"/><path d="M4 9h16M9 4v16"/></svg>
+          Documentation
+        </a>
+        <a class="l2-item" href="#">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/></svg>
+          API reference
+        </a>
+        <a class="l2-item" href="#">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2zM22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+          Tutorials
+          <span class="l2-count">12</span>
+        </a>
+      </div>
+      <div class="l2-section">Support</div>
+      <div class="l2-list">
+        <a class="l2-item" href="#">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Contact support
+        </a>
+        <a class="l2-item" href="#">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 1 1 5.8 1c0 2-3 2-3 4M12 17h.01"/></svg>
+          FAQs
+        </a>
+        <a class="l2-item" href="#">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Status page
+        </a>
+      </div>
+      <div class="l2-section">Community</div>
+      <div class="l2-list">
+        <a class="l2-item" href="#">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Forum
+        </a>
+        <a class="l2-item" href="#">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8z"/></svg>
+          Changelog
+        </a>
+      </div>
+    </div>
+  </aside>
 
   <main>
     <header class="top">
+      <button class="l2-toggle" id="l2-toggle-btn" type="button" aria-pressed="false" aria-controls="l2-panel">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 1 1 5.8 1c0 2-3 2-3 4M12 17h.01"/></svg>
+        Help
+      </button>
       <div class="crumbs">Settings · <b>Payments</b></div>
       <div style="margin-left:auto;display:flex;align-items:center;gap:10px">
         <span data-agent-trigger-slot></span>
@@ -1535,6 +1665,23 @@
 </div>
 
 <script>
+  // ───── L2 secondary nav toggle ─────
+  (function(){
+    const app = document.querySelector('.app');
+    const toggleBtn = document.getElementById('l2-toggle-btn');
+    const closeBtn  = document.getElementById('l2-close-btn');
+    if (!app || !toggleBtn) return;
+
+    function setL2(state){
+      app.dataset.l2 = state;
+      toggleBtn.setAttribute('aria-pressed', String(state === 'open'));
+    }
+    toggleBtn.addEventListener('click', () => {
+      setL2(app.dataset.l2 === 'open' ? 'closed' : 'open');
+    });
+    if (closeBtn) closeBtn.addEventListener('click', () => setL2('closed'));
+  })();
+
   // ───── Gateway switcher with confirmation ─────
   let currentGateway = 'chekin';
   let pendingGateway = null;
