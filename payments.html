@@ -1739,17 +1739,17 @@
 <div class="modal-backdrop" id="switch-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
   <div class="modal">
     <div class="m-icon"><svg viewBox="0 0 24 24"><path d="M12 9v4M12 17h.01M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg></div>
-    <h3 id="modal-title">Switch payment gateway?</h3>
-    <p id="modal-lead">You're about to change the active gateway. This affects future transactions only — open holds and pending payments stay on the current provider until they settle.</p>
-    <p class="m-impact" id="modal-impact">We'll switch your active gateway to <strong id="modal-target">Stripe</strong>. New payments will route through the new provider as soon as you confirm. <strong>Existing transactions and payouts are not affected.</strong></p>
+    <h3 id="modal-title">Switch to Stripe?</h3>
+    <p id="modal-lead">All new bookings will be charged through <strong id="modal-target">Stripe</strong> from now on.</p>
     <ul>
-      <li>Historical transactions remain visible</li>
-      <li>Open deposit holds keep their original provider</li>
-      <li>New bookings will use the new gateway</li>
+      <li id="modal-bullet-1">You'll need to complete Stripe onboarding before guests can pay</li>
+      <li>Open deposit holds and pending payments stay on Chekin Payments until they settle</li>
+      <li>Past transactions and payouts remain untouched</li>
     </ul>
+    <p class="m-impact" id="modal-impact">Nothing happens to money already in motion. This change only affects future bookings.</p>
     <div class="m-actions">
       <button class="btn-secondary" id="m-cancel">Cancel</button>
-      <button class="btn-primary" id="m-confirm">Confirm switch</button>
+      <button class="btn-primary" id="m-confirm">Switch to Stripe</button>
     </div>
   </div>
 </div>
@@ -1777,17 +1777,45 @@
     if (cfgStripe) cfgStripe.style.display = 'none';
   }
 
-  const modalImpact = document.getElementById('modal-impact');
+  const modalTitleEl  = document.getElementById('modal-title');
+  const modalLeadEl   = document.getElementById('modal-lead');
+  const modalBullet1  = document.getElementById('modal-bullet-1');
+  const modalImpact   = document.getElementById('modal-impact');
+
   const SWITCH_COPY = {
-    stripe: "We'll switch your active gateway to <strong>Stripe</strong>. New payments will route through Stripe as soon as you confirm — you may need to complete Stripe onboarding before guests can pay. <strong>Existing transactions and payouts are not affected.</strong>",
-    chekin: "We'll switch your active gateway to <strong>Chekin Payments</strong>. New payments will route through Chekin Wallet as soon as you confirm. <strong>Existing transactions and payouts are not affected.</strong>"
+    stripe: {
+      title:   "Switch to Stripe?",
+      lead:    "All new bookings will be charged through <strong>Stripe</strong> from now on.",
+      bullet1: "You'll need to complete Stripe onboarding before guests can pay",
+      stayOn:  "Chekin Payments",
+      cta:     "Switch to Stripe"
+    },
+    chekin: {
+      title:   "Switch to Chekin Payments?",
+      lead:    "All new bookings will be charged through <strong>Chekin Payments</strong> from now on.",
+      bullet1: "Your Chekin Wallet is ready — no extra onboarding needed",
+      stayOn:  "Stripe",
+      cta:     "Switch to Chekin"
+    }
   };
 
   function requestSwitch(g){
     if (g === currentGateway) return;
     pendingGateway = g;
     lastFocusedBeforeModal = document.activeElement;
-    if (modalImpact && SWITCH_COPY[g]) modalImpact.innerHTML = SWITCH_COPY[g];
+
+    const c = SWITCH_COPY[g];
+    if (c){
+      if (modalTitleEl) modalTitleEl.textContent = c.title;
+      if (modalLeadEl)  modalLeadEl.innerHTML    = c.lead;
+      if (modalBullet1) modalBullet1.textContent = c.bullet1;
+      if (modalImpact)  modalImpact.textContent  = "Nothing happens to money already in motion. This change only affects future bookings.";
+      if (modalConfirm) modalConfirm.textContent = c.cta;
+      // Update the "stays on" bullet (second item)
+      const bullet2 = modal.querySelector('ul li:nth-child(2)');
+      if (bullet2) bullet2.textContent = `Open deposit holds and pending payments stay on ${c.stayOn} until they settle`;
+    }
+
     modal.classList.add('open');
     // P2: focus trap — initial focus
     setTimeout(() => modalCancel.focus(), 30);
