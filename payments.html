@@ -326,14 +326,8 @@
     background:#fff;border:1px solid var(--stroke-gray-lighter);
     border-radius:var(--radius-lg);padding:16px 18px;
     box-shadow:0 1px 2px rgba(22,22,67,.03);
-    transition:transform .2s, box-shadow .2s;position:relative;overflow:hidden;
+    position:relative;overflow:hidden;
   }
-  .kpi-mini::after{
-    content:"";position:absolute;left:0;top:0;height:3px;width:100%;
-    background:linear-gradient(90deg,var(--text-brand),#7D8DFF);opacity:0;transition:opacity .2s;
-  }
-  .kpi-mini:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(22,22,67,.08)}
-  .kpi-mini:hover::after{opacity:1}
   .kpi-mini .l{font:600 11px var(--font-primary);color:var(--text-gray-dark);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;display:flex;align-items:center;gap:5px}
   .kpi-mini .v{font:700 22px/26px var(--font-primary);color:var(--text-dark);font-variant-numeric:tabular-nums;letter-spacing:-.01em}
   .kpi-mini .v .u{font:500 12px var(--font-primary);color:var(--text-gray-dark);margin-left:4px}
@@ -442,8 +436,11 @@
 
   /* ───────── Comparison modal ───────── */
   .compare-modal{
-    background:#fff;border-radius:var(--radius-lg);
-    box-shadow:0 24px 64px rgba(22,22,67,.32), 0 8px 24px rgba(22,22,67,.14);
+    background:#fff;border-radius:18px;
+    box-shadow:
+      0 0 0 1px rgba(22,22,67,.06),
+      0 24px 64px rgba(22,22,67,.28),
+      0 8px 24px rgba(22,22,67,.12);
     width:980px;max-width:calc(100vw - 32px);
     max-height:calc(100vh - 64px); /* fallback */
     max-height:calc(100dvh - 64px); /* P2-11: dynamic viewport */
@@ -452,12 +449,20 @@
   }
   .cm-head{
     display:flex;align-items:flex-start;gap:var(--s-2);
-    padding:var(--s-3) var(--s-4);border-bottom:1px solid var(--stroke-gray-lighter);
+    padding:28px var(--s-4) 26px;border-bottom:1px solid var(--stroke-gray-lighter);
     flex-shrink:0;position:relative;overflow:hidden;
     background:
-      radial-gradient(600px 200px at 90% -20%, rgba(56,92,248,.10), transparent 70%),
-      radial-gradient(400px 200px at 0% 120%, rgba(99,91,255,.06), transparent 70%),
-      #fff;
+      radial-gradient(700px 260px at 85% -30%, rgba(56,92,248,.16), transparent 60%),
+      radial-gradient(500px 280px at -5% 130%, rgba(99,91,255,.10), transparent 60%),
+      linear-gradient(180deg,#fff,#FAFBFF);
+  }
+  .cm-head::after{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(56,92,248,.08) 1px, transparent 0);
+    background-size:18px 18px;
+    mask:linear-gradient(180deg, rgba(0,0,0,.18), transparent 80%);
+    -webkit-mask:linear-gradient(180deg, rgba(0,0,0,.18), transparent 80%);
   }
   .cm-head .ct{flex:1;min-width:0;position:relative;z-index:1}
   .cm-head h3{
@@ -471,23 +476,28 @@
     width:36px;height:36px;border-radius:10px;
     border:1px solid var(--stroke-gray-lighter);background:#fff;
     display:grid;place-items:center;cursor:pointer;flex-shrink:0;
-    transition:background .15s, border-color .15s, transform .15s;position:relative;z-index:1;
+    transition:background .15s, border-color .15s, color .15s;position:relative;z-index:1;
   }
-  .cm-close:hover{background:var(--bg-neutral-light);border-color:var(--stroke-gray-medium);transform:rotate(90deg)}
-  .cm-close svg{width:14px;height:14px;stroke:var(--text-gray-dark);fill:none;stroke-width:2}
+  .cm-close:hover{background:var(--bg-neutral-light);border-color:var(--stroke-gray-medium)}
+  .cm-close:hover svg{stroke:var(--text-dark)}
+  .cm-close svg{width:14px;height:14px;stroke:var(--text-gray-dark);fill:none;stroke-width:2;transition:stroke .15s}
 
   .cm-body{padding:0;overflow:auto;flex:1}
 
   /* ── Eyebrow badge in header ── */
   .cm-eyebrow{
-    display:inline-flex;align-items:center;gap:6px;
+    display:inline-flex;align-items:center;gap:7px;
     font:700 11px var(--font-primary);color:var(--text-brand);
-    background:linear-gradient(135deg, rgba(56,92,248,.12), rgba(99,91,255,.10));
-    border:1px solid rgba(56,92,248,.20);
+    background:linear-gradient(135deg, rgba(56,92,248,.14), rgba(99,91,255,.08));
+    border:1px solid rgba(56,92,248,.22);
     border-radius:99px;
-    padding:4px 12px;margin-bottom:10px;text-transform:uppercase;letter-spacing:.08em;
+    padding:5px 12px 5px 6px;margin-bottom:12px;text-transform:uppercase;letter-spacing:.08em;
   }
-  .cm-eyebrow svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2.5}
+  .cm-eyebrow svg{
+    width:18px;height:18px;border-radius:50%;
+    background:linear-gradient(135deg,#385CF8,#274BF0);
+    padding:3px;color:#fff;
+  }
 
   /* ── Summary benefit cards ── */
   .cm-benefits{
@@ -499,19 +509,12 @@
     padding:16px 18px;display:flex;flex-direction:column;gap:8px;
     border:1px solid var(--stroke-gray-lighter);
     box-shadow:0 1px 2px rgba(22,22,67,.04);
-    transition:transform .2s cubic-bezier(.2,.7,.3,1), box-shadow .2s, border-color .2s;
     position:relative;overflow:hidden;
   }
   .cm-benefit::before{
     content:"";position:absolute;left:0;top:0;height:3px;width:100%;
     background:linear-gradient(90deg,var(--text-brand),#7D8DFF);
-    opacity:0;transition:opacity .2s;
   }
-  .cm-benefit:hover{
-    transform:translateY(-3px);border-color:rgba(56,92,248,.20);
-    box-shadow:0 8px 24px rgba(22,22,67,.10);
-  }
-  .cm-benefit:hover::before{opacity:1}
   .cm-benefit .b-icon{
     width:36px;height:36px;border-radius:10px;
     background:linear-gradient(135deg,rgba(56,92,248,.14),rgba(99,91,255,.10));
@@ -552,13 +555,18 @@
 
   /* ── Section divider between cards and table ── */
   .cm-divider{
-    margin:20px var(--s-4) 0;padding:0 0 4px;
-    font:600 12px var(--font-primary);color:var(--text-gray-dark);
-    text-transform:uppercase;letter-spacing:.06em;
-    border-bottom:1px solid var(--stroke-gray-lighter);
-    display:flex;align-items:center;gap:8px;
+    margin:24px var(--s-4) 4px;padding:0 0 10px;
+    font:700 12px var(--font-primary);color:var(--text-dark);
+    text-transform:uppercase;letter-spacing:.08em;
+    display:flex;align-items:center;gap:10px;
   }
-  .cm-divider svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2}
+  .cm-divider::before{
+    content:"";width:24px;height:2px;background:linear-gradient(90deg,var(--text-brand),#7D8DFF);border-radius:2px;
+  }
+  .cm-divider::after{
+    content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--stroke-gray-lighter),transparent);
+  }
+  .cm-divider svg{width:14px;height:14px;stroke:var(--text-brand);fill:none;stroke-width:2}
 
   /* ── Deposit rows emphasis ── */
   .cm-row.deposit-row .cm-cell.chekin{
@@ -603,11 +611,17 @@
     position:sticky;top:0;z-index:2;
     box-shadow:0 1px 0 var(--stroke-gray-lighter);
   }
-  .cm-providers .cm-pcell{padding:var(--s-2) var(--s-3);padding-top:18px;padding-bottom:18px;display:flex;align-items:center;gap:12px;text-align:left;font-weight:inherit}
+  .cm-providers .cm-pcell{padding:22px var(--s-3);display:flex;align-items:center;gap:14px;text-align:left;font-weight:inherit}
   .cm-providers .cm-pcell:not(:last-child){border-right:1px solid var(--stroke-gray-lighter)}
-  .cm-providers .cm-pcell.chekin{background:linear-gradient(180deg, rgba(56,92,248,.08), rgba(56,92,248,.02));position:relative}
+  .cm-providers .cm-pcell.chekin{
+    background:
+      radial-gradient(200px 100px at 50% 0%, rgba(56,92,248,.16), transparent 70%),
+      linear-gradient(180deg, rgba(56,92,248,.08), rgba(56,92,248,.02));
+    position:relative;
+  }
   .cm-providers .cm-pcell.chekin::after{
-    content:"";position:absolute;left:0;top:0;width:3px;height:100%;background:var(--text-brand);
+    content:"";position:absolute;left:0;top:0;width:3px;height:100%;
+    background:linear-gradient(180deg,var(--text-brand),#7D8DFF);
   }
   .cm-providers .cm-feature-head{font:600 12px var(--font-primary);color:var(--text-gray-dark);text-transform:uppercase;letter-spacing:.06em}
   .cm-providers .logo-mark-sm{
@@ -622,14 +636,6 @@
   .cm-providers .logo-mark-sm.logo-stripe svg{width:22px;height:10px;display:block}
   .cm-providers .pn{font:700 14px var(--font-primary);color:var(--text-dark);line-height:1.2}
   .cm-providers .ps{font:500 11px var(--font-primary);color:var(--text-gray-dark);margin-top:2px;display:flex;align-items:center;gap:4px}
-  .cm-providers .ps .winner-badge{
-    display:inline-flex;align-items:center;gap:3px;
-    background:var(--bg-success-light);color:var(--text-success);
-    /* P0-1: bumped 10px → 11px for legibility */
-    font:700 11px var(--font-primary);
-    padding:2px 6px;border-radius:99px;text-transform:uppercase;letter-spacing:.04em;
-  }
-  .cm-providers .ps .winner-badge svg{width:10px;height:10px;stroke:currentColor;fill:none;stroke-width:2.5}
 
   /* P2-16: zebra by section */
   .cm-section[data-zebra="alt"]{background:#FAFBFF}
@@ -638,19 +644,22 @@
   .cm-section-title{display:block}
   .cm-section-title > td{
     grid-column:1 / -1;
-    font:600 11px var(--font-primary);color:var(--text-gray-dark);
-    text-transform:uppercase;letter-spacing:.07em;
-    /* P2-16: more padding-top for separation */
-    padding:24px var(--s-3) 10px;background:transparent;
-    border-top:1px solid var(--stroke-gray-lighter);
-    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    font:700 11px var(--font-primary);color:var(--text-brand);
+    text-transform:uppercase;letter-spacing:.09em;
+    padding:22px var(--s-3) 12px;
+    background:transparent;border-top:1px solid var(--stroke-gray-lighter);
+    display:flex;align-items:center;gap:10px;
+  }
+  .cm-section-title > td::before{
+    content:"";width:5px;height:5px;border-radius:50%;background:var(--text-brand);
+    box-shadow:0 0 0 3px rgba(56,92,248,.15);
   }
   .cm-section:first-of-type .cm-section-title > td{border-top:none}
 
   /* Comparison row */
   .cm-row{border-top:1px solid var(--stroke-gray-lighter);align-items:stretch}
   .cm-row:first-of-type{border-top:none}
-  .cm-cell{padding:18px var(--s-3);font:400 13px/20px var(--font-primary);color:var(--text-dark);display:flex;align-items:center;gap:10px;min-height:62px;text-align:left;vertical-align:middle}
+  .cm-cell{padding:18px var(--s-3);font:400 13.5px/20px var(--font-primary);color:var(--text-dark);display:flex;align-items:center;gap:10px;min-height:64px;text-align:left;vertical-align:middle}
   .cm-cell:not(:last-child){border-right:1px solid var(--stroke-gray-lighter)}
   .cm-cell.feature{font:600 13px var(--font-primary);color:var(--text-dark);background:#FAFAFE}
   .cm-cell.feature .sub{font:400 11px var(--font-primary);color:var(--text-gray-dark);margin-top:3px;font-weight:500}
@@ -666,10 +675,12 @@
   /* P2-12: row layout — value left, winner-check right */
   .cm-cell .val-row{display:flex;justify-content:space-between;width:100%;align-items:center;gap:8px}
   .cm-cell .winner-check{
-    width:16px;height:16px;border-radius:50%;background:var(--text-success);
+    width:18px;height:18px;border-radius:50%;
+    background:linear-gradient(135deg,#10B898,#0F9F80);
     display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;
+    box-shadow:0 2px 6px rgba(15,159,128,.30);
   }
-  .cm-cell .winner-check svg{width:9px;height:9px;stroke:#fff;fill:none;stroke-width:3}
+  .cm-cell .winner-check svg{width:10px;height:10px;stroke:#fff;fill:none;stroke-width:3}
   .cm-cell .neutral-dash{
     width:10px;height:2px;background:var(--stroke-gray-medium);display:inline-block;
   }
@@ -1178,11 +1189,11 @@
     <div class="cm-head">
       <div class="ct">
         <div class="cm-eyebrow">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          Payment comparison
+          <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M34 16c-2.2-2.4-5.4-4-9-4-7 0-12 5-12 12s5 12 12 12c3.6 0 6.8-1.6 9-4" stroke="currentColor" stroke-width="6" stroke-linecap="round" fill="none"/></svg>
+          Chekin Payments
         </div>
-        <h3 id="compare-title" tabindex="-1">Choose the best gateway for your properties</h3>
-        <div class="csub" id="compare-subtitle">Transparent side-by-side breakdown so you can decide with confidence.</div>
+        <h3 id="compare-title" tabindex="-1">Designed for short-term rentals — not generic checkout</h3>
+        <div class="csub" id="compare-subtitle">See how Chekin Payments compares to Stripe across the things that matter most for hosts.</div>
       </div>
       <button class="cm-close" id="cm-close-btn" aria-label="Close comparison">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
@@ -1239,12 +1250,7 @@
               <div class="logo-mark-sm logo-chekin" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none"><path d="M34 16c-2.2-2.4-5.4-4-9-4-7 0-12 5-12 12s5 12 12 12c3.6 0 6.8-1.6 9-4" stroke="#fff" stroke-width="4" stroke-linecap="round"/></svg></div>
               <div>
                 <div class="pn">Chekin Payments</div>
-                <div class="ps">
-                  <span class="winner-badge">
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
-                    Recommended by Chekin
-                  </span>
-                </div>
+                <div class="ps">Built for short-term rentals</div>
               </div>
             </th>
             <th scope="col" class="cm-pcell">
@@ -1253,7 +1259,7 @@
               </div>
               <div>
                 <div class="pn">Stripe</div>
-                <div class="ps">Third-party processor</div>
+                <div class="ps">General-purpose processor</div>
               </div>
             </th>
           </tr>
