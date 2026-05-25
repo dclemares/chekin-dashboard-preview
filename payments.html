@@ -474,6 +474,14 @@
   .m-icon svg{width:22px;height:22px;stroke:#B45309;fill:none;stroke-width:1.8}
   .modal h3{font:600 17px/22px var(--font-primary);color:var(--text-dark);margin:0 0 8px}
   .modal p{font:400 14px/20px var(--font-primary);color:var(--text-gray-dark);margin:0 0 var(--s-2)}
+  .modal .m-impact{
+    background:var(--bg-gray-light,#F6F6FA);
+    border:1px solid var(--stroke-gray-lighter,#E6E6EE);
+    border-radius:8px;padding:10px 12px;
+    font:400 13px/19px var(--font-primary);color:var(--text-dark);
+    margin:0 0 var(--s-2);
+  }
+  .modal .m-impact strong{font-weight:600;color:var(--text-dark)}
   .modal ul{margin:0 0 var(--s-3);padding:0 0 0 18px;color:var(--text-gray-dark);font:400 13px/20px var(--font-primary)}
   .modal ul li{margin-bottom:4px}
   .m-actions{display:flex;justify-content:flex-end;gap:8px}
@@ -1732,7 +1740,8 @@
   <div class="modal">
     <div class="m-icon"><svg viewBox="0 0 24 24"><path d="M12 9v4M12 17h.01M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg></div>
     <h3 id="modal-title">Switch payment gateway?</h3>
-    <p>You're about to change the active gateway. This affects future transactions only — open holds and pending payments stay on the current provider until they settle.</p>
+    <p id="modal-lead">You're about to change the active gateway. This affects future transactions only — open holds and pending payments stay on the current provider until they settle.</p>
+    <p class="m-impact" id="modal-impact">We'll switch your active gateway to <strong id="modal-target">Stripe</strong>. New payments will route through the new provider as soon as you confirm. <strong>Existing transactions and payouts are not affected.</strong></p>
     <ul>
       <li>Historical transactions remain visible</li>
       <li>Open deposit holds keep their original provider</li>
@@ -1768,10 +1777,17 @@
     if (cfgStripe) cfgStripe.style.display = 'none';
   }
 
+  const modalImpact = document.getElementById('modal-impact');
+  const SWITCH_COPY = {
+    stripe: "We'll switch your active gateway to <strong>Stripe</strong>. New payments will route through Stripe as soon as you confirm — you may need to complete Stripe onboarding before guests can pay. <strong>Existing transactions and payouts are not affected.</strong>",
+    chekin: "We'll switch your active gateway to <strong>Chekin Payments</strong>. New payments will route through Chekin Wallet as soon as you confirm. <strong>Existing transactions and payouts are not affected.</strong>"
+  };
+
   function requestSwitch(g){
     if (g === currentGateway) return;
     pendingGateway = g;
     lastFocusedBeforeModal = document.activeElement;
+    if (modalImpact && SWITCH_COPY[g]) modalImpact.innerHTML = SWITCH_COPY[g];
     modal.classList.add('open');
     // P2: focus trap — initial focus
     setTimeout(() => modalCancel.focus(), 30);
