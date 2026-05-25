@@ -266,17 +266,8 @@
   .status-banner.banner-failed .sb-icon svg{stroke:var(--text-danger)}
   .status-banner .sb-cta{margin-left:auto;flex-shrink:0}
 
-  /* Method-card — secondary action slot at the very bottom.
-     Reserved on every card to keep both cards aligned (Chekin's is empty). */
-  .method-card .card-footer-action{
-    display:flex;justify-content:flex-end;align-items:center;
-    margin-top:12px;padding-top:12px;
-    border-top:1px solid var(--stroke-gray-lighter);
-    min-height:44px;
-  }
-  .method-card .card-footer-action:empty{
-    border-top:0;padding-top:0;margin-top:12px;min-height:44px;
-  }
+  /* Badge-row: align the Stripe reset button to the right (mirrors Chekin's badges on the left) */
+  .method-card .badge-row > .btn-text-danger{margin-left:auto}
   .btn-text-danger{
     display:inline-flex;align-items:center;gap:6px;
     background:transparent;border:0;padding:6px 8px;border-radius:6px;cursor:pointer;
@@ -1168,8 +1159,6 @@
                 <div class="commission-note">Payout fee depends on method — see details in Wallet</div>
               </div>
             </div>
-
-            <div class="card-footer-action" aria-hidden="true"></div>
           </label>
 
           <!-- STRIPE -->
@@ -1190,7 +1179,12 @@
               <span class="status-pill status-inactive" id="pill-stripe"><span class="dot"></span>Not connected</span>
             </div>
 
-            <div class="badge-row"></div>
+            <div class="badge-row">
+              <button type="button" class="btn-text-danger" id="stripe-reset">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 17H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M22 12l-5-5M22 12l-5 5M22 12H10"/></svg>
+                Reset Stripe connection
+              </button>
+            </div>
 
             <div class="method-headline">Use your existing Stripe account.</div>
             <div class="method-desc" id="stripe-desc">Use your existing Stripe account if you prefer to manage payments externally. Requires KYC and fiscal documentation before going live.</div>
@@ -1216,13 +1210,6 @@
                 <div class="commission-val">1.5% <span class="unit">+ €0.25</span></div>
                 <div class="commission-note">UK 2.5% · International 3.25% · +2% FX</div>
               </div>
-            </div>
-
-            <div class="card-footer-action">
-              <button type="button" class="btn-text-danger" id="stripe-reset">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 17H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M22 12l-5-5M22 12l-5 5M22 12H10"/></svg>
-                Reset Stripe connection
-              </button>
             </div>
           </label>
 
