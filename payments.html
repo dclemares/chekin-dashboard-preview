@@ -80,25 +80,37 @@
   }
   .pagehead .sub{font:400 15px/22px var(--font-primary);color:var(--text-gray-dark);margin-top:8px;max-width:600px}
 
-  /* Demo state switcher (devtool look) */
+  /* Demo state switcher — floating devtool, clearly OUTSIDE the product UI */
   .state-switch{
-    display:flex;align-items:center;gap:8px;padding:4px;
-    background:#fff;border:1px solid var(--stroke-gray-lighter);
-    border-radius:var(--radius-md);box-shadow:var(--shadow-card);
+    position:fixed;left:20px;bottom:20px;z-index:9000;
+    display:flex;align-items:center;gap:6px;padding:5px 5px 5px 12px;
+    background:rgba(20,20,30,.92);color:#fff;
+    border:1px solid rgba(255,255,255,.10);
+    border-radius:999px;
+    box-shadow:0 10px 30px rgba(0,0,0,.30),0 2px 6px rgba(0,0,0,.20);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    font-family:'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   }
-  .state-switch .lbl{font:600 11px var(--font-primary);color:var(--text-gray-dark);text-transform:uppercase;letter-spacing:.05em;padding:0 8px;border-right:1px solid var(--stroke-gray-lighter)}
+  .state-switch::before{
+    content:"◍";margin-right:6px;color:#FF9F1C;font-size:13px;line-height:1;
+  }
+  .state-switch .lbl{
+    font:600 10px 'JetBrains Mono', ui-monospace, monospace;color:rgba(255,255,255,.55);
+    text-transform:uppercase;letter-spacing:.10em;
+    padding:0 8px 0 0;border-right:1px solid rgba(255,255,255,.12);
+  }
   .state-switch button{
     border:none;background:transparent;cursor:pointer;
-    font:600 12px var(--font-primary);color:var(--text-gray-dark);
-    padding:6px 10px;border-radius:6px;display:inline-flex;align-items:center;gap:6px;
+    font:600 11px 'JetBrains Mono', ui-monospace, monospace;color:rgba(255,255,255,.65);
+    padding:6px 10px;border-radius:999px;display:inline-flex;align-items:center;gap:6px;
+    transition:background .12s,color .12s;
   }
-  .state-switch button:hover{background:var(--bg-neutral-light);color:var(--text-dark)}
-  .state-switch button[aria-pressed="true"]{background:var(--text-dark);color:#fff}
-  .state-switch button[aria-pressed="true"] .d{background:#fff}
-  .state-switch button .d{width:6px;height:6px;border-radius:50%}
-  .state-switch button .d.active{background:#0F9F80}
-  .state-switch button .d.pending{background:#B45309}
-  .state-switch button .d.failed{background:var(--text-danger)}
+  .state-switch button:hover{background:rgba(255,255,255,.08);color:#fff}
+  .state-switch button[aria-pressed="true"]{background:rgba(255,255,255,.12);color:#fff}
+  .state-switch button .d{width:6px;height:6px;border-radius:50%;box-shadow:0 0 0 2px rgba(255,255,255,.05)}
+  .state-switch button .d.active{background:#10C8A0}
+  .state-switch button .d.pending{background:#F5A524}
+  .state-switch button .d.failed{background:#FF5C8A}
 
   .sec-label{font:600 11px var(--font-primary);color:var(--text-gray-dark);text-transform:uppercase;letter-spacing:.07em;margin-bottom:var(--s-2);display:block}
 
@@ -1086,13 +1098,6 @@
           <div class="sub">Pick how you charge guests and hold deposits. The selected gateway applies to every property in this workspace.</div>
         </div>
 
-        <!-- Demo state switcher (P0) -->
-        <div class="state-switch" role="group" aria-label="Demo: simulate gateway status">
-          <span class="lbl">Demo state</span>
-          <button data-state="active" aria-pressed="true"><span class="d active"></span>Active</button>
-          <button data-state="pending" aria-pressed="false"><span class="d pending"></span>Pending validation</button>
-          <button data-state="failed" aria-pressed="false"><span class="d failed"></span>Failed</button>
-        </div>
       </div>
 
       <!-- ─── METHOD SELECTOR ─── -->
@@ -2068,6 +2073,14 @@
     document.addEventListener('keydown', e => { if (e.key === 'Escape' && backdrop.classList.contains('open')) close(); });
   })();
 </script>
+
+<!-- Prototype-only: floating demo state devtool (outside product UI) -->
+<div class="state-switch" role="group" aria-label="Prototype devtool: simulate gateway status">
+  <span class="lbl">Prototype</span>
+  <button data-state="active" aria-pressed="true"><span class="d active"></span>Active</button>
+  <button data-state="pending" aria-pressed="false"><span class="d pending"></span>Pending</button>
+  <button data-state="failed" aria-pressed="false"><span class="d failed"></span>Failed</button>
+</div>
 
 <script src="ds/_agent.js"></script>
 </body>
