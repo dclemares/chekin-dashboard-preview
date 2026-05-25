@@ -265,6 +265,72 @@
   .status-banner.banner-failed .sb-icon svg{stroke:var(--text-danger)}
   .status-banner .sb-cta{margin-left:auto;flex-shrink:0}
 
+  /* Card-head: more-actions kebab menu */
+  .cp-actions{position:relative}
+  .cp-actions .kebab-btn{
+    width:32px;height:32px;display:grid;place-items:center;
+    background:transparent;border:1px solid var(--stroke-gray-lighter);
+    color:var(--text-gray-dark);border-radius:8px;cursor:pointer;
+    transition:background .14s,color .14s,border-color .14s;
+  }
+  .cp-actions .kebab-btn:hover,.cp-actions .kebab-btn[aria-expanded="true"]{
+    background:var(--bg-neutral-light);color:var(--text-dark);border-color:var(--stroke-gray-medium);
+  }
+  .cp-actions .kebab-btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2}
+  .cp-actions .kebab-menu{
+    position:absolute;top:calc(100% + 6px);right:0;z-index:30;min-width:240px;
+    background:#fff;border:1px solid var(--stroke-gray-lighter);border-radius:10px;
+    box-shadow:0 14px 36px rgba(22,22,67,.14),0 2px 6px rgba(22,22,67,.06);
+    padding:6px;display:none;
+  }
+  .cp-actions[data-open="true"] .kebab-menu{display:block;animation:km-in .14s ease-out}
+  @keyframes km-in{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+  .cp-actions .km-item{
+    display:flex;align-items:flex-start;gap:10px;
+    padding:9px 10px;border-radius:7px;cursor:pointer;
+    background:transparent;border:0;width:100%;text-align:left;
+    color:var(--text-dark);font:500 13px var(--font-primary);
+  }
+  .cp-actions .km-item:hover,.cp-actions .km-item:focus-visible{background:var(--bg-neutral-light);outline:none}
+  .cp-actions .km-item svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;flex-shrink:0;margin-top:1px}
+  .cp-actions .km-item .km-txt{display:flex;flex-direction:column;gap:1px;min-width:0}
+  .cp-actions .km-item .km-t{font:600 13px var(--font-primary);color:var(--text-dark)}
+  .cp-actions .km-item .km-d{font:500 12px var(--font-primary);color:var(--text-gray-dark)}
+  .cp-actions .km-sep{height:1px;background:var(--stroke-gray-lighter);margin:4px 6px}
+  .cp-actions .km-item.danger{color:#C81F4B}
+  .cp-actions .km-item.danger .km-t{color:#C81F4B}
+  .cp-actions .km-item.danger:hover{background:#FFF1F4}
+
+  /* Reset confirm dialog (lightweight) */
+  .confirm-backdrop{
+    position:fixed;inset:0;background:rgba(22,22,67,.42);backdrop-filter:blur(2px);
+    display:none;align-items:center;justify-content:center;z-index:80;padding:24px;
+  }
+  .confirm-backdrop.open{display:flex;animation:cb-in .14s ease-out}
+  @keyframes cb-in{from{opacity:0}to{opacity:1}}
+  .confirm-card{
+    width:100%;max-width:440px;background:#fff;border-radius:14px;overflow:hidden;
+    box-shadow:0 20px 50px rgba(22,22,67,.30);
+  }
+  .confirm-card .cc-head{padding:20px 22px 6px;display:flex;align-items:flex-start;gap:12px}
+  .confirm-card .cc-icon{
+    width:36px;height:36px;border-radius:50%;background:#FFE4EC;color:#C81F4B;
+    display:grid;place-items:center;flex-shrink:0;
+  }
+  .confirm-card .cc-icon svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2}
+  .confirm-card .cc-title{font:700 16px var(--font-primary);color:var(--text-dark)}
+  .confirm-card .cc-body{padding:0 22px 16px;color:var(--text-gray-dark);font:400 13.5px/20px var(--font-primary)}
+  .confirm-card .cc-body strong{color:var(--text-dark)}
+  .confirm-card .cc-foot{
+    display:flex;justify-content:flex-end;gap:8px;padding:12px 18px 18px;
+    background:var(--bg-neutral-light);border-top:1px solid var(--stroke-gray-lighter);
+  }
+  .confirm-card .btn-danger{
+    height:38px;padding:0 16px;background:#C81F4B;border:0;color:#fff;border-radius:8px;cursor:pointer;
+    font:600 13px var(--font-primary);box-shadow:0 4px 12px rgba(200,31,75,.25);
+  }
+  .confirm-card .btn-danger:hover{background:#A91A40}
+
   /* Stripe connect block */
   .stripe-connect{
     display:flex;align-items:center;gap:var(--s-3);
@@ -1231,6 +1297,28 @@
                 Admin only
               </span>
               <span class="status-pill status-inactive" id="cfg-pill-stripe"><span class="dot"></span>Not connected</span>
+              <div class="cp-actions" id="stripe-actions">
+                <button type="button" class="kebab-btn" id="stripe-kebab" aria-haspopup="menu" aria-expanded="false" aria-label="More Stripe actions" title="More actions">
+                  <svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg>
+                </button>
+                <div class="kebab-menu" role="menu" aria-label="Stripe actions">
+                  <button type="button" class="km-item" role="menuitem" id="stripe-resync">
+                    <svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 15.5-6.3L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15.5 6.3L3 16"/><path d="M3 21v-5h5"/></svg>
+                    <span class="km-txt">
+                      <span class="km-t">Resync Stripe data</span>
+                      <span class="km-d">Re-pull balance, payouts and KYC status</span>
+                    </span>
+                  </button>
+                  <div class="km-sep"></div>
+                  <button type="button" class="km-item danger" role="menuitem" id="stripe-reset">
+                    <svg viewBox="0 0 24 24"><path d="M9 17H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M22 12l-5-5M22 12l-5 5M22 12H10"/></svg>
+                    <span class="km-txt">
+                      <span class="km-t">Reset connection</span>
+                      <span class="km-d">Disconnect and start the Stripe link again</span>
+                    </span>
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
           <div class="cp-body">
@@ -2084,6 +2172,79 @@
         }
       });
     }
+  })();
+</script>
+
+<!-- Reset Stripe confirm dialog -->
+<div class="confirm-backdrop" id="reset-stripe-backdrop" role="presentation" aria-hidden="true">
+  <div class="confirm-card" role="dialog" aria-modal="true" aria-labelledby="reset-stripe-title" aria-describedby="reset-stripe-desc">
+    <div class="cc-head">
+      <div class="cc-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.3 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+      </div>
+      <div>
+        <div class="cc-title" id="reset-stripe-title">Reset Stripe connection?</div>
+      </div>
+    </div>
+    <div class="cc-body" id="reset-stripe-desc">
+      We'll disconnect your current Stripe account. New payments will pause until you link Stripe again. <strong>Existing transactions and payouts are not affected.</strong>
+    </div>
+    <div class="cc-foot">
+      <button type="button" class="btn-secondary" id="reset-stripe-cancel">Cancel</button>
+      <button type="button" class="btn-danger" id="reset-stripe-confirm">Reset connection</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* Stripe panel: kebab menu + reset confirm */
+  (function(){
+    const wrap = document.getElementById('stripe-actions');
+    const btn  = document.getElementById('stripe-kebab');
+    if (!wrap || !btn) return;
+
+    function open(){
+      wrap.dataset.open = 'true';
+      btn.setAttribute('aria-expanded','true');
+    }
+    function close(){
+      wrap.dataset.open = 'false';
+      btn.setAttribute('aria-expanded','false');
+    }
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      wrap.dataset.open === 'true' ? close() : open();
+    });
+    document.addEventListener('click', e => {
+      if (!wrap.contains(e.target)) close();
+    });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+
+    const resync = document.getElementById('stripe-resync');
+    if (resync){
+      resync.addEventListener('click', () => {
+        close();
+        const pill = document.getElementById('cfg-pill-stripe');
+        if (pill){
+          const original = pill.innerHTML;
+          pill.innerHTML = '<span class="dot"></span>Resyncing…';
+          setTimeout(() => { pill.innerHTML = original; }, 1500);
+        }
+      });
+    }
+
+    /* Confirm dialog */
+    const backdrop = document.getElementById('reset-stripe-backdrop');
+    const reset    = document.getElementById('stripe-reset');
+    const cancel   = document.getElementById('reset-stripe-cancel');
+    const confirm  = document.getElementById('reset-stripe-confirm');
+    function openDlg(){ backdrop.classList.add('open'); backdrop.setAttribute('aria-hidden','false'); }
+    function closeDlg(){ backdrop.classList.remove('open'); backdrop.setAttribute('aria-hidden','true'); }
+    if (reset)   reset.addEventListener('click', () => { close(); openDlg(); });
+    if (cancel)  cancel.addEventListener('click', closeDlg);
+    if (confirm) confirm.addEventListener('click', closeDlg);
+    if (backdrop) backdrop.addEventListener('click', e => { if (e.target === backdrop) closeDlg(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && backdrop.classList.contains('open')) closeDlg(); });
   })();
 </script>
 
