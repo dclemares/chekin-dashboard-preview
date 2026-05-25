@@ -1221,56 +1221,6 @@
         </div>
       </section>
 
-      <!-- ─── CONFIG PANEL ─── -->
-      <section id="config-wrapper">
-
-        <!-- Chekin "active" status panel (compact, no details) -->
-        <div id="config-chekin" class="config-panel" style="display:none">
-          <div class="cp-head">
-            <div class="cp-title">
-              <span class="micro-logo logo-chekin"><svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M34 16c-2.2-2.4-5.4-4-9-4-7 0-12 5-12 12s5 12 12 12c3.6 0 6.8-1.6 9-4" stroke="#fff" stroke-width="4" stroke-linecap="round"/></svg></span>
-              Chekin Payments
-            </div>
-            <div class="right">
-              <span class="admin-badge" title="Only workspace admins can switch the payment gateway">
-                <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                Admin only
-              </span>
-              <span class="status-pill status-active" id="cfg-pill-chekin"><span class="dot"></span>Active</span>
-            </div>
-          </div>
-          <div class="cp-body">
-            <div class="status-banner banner-active" id="banner-active">
-              <div class="sb-icon"><svg viewBox="0 0 24 24" stroke="currentColor"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
-              <div class="sb-info">
-                <div class="t">Your account is ready</div>
-                <div class="d">Chekin Payments is live. Guests can pay and deposits are held automatically — no extra setup.</div>
-              </div>
-              <div class="sb-cta"><button type="button" class="btn-secondary btn-sm" data-open-compare="banner">See differences</button></div>
-            </div>
-
-            <div class="status-banner banner-pending" id="banner-pending" style="display:none">
-              <div class="sb-icon"><svg viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
-              <div class="sb-info">
-                <div class="t">Validating your business data</div>
-                <div class="d">We're reviewing the information you submitted. This usually takes a few hours.</div>
-              </div>
-              <div class="sb-cta"><button class="btn-secondary btn-sm">View checklist</button></div>
-            </div>
-
-            <div class="status-banner banner-failed" id="banner-failed" style="display:none">
-              <div class="sb-icon"><svg viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg></div>
-              <div class="sb-info">
-                <div class="t">Validation failed — action required</div>
-                <div class="d">Some documents couldn't be verified. New charges are paused until you resolve this.</div>
-              </div>
-              <div class="sb-cta"><button class="btn-primary btn-sm">Fix now</button></div>
-            </div>
-          </div>
-        </div>
-
-
-      </section>
 
       <!-- ─── DIVIDER ─── -->
       <div class="divider"></div>
@@ -2029,12 +1979,13 @@
   function applyState(state){
     const info = STATE_LABELS[state];
     [pillChekin, cfgPillChekin].forEach(p => {
+      if (!p) return;
       p.className = 'status-pill ' + info.cls;
       p.innerHTML = '<span class="dot"></span>' + info.txt;
     });
-    bannerActive.style.display  = state === 'active'  ? 'flex' : 'none';
-    bannerPending.style.display = state === 'pending' ? 'flex' : 'none';
-    bannerFailed.style.display  = state === 'failed'  ? 'flex' : 'none';
+    if (bannerActive)  bannerActive.style.display  = state === 'active'  ? 'flex' : 'none';
+    if (bannerPending) bannerPending.style.display = state === 'pending' ? 'flex' : 'none';
+    if (bannerFailed)  bannerFailed.style.display  = state === 'failed'  ? 'flex' : 'none';
     stateBtns.forEach(b => b.setAttribute('aria-pressed', String(b.dataset.state === state)));
   }
   stateBtns.forEach(b => b.addEventListener('click', () => applyState(b.dataset.state)));
